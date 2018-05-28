@@ -1,3 +1,21 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  register_structures.h
+ *
+ *    Description:  Header file with typedefs for the register structures
+ *
+ *        Version:  1.0
+ *        Created:  05/25/2018 20:05:04
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  Matt Gercz (matt.gercz@icloud.com)
+ *   Organization:  
+ *
+ * =====================================================================================
+ */
+
 #ifndef REGISTERSTRUCTURES
 #define REGISTERSTRUCTURES
 

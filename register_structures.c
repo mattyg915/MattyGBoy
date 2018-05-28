@@ -1,12 +1,34 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  register_structures.c
+ *
+ *    Description:  Constains definitions of functions used to initialize the
+ *    		    structures that contain the registers
+ *
+ *        Version:  1.0
+ *        Created:  05/25/2018 20:05:04
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  Matt Gercz (matt.gercz@icloud.com)
+ *   Organization:  
+ *
+ * =====================================================================================
+ */
+
 #include <stdlib.h>
 #include "register_structures.h"
 
-/**
- * Initializes the registers and returns a pointer to the
- * struct that contains them
- * @return a pointer to a Registers struct
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  init_registers
+ *  Description:  Initializes the virtual registers
+ *  Return:	  Pointer to the struct containing the virtual registers
+ * =====================================================================================
  */
-Registers* init_registers() {
+	Registers*
+init_registers() {
 	Registers *reg_ptr = malloc(sizeof(*reg_ptr));
 	if (reg_ptr == NULL) {
 		return NULL;
@@ -22,14 +44,17 @@ Registers* init_registers() {
 	reg_ptr->L = 0;
 
 	return reg_ptr;
-}
+}		/* -----  end of function init_registers  ----- */
 
-/**
- * Initializes the stack pointer and program counter
- * and returns a pointer to the struct containing them
- * @return a pointer to a Pointers struct
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  init_pointers
+ *  Description:  Initializes the virtual stack pointer and program counter
+ *  Return:       Pointer to the struct containing the virtual registers
+ * =====================================================================================
  */
-Pointers* init_pointers() {
+	Pointers*
+init_pointers() {
 	Pointers *ptrs_ptr = malloc(sizeof(*ptrs_ptr));
 	if (ptrs_ptr == NULL) {
 		return NULL;
@@ -37,4 +62,6 @@ Pointers* init_pointers() {
 	// Program counter starts at 0x100, stack at 0xFFFE
 	ptrs_ptr->PC = 0x0100;
 	ptrs_ptr->SP = 0xFFFE;
-}
+
+	return ptrs_ptr;
+}		/* -----  end of function init_pointers  ----- */
