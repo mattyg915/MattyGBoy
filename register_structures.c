@@ -28,7 +28,8 @@
  * =====================================================================================
  */
 	Registers*
-init_registers() {
+init_registers() 
+{
 	Registers *reg_ptr = malloc(sizeof(*reg_ptr));
 	if (reg_ptr == NULL) {
 		return NULL;
@@ -54,7 +55,8 @@ init_registers() {
  * =====================================================================================
  */
 	Pointers*
-init_pointers() {
+init_pointers() 
+{
 	Pointers *ptrs_ptr = malloc(sizeof(*ptrs_ptr));
 	if (ptrs_ptr == NULL) {
 		return NULL;

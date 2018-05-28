@@ -21,6 +21,7 @@
 #include "math_instructions.h"
 #include "global_declarations.h"
 
+#define EXIT_SUCCESS 0 // Quit without error condition
 #define MEMORY_SIZE 0xFFFF // Top end of address range
 
 unsigned char *memory;
@@ -55,7 +56,8 @@ dump_registers()
  * =====================================================================================
  */
 	void
-initial_decode() {
+initial_decode() 
+{
 	unsigned char opcode = memory[ptrs->PC];
 	// TODO:pretty much this whole method
 	switch (opcode) {
@@ -73,7 +75,8 @@ initial_decode() {
 	return;
 }		/* -----  end of function decode  ----- */
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) 
+{
 	// Virtual registers are loaded
 	regs = init_registers();
 	ptrs = init_pointers();
@@ -85,5 +88,5 @@ int main(int argc, char *argv[]) {
 	// TODO:Main program loop, fetch/decode/execute
 	
 	free(regs); free(ptrs); free(memory);
-	return 0;
+	return EXIT_SUCCESS;
 }
