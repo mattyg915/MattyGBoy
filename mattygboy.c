@@ -28,53 +28,6 @@ unsigned char *memory;
 Registers *regs;
 Pointers *ptrs;
 
-/*
- * ===  FUNCTION  ======================================================================
- *         Name:  dump_registers
- *  Description:  Prints the contents of the registers to the console
- * =====================================================================================
- */
-	void
-dump_registers()
-{
-	printf("Registers: A: %x B: %x C: %x D: %x E: %x"
-			" F: %x H: %x L: %x\n", regs->A, regs->B,
-			regs->C, regs->D, regs->E, regs->F, 
-			regs->H, regs->L);
-	printf("Stack pointer: %x Program Counter: %x\n", 
-			ptrs->SP, ptrs->PC);
-	return;
-}		/* -----  end of function dump_registers  ----- */
-
-
-/* 
- * ===  FUNCTION  ======================================================================
- *         Name:  decode
- *  Description:  Takes the current opcode pointed to by PC and determines 
- *  		  its generalized instruction (e.g. this is a 'load' instruction), 
- *  		  then calls the appropriate method to further decode and emulate it
- * =====================================================================================
- */
-	void
-initial_decode() 
-{
-	unsigned char opcode = memory[ptrs->PC];
-	// TODO:pretty much this whole method
-	switch (opcode) {
-		case 0xC6:
-		case 0x80 ... 0x87:
-		case 0x09:
-		case 0x19:
-		case 0x29:
-		case 0x39:
-		case 0xE8:
-			// Add instructions
-			add();
-			break;
-	}
-	return;
-}		/* -----  end of function decode  ----- */
-
 int main(int argc, char *argv[]) 
 {
 	// Virtual registers are loaded

@@ -21,6 +21,7 @@
 #include "math_instructions.h"
 #include "global_declarations.h"
 #include "helper_functions.h"
+#include "cpu_emulator.h"
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -31,7 +32,6 @@
 	void
 add ()
 {
-	unsigned char opcode = memory[ptrs->PC];
 	/* Grab the next byte in case an immediate value is needed
 	 * but don't increment PC unless it's actually used */
 	char immediate_value = memory[ptrs->PC + 1];
@@ -100,8 +100,5 @@ add ()
 			split_between_registers(value, &(regs->H), &(regs->L));
 			break;
 	}
-
-	// Move the program counter to the next instruction
-	ptrs->PC++;
 	return;
 }		/* -----  end of function add  ----- */

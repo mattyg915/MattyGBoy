@@ -64,3 +64,23 @@ split_between_registers(unsigned short value,
 	value >>= 8;
 	*reg1 = (unsigned char)value;
 }	/* -----  end of function split_between_registers  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  dump_registers
+ *  Description:  Prints the contents of the registers to the console
+ * =====================================================================================
+ */
+	void
+dump_registers()
+{
+	printf("Registers: A: %x B: %x C: %x D: %x E: %x"
+			" F: %x H: %x L: %x\n", regs->A, regs->B,
+			regs->C, regs->D, regs->E, regs->F,
+			regs->H, regs->L);
+	printf("Stack pointer: %x Program Counter: %x\n",
+			ptrs->SP, ptrs->PC);
+	return;
+}		/* -----  end of function dump_registers  ----- */
+
+
