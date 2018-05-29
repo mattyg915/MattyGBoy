@@ -24,7 +24,7 @@
  * ===  FUNCTION  ======================================================================
  *         Name:  init_registers
  *  Description:  Initializes the virtual registers
- *  Return:	  Pointer to the struct containing the virtual registers
+ *       Return:  Pointer to the struct containing the virtual registers
  * =====================================================================================
  */
 	Registers*
@@ -51,7 +51,7 @@ init_registers()
  * ===  FUNCTION  ======================================================================
  *         Name:  init_pointers
  *  Description:  Initializes the virtual stack pointer and program counter
- *  Return:       Pointer to the struct containing the virtual registers
+ *       Return:  Pointer to the struct containing the virtual registers
  * =====================================================================================
  */
 	Pointers*
