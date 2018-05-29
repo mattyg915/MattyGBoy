@@ -30,8 +30,10 @@ Pointers *ptrs;
 
 int main(int argc, char *argv[]) 
 {
+	// Array containing initializing values for all registers (default to 0)
+	int reg_init_values[8] = { 0 };
 	// Virtual registers are loaded
-	regs = init_registers();
+	regs = init_registers(reg_init_values);
 	ptrs = init_pointers();
 
 	// TODO:Initialize virtual memory

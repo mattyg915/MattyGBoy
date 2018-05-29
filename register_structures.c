@@ -24,25 +24,29 @@
  * ===  FUNCTION  ======================================================================
  *         Name:  init_registers
  *  Description:  Initializes the virtual registers
+ *   Parameters:  init_values a pointer to the beginning of an int array
+ *   		  containing 8 values, which will be assigned as the 
+ *   		  initializing value of each register in alphabetical order
  *       Return:  Pointer to the struct containing the virtual registers
  * =====================================================================================
  */
 	Registers*
-init_registers() 
+init_registers(int *init_values)
 {
 	Registers *reg_ptr = malloc(sizeof(*reg_ptr));
 	if (reg_ptr == NULL) {
 		return NULL;
 	}
-	// All registers initialize to 0
-	reg_ptr->A = 0;
-	reg_ptr->B = 0;
-	reg_ptr->C = 0;
-	reg_ptr->D = 0;
-	reg_ptr->E = 0;
-	reg_ptr->F = 0;
-	reg_ptr->H = 0;
-	reg_ptr->L = 0;
+
+	// Initialize with specified values
+	reg_ptr->A = init_values[0];
+	reg_ptr->B = init_values[1];
+	reg_ptr->C = init_values[2];
+	reg_ptr->D = init_values[3];
+	reg_ptr->E = init_values[4];
+	reg_ptr->F = init_values[5];
+	reg_ptr->H = init_values[6];
+	reg_ptr->L = init_values[7];
 
 	return reg_ptr;
 }		/* -----  end of function init_registers  ----- */
