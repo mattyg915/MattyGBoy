@@ -32,6 +32,7 @@
 	void
 add ()
 {
+	//TODO: handle setting the flags
 	/* Grab the next byte in case an immediate value is needed
 	 * but don't increment PC unless it's actually used */
 	char immediate_value = memory[ptrs->PC + 1];
