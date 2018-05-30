@@ -104,9 +104,16 @@ int main (int argc, char *argv[])
 		}
 	}
 	
-	while (opcode != 0x00) {
+	memory[0xAABB] = 0x77;
+	
+	do
+	{
+		if (verbose)
+		{
+			printf("Execute opcode %x\n",opcode);
+		}
 		cpu_execution();
-	}
+	} while (opcode != 0x00);
 
 	dump_registers();
 
