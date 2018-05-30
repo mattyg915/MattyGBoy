@@ -16,7 +16,7 @@
  */
 
 #ifndef MATHINSTRUCTIONS
-#define MATHINTSRUCTIONS
+#define MATHINSTRUCTIONS
 void add ();
 
 #endif

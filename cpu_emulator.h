@@ -19,5 +19,5 @@
 #define CPUEMULATOR
 extern unsigned char opcode;
 
-void decode();
+void cpu_execution();
 #endif

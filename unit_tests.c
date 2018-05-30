@@ -19,7 +19,10 @@
 #include "register_structures.h"
 #include "global_declarations.h"
 #include "helper_functions.h"
+#include "cpu_emulator.h"
+#include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <assert.h>
 
 #define EXIT_SUCCESS 0
@@ -76,7 +79,7 @@ int main (int argc, char *argv[])
 	}
 	
 	regs = init_registers(reg_init_values);
-	ptrs = init_ptrs();
+	ptrs = init_pointers();
 	memory = malloc(MEMORY_SIZE);
 
 	// Read instructions into memory, track how many are read
@@ -85,11 +88,14 @@ int main (int argc, char *argv[])
 	char inst_line[5];
 	while (fgets(inst_line, 4, unit_test_file) != NULL) {
 		// Convert to single-byte number and store in memory array
-		virtual_memory[0x0100 + inst_read] = (unsigned char)strtol(inst_line, NULL, 16);
+		memory[0x0100 + inst_read] = (unsigned char)strtol(inst_line, 
+				NULL, 16);
 		inst_read++;
 	}
+	memory[0x0100 + inst_read] = 0x00;
 
-	fclose(unit_test_file)
+	fclose(unit_test_file);
+	
 	if (verbose)
 	{
 		for (int i = 0x0100; i < 0x0100 + inst_read; i++)
@@ -97,6 +103,12 @@ int main (int argc, char *argv[])
 			printf("Opcode at %x is %x\n\n", i, memory[i]);
 		}
 	}
+	
+	while (opcode != 0x00) {
+		cpu_execution();
+	}
+
+	dump_registers();
 
 	return EXIT_SUCCESS;
 }

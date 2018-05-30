@@ -35,7 +35,7 @@ add ()
 	/* Grab the next byte in case an immediate value is needed
 	 * but don't increment PC unless it's actually used */
 	char immediate_value = memory[ptrs->PC + 1];
-	unsigned short value1 = 0; // For operations using 16-bit values
+	unsigned short value = 0; // For operations using 16-bit values
 	switch (opcode)
 	{
 		// Immediate value cases
@@ -44,11 +44,11 @@ add ()
 			ptrs->PC++;
 			break;
 		case 0xE8:
-			ptrs->SP += immediate value;
+			ptrs->SP += immediate_value;
 			ptrs->PC++;
 			break;
 		// 8-bit register cases
-		case 0x80
+		case 0x80:
 			regs->A += regs->B;
 			break;
 		case 0x81:
@@ -78,8 +78,8 @@ add ()
 		case 0x09:
 			// HL + BC --> HL
 			value = combine_registers(regs->H, regs->L);
-			value += combine_registers(regs->B, regs->C)
-			split_between_registers(value, &(regs->H), &(regs->L))
+			value += combine_registers(regs->B, regs->C);
+			split_between_registers(value, &(regs->H), &(regs->L));
 			break;
 		case 0x19:
 			// HL + DE --> HL

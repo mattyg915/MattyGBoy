@@ -16,6 +16,7 @@
  * =====================================================================================
  */
 
+#include <stdio.h>
 #include "helper_functions.h"
 #include "register_structures.h"
 #include "global_declarations.h"

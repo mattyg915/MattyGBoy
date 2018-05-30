@@ -18,7 +18,7 @@
 #ifndef HELPERFUNCTIONS
 #define HELPERFUNCTIONS
 unsigned short combine_registers(unsigned char reg1, unsigned char reg2);
-unsigned short split_between_registers(unsigned short value, 
+void split_between_registers(unsigned short value, 
 		unsigned char *reg1, unsigned char *reg2);
 void dump_registers();
 #endif
