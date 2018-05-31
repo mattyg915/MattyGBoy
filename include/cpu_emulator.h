@@ -19,7 +19,7 @@
 #define CPUEMULATOR
 extern unsigned char opcode;
 
-unsigned short combine_registers(unsigned short reg1, unsigned short reg2);
+unsigned short combine_registers(unsigned char reg1, unsigned char reg2);
 void split_between_registers(unsigned short value, 
 		unsigned char *reg1, unsigned char *reg2);
 void eight_bit_update_flags(int value1, int value2);

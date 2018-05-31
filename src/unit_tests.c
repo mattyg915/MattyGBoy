@@ -45,7 +45,10 @@ static int reg_init_values[8] = { 0 };
 	void
 add_tests ()
 {
-	reg_init_values = [0, 0, 0x5, 0xFF, 0, 0, 0xAA, 0xBB];
+	reg_init_values[2] = 0x5;
+	reg_init_values[3] = 0xFF;
+	reg_init_values[6] = 0xAA;
+	reg_init_values[7] = 0xBB;
 
 	regs = init_registers(reg_init_values);
 	ptrs = init_pointers();

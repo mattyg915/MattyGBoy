@@ -120,11 +120,11 @@ eight_bit_update_flags (int value1, int value2)
 		// Half Carry Flag - subtraction
 		if ((((value1 & 0xF) - (value2 & 0xF)) & 0x10) < 0)
 		{
-			regs-> |= 0x20;
+			regs->F |= 0x20;
 		}
 		else
 		{
-			rergs->F &= 0xD0;
+			regs->F &= 0xD0;
 		}
 		// Carry Flag - subtraction
 		if (result < 0)
@@ -133,7 +133,7 @@ eight_bit_update_flags (int value1, int value2)
 		}
 		else
 		{
-			regs-> &= 0xE0;
+			regs->F &= 0xE0;
 		}
 	}
 
@@ -198,11 +198,11 @@ sixteen_bit_update_flags (int value1, int value2)
                 // Half Carry Flag - subtraction
                 if ((((value1 & 0x0FFF) - (value2 & 0x0FFF)) & 0x1000) < 0)
                 {
-                        regs-> |= 0x20;
+                        regs->F |= 0x20;
                 }
                 else
                 {
-                        rergs->F &= 0xD0;
+                        regs->F &= 0xD0;
                 }
                 // Carry Flag - subtraction
                 if (result > 0)
@@ -211,7 +211,7 @@ sixteen_bit_update_flags (int value1, int value2)
                 }
                 else
                 {
-                        regs-> &= 0xE0;
+                        regs->F &= 0xE0;
                 }
         }
 
@@ -260,7 +260,6 @@ decode ()
 			break;
 		// AND instructions
 		case 0xE6:
-		case 0xE8:
 		case 0xA0 ... 0xA7:
 			and();
 			break;
