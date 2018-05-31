@@ -171,7 +171,7 @@ sixteen_bit_update_flags (int value1, int value2)
                 result = value1 + value2;
 
                 // Half-Carry - addition
-                if () //TODO
+                if ((((value1 & 0x0FFF) + (value2 & 0x0FFF)) & 0x1000) == 0x1000)
                 {
                         regs->F |= 0x20;
                 }
@@ -196,7 +196,7 @@ sixteen_bit_update_flags (int value1, int value2)
                 result = value1 - value2;
 
                 // Half Carry Flag - subtraction
-                if () //TODO
+                if ((((value1 & 0x0FFF) - (value2 & 0x0FFF)) & 0x1000) < 0)
                 {
                         regs-> |= 0x20;
                 }

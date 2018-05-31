@@ -45,6 +45,7 @@ static int reg_init_values[8] = { 0 };
 	void
 add_tests ()
 {
+	reg_init_values = [0, 0, 0x5, 0xFF, 0, 0, 0xAA, 0xBB];
 
 	regs = init_registers(reg_init_values);
 	ptrs = init_pointers();
@@ -64,6 +65,8 @@ add_tests ()
         }
 	// Append 'NOP' so we have a hook to break the execution loop
         memory[0x0100 + inst_read] = 0x00;
+	
+	memory[0xAABB] = 0x4E;
 
         fclose(unit_test_file);
 	
@@ -86,21 +89,21 @@ add_tests ()
 			dump_registers();
 		}
         } while (opcode != 0x00);
-	/*
-	// Check final state of registers
-	assert(regs->A == //TODO);
-	assert(regs->B == //TODO);
-	assert(regs->C == //TODO);
-	assert(regs->D == //TODO);
-	assert(regs->E == //TODO);
-	assert(regs->F == //TODO);
-	assert(regs->H == //TODO);
-	assert(regs->L == //TODO);
 
-	// Check state of pointers
-	assert(ptrs->SP == //TODO);
-	assert(ptrs->PC == //TODO);
-	*/
+	// Check final state of registers
+	assert(regs->A == 0x5A);
+	assert(regs->B == 0x0);
+	assert(regs->C == 0x5);
+	assert(regs->D == 0xFF);
+	assert(regs->E == 0x0);
+	assert(regs->F == 0x20);
+	assert(regs->H == 0xAA);
+	assert(regs->L == 0xBB);
+
+	// Check final state of pointers
+	assert(ptrs->SP == 0xFFFE);
+	assert(ptrs->PC == 0x5);
+
 	printf("All add() tests passed successfully\n");
 	return;
 }	/* -----  end of function add_tests  ----- */
