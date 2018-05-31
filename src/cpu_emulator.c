@@ -68,6 +68,39 @@ split_between_registers(unsigned short value,
         *reg1 = (unsigned char)value;
 }       /* -----  end of function split_between_registers  ----- */
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  update_flags
+ *  Description:  Handles updates to the F register after an instruction executes
+ *  		  with flag implications
+ *   Parameters:  value1 is the first operand of an arithmetic instruction
+ *   		  value2 is the second operand in an arithmetic instruction
+ *   		  and is **added** to value1 to get a check value
+ *   		  z should be set to 1 to evaluate for z flag, else 0
+ *   		  n should be set to 1 to evaluate for s flag, else 0
+ *   		  h should be set to 1 to evaluate for h flag, else 0
+ *   		  c should be set to 1 to evaluate for c flag, else 0
+ * =====================================================================================
+ */
+	void
+update_flags (int value1, int value2, int z, int n, int h, int c)
+{
+	// Set the z flag if last op yielded a 0
+	if (z) 
+	{
+		if ((value1 + value2) == 0) 
+		{
+			regs->F //TODO;
+		}
+		else
+		{
+			regs->F //TODO;
+		}
+	}
+	return;
+}		/* -----  end of function update_flags  ----- */
+
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  decode
