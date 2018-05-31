@@ -18,5 +18,6 @@
 #ifndef MATHINSTRUCTIONS
 #define MATHINSTRUCTIONS
 void add ();
-
+void adc();
+void and();
 #endif

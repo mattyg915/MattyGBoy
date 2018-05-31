@@ -253,6 +253,18 @@ decode ()
 		case 0xE8:
 			add();
 			break;
+		// ADC instructions
+		case 0xCE:
+		case 0x88 ... 0x8D:
+			adc();
+			break;
+		// AND instructions
+		case 0xE6:
+		case 0xE8:
+		case 0xA0 ... 0xA7:
+			and();
+			break;
+
 	}
 	return;
 }		/* -----  end of function decode  ----- */
