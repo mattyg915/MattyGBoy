@@ -80,7 +80,7 @@ add_tests ()
                         printf("Opcode at %x is %x\n\n", i, memory[i]);
                 }
         }
-
+			/* First run tests basic 8 bit instructions and half-carry */
         do
         {
         	cpu_execution(); // Emulate instructions until NOP reached
@@ -90,7 +90,7 @@ add_tests ()
 		}
         } while (opcode != 0x00);
 
-	// Check final state of registers
+	// Check state of registers
 	assert(regs->A == 0x5A);
 	assert(regs->B == 0x0);
 	assert(regs->C == 0x5);
@@ -100,9 +100,34 @@ add_tests ()
 	assert(regs->H == 0xAA);
 	assert(regs->L == 0xBB);
 
-	// Check final state of pointers
+	// Check state of pointers
 	assert(ptrs->SP == 0xFFFE);
 	assert(ptrs->PC == 0x5);
+
+		/* Second run tests 16-bit instructions and carry */
+
+	do
+        {
+                cpu_execution(); // Emulate instructions until NOP reached
+                if (verbose) // Dump registers after each instruction
+                {
+                        dump_registers();
+                }
+        } while (opcode != 0x00);
+
+        // Check state of registers
+        assert(regs->A == 0x04);
+        assert(regs->B == 0x0);
+        assert(regs->C == 0x5);
+        assert(regs->D == 0xFF);
+        assert(regs->E == 0x0);
+        assert(regs->F == 0x10);
+        assert(regs->H == 0xAA);
+        assert(regs->L == 0xC0);
+
+        // Check state of pointers
+        assert(ptrs->SP == 0xFFFE);
+        assert(ptrs->PC == 0x5);
 
 	printf("All add() tests passed successfully\n");
 	return;
