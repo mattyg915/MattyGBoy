@@ -20,7 +20,7 @@
 #include "helper_functions.h"
 #include "register_structures.h"
 #include "global_declarations.h"
-#include "cpu_emulato.h"
+#include "cpu_emulator.h"
 
 /*
  * ===  FUNCTION  ======================================================================

@@ -53,7 +53,7 @@ add_tests ()
 	// Read instructions for this test into memory, track how many are read
         int inst_read = 0;
         FILE *unit_test_file = fopen("add_tests.txt", "r"); // Stream from test file
-	assert (unit_test_file != NULL)
+	assert(unit_test_file != NULL);
         char inst_line[5];
         while (fgets(inst_line, 4, unit_test_file) != NULL) 
 	{
@@ -86,7 +86,7 @@ add_tests ()
 			dump_registers();
 		}
         } while (opcode != 0x00);
-
+	/*
 	// Check final state of registers
 	assert(regs->A == //TODO);
 	assert(regs->B == //TODO);
@@ -100,7 +100,7 @@ add_tests ()
 	// Check state of pointers
 	assert(ptrs->SP == //TODO);
 	assert(ptrs->PC == //TODO);
-	
+	*/
 	printf("All add() tests passed successfully\n");
 	return;
 }	/* -----  end of function add_tests  ----- */
