@@ -32,7 +32,9 @@
 	void
 add ()
 {
-	//TODO: handle setting the flags
+	// Clear the N flag
+	regs->F &= 0xB0;
+
 	/* Grab the next byte in case an immediate value is needed
 	 * but don't increment PC unless it's actually used */
 	char immediate_value = memory[ptrs->PC + 1];
@@ -42,33 +44,42 @@ add ()
 		// Immediate value cases
 		case 0xC6:
 			regs->A += immediate_value;
+			eight_bit_update_flags(regs->A, immediate_value);
 			ptrs->PC++;
 			break;
 		case 0xE8:
 			ptrs->SP += immediate_value;
+			eight_bit_update_flags(regs->A, immediate_value);
 			ptrs->PC++;
 			break;
 		// 8-bit register cases
 		case 0x80:
 			regs->A += regs->B;
+			eight_bit_update_flags(regs->A, regs->B);
 			break;
 		case 0x81:
 			regs->A += regs->C;
+			eight_bit_update_flags(regs->A, regs->C);
 			break;
 		case 0x82:
 			regs->A += regs->D;
+			eight_bit_update_flags(regs->A, regs->D);
 			break;
 		case 0x83:
 			regs->A += regs->E;
+			eight_bit_update_flags(regs->A, regs->E);
 			break;
 		case 0x84:
 			regs->A += regs->H;
+			eight_bit_update_flags(regs->A, regs->H);
 			break;
 		case 0x85:
 			regs->A += regs->L;
+			eight_bit_update_flags(regs->A, regs->L);
 			break;
 		case 0x87:
 			regs->A += regs->A;
+			eight_bit_update_flags(regs->A, regs->A);
 			break;
 		// Cases involving 16-bit registers
 		case 0x86:

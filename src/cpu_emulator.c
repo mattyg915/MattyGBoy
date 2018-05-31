@@ -71,35 +71,162 @@ split_between_registers(unsigned short value,
 
 /* 
  * ===  FUNCTION  ======================================================================
- *         Name:  update_flags
- *  Description:  Handles updates to the F register after an instruction executes
- *  		  with flag implications
+ *         Name:  eight_bit_update_flags
+ *  Description:  Handles updates to the Z, H, and C flags in the F register 
+ *  		  after an eight-bit instruction executes. Assumes N flag has
+ *  		  been set or cleared before this function is called
+ *  		  
  *   Parameters:  value1 is the first operand of an arithmetic instruction
  *   		  value2 is the second operand in an arithmetic instruction
- *   		  and is **added** to value1 to get a check value
- *   		  z should be set to 1 to evaluate for z flag, else 0
- *   		  n should be set to 1 to evaluate for s flag, else 0
- *   		  h should be set to 1 to evaluate for h flag, else 0
- *   		  c should be set to 1 to evaluate for c flag, else 0
  * =====================================================================================
  */
 	void
-update_flags (int value1, int value2, int z, int n, int h, int c)
+eight_bit_update_flags (int value1, int value2)
 {
-	// Set the z flag if last op yielded a 0
-	if (z) 
+	int result;
+
+	if ((regs->F & 0x40) == 0) // Checks that last op was addition
 	{
-		if ((value1 + value2) == 0) 
+		result = value1 + value2;
+
+		/*
+		 * Credit to StackOverflow user Tommy for the half-carry algorithm
+		 * https://stackoverflow.com/questions/8868396/gbz80-what-constitutes-a-half-carry/
+		 */
+		if ((((value1 & 0xF) + (value2 & 0xF)) & 0x10) == 0x10)
 		{
-			regs->F //TODO;
+			regs->F |= 0x20;
 		}
 		else
 		{
-			regs->F //TODO;
+			regs->F &= 0xD0;
+		}
+		
+		// Carry Flag - addition
+		if (result > 0xFF)
+		{
+			regs->F |= 0x10;
+		}
+		else
+		{
+			regs->F &= 0xE0;
 		}
 	}
+	// Otherwise it was a subtraction
+	else
+	{
+		result = value1 - value2;
+
+		// Half Carry Flag - subtraction
+		if ((((value1 & 0xF) - (value2 & 0xF)) & 0x10) < 0)
+		{
+			regs-> |= 0x20;
+		}
+		else
+		{
+			rergs->F &= 0xD0;
+		}
+		// Carry Flag - subtraction
+		if (result < 0)
+		{
+			regs->F |= 0x10;
+		}
+		else
+		{
+			regs-> &= 0xE0;
+		}
+	}
+
+	// Zero Flag
+        if (!result)
+        {
+                regs->F |= 0x80;
+        }
+        else
+        {
+                regs->F &= 0x70; // Otherwise clear it
+        }
+
 	return;
-}		/* -----  end of function update_flags  ----- */
+}		/* -----  end of function eight_bit_update_flags  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  sixteen_bit_update_flags
+ *  Description:  Handles updates to the Z, H, and C flags in the F register
+ *                after a sixteen-bit instruction executes. Assumes N flag has
+ *                been set or cleared before this function is called
+ *
+ *   Parameters:  value1 is the first operand of an arithmetic instruction
+ *                value2 is the second operand in an arithmetic instruction
+ * =====================================================================================
+ */
+        void
+sixteen_bit_update_flags (int value1, int value2)
+{
+	int result;
+
+        if ((regs->F & 0x40) == 0) // Checks that last op was addition
+        {
+                result = value1 + value2;
+
+                // Half-Carry - addition
+                if () //TODO
+                {
+                        regs->F |= 0x20;
+                }
+                else
+                {
+                        regs->F &= 0xD0;
+                }
+
+                // Carry Flag - addition
+                if (result > 0xFFFF)
+                {
+                        regs->F |= 0x10;
+                }
+                else
+                {
+                        regs->F &= 0xE0;
+                }
+        }
+	// Otherwise it was a subtraction
+        else
+        {
+                result = value1 - value2;
+
+                // Half Carry Flag - subtraction
+                if () //TODO
+                {
+                        regs-> |= 0x20;
+                }
+                else
+                {
+                        rergs->F &= 0xD0;
+                }
+                // Carry Flag - subtraction
+                if (result > 0)
+                {
+                        regs->F |= 0x10;
+                }
+                else
+                {
+                        regs-> &= 0xE0;
+                }
+        }
+
+        // Zero Flag
+        if (!result)
+        {
+                regs->F |= 0x80;
+        }
+        else
+        {
+                regs->F &= 0x70; // Otherwise clear it
+        }
+
+	return;
+}		/* -----  end of function sixteen_bit_update_flags  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
