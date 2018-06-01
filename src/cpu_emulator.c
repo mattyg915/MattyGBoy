@@ -15,6 +15,7 @@
  * =====================================================================================
  */
 
+#include <stdio.h>
 #include <stdlib.h>
 #include "math_instructions.h"
 #include "global_declarations.h"
@@ -88,10 +89,10 @@ eight_bit_update_flags (int value1, int value2)
 	if ((regs->F & 0x40) == 0) // Checks that last op was addition
 	{
 		result = value1 + value2;
-
 		/*
 		 * Credit to StackOverflow user Tommy for the half-carry algorithm
-		 * https://stackoverflow.com/questions/8868396/gbz80-what-constitutes-a-half-carry/
+		 * https://stackoverflow.com/questions/8868396/gbz80-what-constitutes
+		 * -a-half-carry/
 		 */
 		if ((((value1 & 0xF) + (value2 & 0xF)) & 0x10) == 0x10)
 		{

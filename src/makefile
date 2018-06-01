@@ -20,5 +20,5 @@ $(ODIR)/%.o: %.c $(DEPS)
 mattygboy: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
-tests: $(OBJTEST)
+unit_tests: $(OBJTEST)
 	$(CC) -o $@ $^ $(CFLAGS)

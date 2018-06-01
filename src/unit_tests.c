@@ -45,6 +45,7 @@ static int reg_init_values[8] = { 0 };
 	void
 add_tests ()
 {
+	printf("Executing unit tests for add()\n");
 	reg_init_values[2] = 0x5;
 	reg_init_values[3] = 0xFF;
 	reg_init_values[6] = 0xAA;
@@ -105,7 +106,7 @@ add_tests ()
 
 	// Check state of pointers
 	assert(ptrs->SP == 0xFFFE);
-	assert(ptrs->PC == 0x5);
+	assert(ptrs->PC == 0x0106);
 
 		/* Second run tests 16-bit instructions and carry */
 
@@ -124,13 +125,13 @@ add_tests ()
         assert(regs->C == 0x5);
         assert(regs->D == 0xFF);
         assert(regs->E == 0x0);
-        assert(regs->F == 0x10);
+        assert(regs->F == 0x30);
         assert(regs->H == 0xAA);
         assert(regs->L == 0xC0);
 
         // Check state of pointers
         assert(ptrs->SP == 0xFFFE);
-        assert(ptrs->PC == 0x5);
+        assert(ptrs->PC == 0x0109);
 
 	printf("All add() tests passed successfully\n");
 	return;
@@ -173,7 +174,9 @@ int main (int argc, char *argv[])
                 		break;
 		}
 	}
-
+	
+	// Run unit tests for add()
+	add_tests();
 	
 	return EXIT_SUCCESS;
 }

@@ -37,79 +37,83 @@ add ()
 
 	/* Grab the next byte in case an immediate value is needed
 	 * but don't increment PC unless it's actually used */
-	char immediate_value = memory[ptrs->PC + 1];
-	unsigned short value = 0; // For operations using 16-bit values
+	unsigned char immediate_value = memory[ptrs->PC + 1];
+	unsigned short value1 = 0, value2 = 0; // For operations using 16-bit values
 	switch (opcode)
 	{
 		// Immediate value cases
 		case 0xC6:
-			regs->A += immediate_value;
 			eight_bit_update_flags(regs->A, immediate_value);
+			regs->A += immediate_value;
 			ptrs->PC++;
 			break;
 		case 0xE8:
-			ptrs->SP += immediate_value;
 			eight_bit_update_flags(regs->A, immediate_value);
+			ptrs->SP += immediate_value;
 			ptrs->PC++;
 			break;
 		// 8-bit register cases
 		case 0x80:
-			regs->A += regs->B;
 			eight_bit_update_flags(regs->A, regs->B);
+			regs->A += regs->B;
 			break;
 		case 0x81:
-			regs->A += regs->C;
 			eight_bit_update_flags(regs->A, regs->C);
+			regs->A += regs->C;
 			break;
 		case 0x82:
-			regs->A += regs->D;
 			eight_bit_update_flags(regs->A, regs->D);
+			regs->A += regs->D;
 			break;
 		case 0x83:
-			regs->A += regs->E;
 			eight_bit_update_flags(regs->A, regs->E);
+			regs->A += regs->E;
 			break;
 		case 0x84:
-			regs->A += regs->H;
 			eight_bit_update_flags(regs->A, regs->H);
+			regs->A += regs->H;
 			break;
 		case 0x85:
-			regs->A += regs->L;
 			eight_bit_update_flags(regs->A, regs->L);
+			regs->A += regs->L;
 			break;
 		case 0x87:
-			regs->A += regs->A;
 			eight_bit_update_flags(regs->A, regs->A);
+			regs->A += regs->A;
 			break;
-		// Cases involving 16-bit registers
 		case 0x86:
 			// Use HL as address to get value from memory and add to A
-			value = combine_registers(regs->H, regs->L);
-			regs->A += memory[value];
+			value1 = combine_registers(regs->H, regs->L);
+			eight_bit_update_flags(regs->A, memory[value1]);
+			regs->A += memory[value1];
 			break;
 		case 0x09:
 			// HL + BC --> HL
-			value = combine_registers(regs->H, regs->L);
-			value += combine_registers(regs->B, regs->C);
-			split_between_registers(value, &(regs->H), &(regs->L));
+			value1 = combine_registers(regs->H, regs->L);
+			value2 = combine_registers(regs->B, regs->C);
+			sixteen_bit_update_flags(value1, value2);
+			split_between_registers((value1 + value2), &(regs->H), &(regs->L));
 			break;
 		case 0x19:
 			// HL + DE --> HL
-			value = combine_registers(regs->H, regs->L);
-			value += combine_registers(regs->D, regs->E);
-			split_between_registers(value, &(regs->H), &(regs->L));
+			value1 = combine_registers(regs->H, regs->L);
+			value2 = combine_registers(regs->D, regs->E);
+			sixteen_bit_update_flags(value1, value2);
+			split_between_registers((value1 + value2), &(regs->H), &(regs->L));
 			break;
 		case 0x29:
 			// HL + HL --> HL
-			value = combine_registers(regs->H, regs->L);
-			value += combine_registers(regs->H, regs->L);
-			split_between_registers(value, &(regs->H), &(regs->L));
+			value1 = combine_registers(regs->H, regs->L);
+			value2 = combine_registers(regs->H, regs->L);
+			sixteen_bit_update_flags(value1, value2);
+			split_between_registers((value1 + value2), &(regs->H), &(regs->L));
 			break;
 		case 0x39:
 			// HL + SP --> HL
-			value = combine_registers(regs->H, regs->L);
-			value += ptrs->SP;
-			split_between_registers(value, &(regs->H), &(regs->L));
+			value1 = combine_registers(regs->H, regs->L);
+			value2 = ptrs->SP;
+			sixteen_bit_update_flags(value1, value2);
+			split_between_registers((value1 + value2), &(regs->H), &(regs->L));
 			break;
 	}
 	return;
