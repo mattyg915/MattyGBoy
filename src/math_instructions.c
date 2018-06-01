@@ -38,7 +38,10 @@ add ()
 	/* Grab the next byte in case an immediate value is needed
 	 * but don't increment PC unless it's actually used */
 	unsigned char immediate_value = memory[ptrs->PC + 1];
-	unsigned short value1 = 0, value2 = 0; // For operations using 16-bit values
+	// For operations using 16-bit values
+	unsigned short reg_hl = combine_registers(regs->H, regs->L);
+	unsigned short value = 0;
+
 	switch (opcode)
 	{
 		// Immediate value cases
@@ -83,65 +86,105 @@ add ()
 			break;
 		case 0x86:
 			// Use HL as address to get value from memory and add to A
-			value1 = combine_registers(regs->H, regs->L);
-			eight_bit_update_flags(regs->A, memory[value1]);
+			eight_bit_update_flags(regs->A, memory[reg_hl]);
 			regs->A += memory[value1];
 			break;
 		case 0x09:
 			// HL + BC --> HL
-			value1 = combine_registers(regs->H, regs->L);
-			value2 = combine_registers(regs->B, regs->C);
-			sixteen_bit_update_flags(value1, value2);
-			split_between_registers((value1 + value2), &(regs->H), &(regs->L));
+			value = combine_registers(regs->B, regs->C);
+			sixteen_bit_update_flags(reg_hl, value);
+			split_between_registers((reg_hl + value), &(regs->H), &(regs->L));
 			break;
 		case 0x19:
 			// HL + DE --> HL
-			value1 = combine_registers(regs->H, regs->L);
-			value2 = combine_registers(regs->D, regs->E);
-			sixteen_bit_update_flags(value1, value2);
-			split_between_registers((value1 + value2), &(regs->H), &(regs->L));
+			value = combine_registers(regs->D, regs->E);
+			sixteen_bit_update_flags(reg_hl, value);
+			split_between_registers((reg_hl + value), &(regs->H), &(regs->L));
 			break;
 		case 0x29:
 			// HL + HL --> HL
-			value1 = combine_registers(regs->H, regs->L);
-			value2 = combine_registers(regs->H, regs->L);
-			sixteen_bit_update_flags(value1, value2);
-			split_between_registers((value1 + value2), &(regs->H), &(regs->L));
+			sixteen_bit_update_flags(reg_hl, reg_hl);
+			split_between_registers((reg_hl + reg_hl), &(regs->H), &(regs->L));
 			break;
 		case 0x39:
 			// HL + SP --> HL
-			value1 = combine_registers(regs->H, regs->L);
-			value2 = ptrs->SP;
-			sixteen_bit_update_flags(value1, value2);
-			split_between_registers((value1 + value2), &(regs->H), &(regs->L));
+			value = ptrs->SP;
+			sixteen_bit_update_flags(reg_hl, value);
+			split_between_registers((reg_hl + value), &(regs->H), &(regs->L));
 			break;
 	}
 	return;
 }		/* -----  end of function add  ----- */
 
-
-/* 
+/*
  * ===  FUNCTION  ======================================================================
  *         Name:  adc
- *  Description:  
+ *  Description:  Handles opcodes translating to ADC instructions
  * =====================================================================================
  */
-	void
+        void
 adc ()
 {
-	return;
-}		/* -----  end of function adc  ----- */
+        // Clear the N flag
+        regs->F &= 0xB0;
 
+	unsigned char sum = 0; // Total the operand and the carry flag
+        sum += //TODO: implement get_carry() to get carry flag
+	
+	// All operations update A, so just need to get sum
+        switch (opcode)
+        {
+                case 0xCE:
+                        // A + (immediate + CY) --> A
+                        regs->PC++;
+                        unsigned char immediate = memory[ptrs->PC];
+			sum += immediate;
+                        break;
+		case 0x8E:
+			// Get value from memory address in HL
+			unsigned short address = combine_registers(regs->H, regs->L);
+			sum += memory[address];
+			break;
+		case 0x8F:
+			sum += regs->A;
+			break;
+		case 0x88:
+			sum += regs->B;
+			break;
+		case 0x89:
+			sum += regs->C;
+			break;
+		case 0x8A:
+			sum += regs->D;
+			break;
+		case 0x8B:
+			sum += regs->E
+			break;
+		case 0x8C:
+			sum += regs->H;
+			break;
+		case 0x8D:
+			sum += regs->L;
+			break;
+	}
 
+	// Update A and the flags
+	regs->A += sum;
+	eight_bit_update_flags(initial_a, sum);
+			
+        return;
+}               /* -----  end of function adc  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  and
- *  Description:  
+ *  Description:  Handles opcodes translating to AND instructions
  * =====================================================================================
  */
 	void
 and ()
 {
+	// Clear N Flag
+	// regs->F $= 0xB0;
 	return;
 }		/* -----  end of function and  ----- */
