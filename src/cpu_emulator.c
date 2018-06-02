@@ -14,13 +14,12 @@
  *
  * =====================================================================================
  */
-
-#include <stdio.h>
 #include <stdlib.h>
 #include "math_instructions.h"
 #include "global_declarations.h"
 #include "register_structures.h"
 #include "cpu_emulator.h"
+#include "logical_instructions.h"
 
 unsigned char opcode;
 
@@ -229,6 +228,65 @@ sixteen_bit_update_flags (int value1, int value2)
 	return;
 }		/* -----  end of function sixteen_bit_update_flags  ----- */
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  get_carry_flag
+ *  Description:  Returns 1 if the carry flag (bit 4 of the F register) is set,
+ *  		  otherwise returns 0
+ *      Returns:  1 or 0 based on whether the carry flag is set
+ * =====================================================================================
+ */
+	unsigned char
+get_carry_flag ()
+{
+	return regs->F & 0x10;
+}		/* -----  end of function get_carry_flag  ----- */
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  get_half_carry_flag
+ *  Description:  Returns 1 if the half carry flag (bit 5 of the F register) is set,
+ *                otherwise returns 0
+ *      Returns:  1 or 0 based on whether the half carry flag is set
+ * =====================================================================================
+ */
+	unsigned char
+get_half_carry_flag ()
+{
+	return regs->F & 0x20;
+}		/* -----  end of function get_half_carry_flag  ----- */
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  get_subtract_flag
+ *  Description:  Returns 1 if the subtract flag (bit 6 of the F register) is set,
+ *                otherwise returns 0
+ *      Returns:  1 or 0 based on whether the subtract flag is set
+ * =====================================================================================
+ */
+	unsigned char
+get_subtract_flag ()
+{
+	return regs->F & 0x40;
+}		/* -----  end of function get_subtract_flag  ----- */
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  get_zero_flag
+ *  Description:  Returns 1 if the zero flag (bit 7 of the F register) is set,
+ *                otherwise returns 0
+ *      Returns:  1 or 0 based on whether the zero flag is set
+ * =====================================================================================
+ */
+	unsigned char
+get_zero_flag ()
+{
+	return regs->F & 0x80;
+}		/* -----  end of function get_zero_flag  ----- */
+
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  decode
@@ -264,7 +322,16 @@ decode ()
 		case 0xA0 ... 0xA7:
 			and();
 			break;
-
+		// SUB instructions
+		case 0xD6:
+		case 0x97:
+		case 0x90 ... 0x95:
+			sub();
+			break;
+		case 0xDE:
+		case 0x98 ... 0x9F:
+			sbc();
+			break;
 	}
 	return;
 }		/* -----  end of function decode  ----- */

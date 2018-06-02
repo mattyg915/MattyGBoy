@@ -3,8 +3,7 @@
  *
  *       Filename:  math_instructions.c
  *
- *    Description:  Constains all of the functions needed for mathematical 
- *    		    instructions
+ *    Description:  Constains functions needed for mathematical CPU instructions
  *
  *        Version:  1.0
  *        Created:  05/25/2018 20:05:04
@@ -16,11 +15,9 @@
  *
  * =====================================================================================
  */
-
 #include <stdlib.h>
 #include "math_instructions.h"
 #include "global_declarations.h"
-#include "helper_functions.h"
 #include "cpu_emulator.h"
 
 /* 
@@ -85,34 +82,31 @@ add ()
 			regs->A += regs->A;
 			break;
 		case 0x86:
-			// Use HL as address to get value from memory and add to A
 			eight_bit_update_flags(regs->A, memory[reg_hl]);
-			regs->A += memory[value1];
+			regs->A += memory[reg_hl];
 			break;
+		// 16-bit register cases
 		case 0x09:
-			// HL + BC --> HL
 			value = combine_registers(regs->B, regs->C);
 			sixteen_bit_update_flags(reg_hl, value);
 			split_between_registers((reg_hl + value), &(regs->H), &(regs->L));
 			break;
 		case 0x19:
-			// HL + DE --> HL
 			value = combine_registers(regs->D, regs->E);
 			sixteen_bit_update_flags(reg_hl, value);
 			split_between_registers((reg_hl + value), &(regs->H), &(regs->L));
 			break;
 		case 0x29:
-			// HL + HL --> HL
 			sixteen_bit_update_flags(reg_hl, reg_hl);
 			split_between_registers((reg_hl + reg_hl), &(regs->H), &(regs->L));
 			break;
 		case 0x39:
-			// HL + SP --> HL
 			value = ptrs->SP;
 			sixteen_bit_update_flags(reg_hl, value);
 			split_between_registers((reg_hl + value), &(regs->H), &(regs->L));
 			break;
 	}
+
 	return;
 }		/* -----  end of function add  ----- */
 
@@ -129,21 +123,18 @@ adc ()
         regs->F &= 0xB0;
 
 	unsigned char sum = 0; // Total the operand and the carry flag
-        sum += //TODO: implement get_carry() to get carry flag
-	
+        sum += get_carry_flag();
+	unsigned char reg_hl = combine_registers(regs->H, regs->L);
+
 	// All operations update A, so just need to get sum
         switch (opcode)
         {
                 case 0xCE:
-                        // A + (immediate + CY) --> A
-                        regs->PC++;
-                        unsigned char immediate = memory[ptrs->PC];
-			sum += immediate;
+                        ptrs->PC++;
+                        sum += memory[ptrs->PC];
                         break;
 		case 0x8E:
-			// Get value from memory address in HL
-			unsigned short address = combine_registers(regs->H, regs->L);
-			sum += memory[address];
+			sum += memory[reg_hl];
 			break;
 		case 0x8F:
 			sum += regs->A;
@@ -158,7 +149,7 @@ adc ()
 			sum += regs->D;
 			break;
 		case 0x8B:
-			sum += regs->E
+			sum += regs->E;
 			break;
 		case 0x8C:
 			sum += regs->H;
@@ -169,22 +160,117 @@ adc ()
 	}
 
 	// Update A and the flags
+	eight_bit_update_flags(regs->A, sum);
 	regs->A += sum;
-	eight_bit_update_flags(initial_a, sum);
 			
         return;
 }               /* -----  end of function adc  ----- */
 
+
 /* 
  * ===  FUNCTION  ======================================================================
- *         Name:  and
- *  Description:  Handles opcodes translating to AND instructions
+ *         Name:  sub
+ *  Description:  Handles opcodes translating to SUB instructions
  * =====================================================================================
  */
 	void
-and ()
+sub ()
 {
-	// Clear N Flag
-	// regs->F $= 0xB0;
+	// Set the subtract flag
+	regs->F |= 0x40;
+
+	// Minuend is always register A
+	unsigned char subtrahend;
+	
+	switch (opcode)
+	{
+		case 0xD6:
+			ptrs->PC++;
+			subtrahend = memory[ptrs->PC];
+			break;
+		case 0x90:
+			subtrahend = regs->B;
+			break;
+		case 0x91:
+			subtrahend = regs->C;
+			break;
+		case 0x92:
+			subtrahend = regs->D;
+			break;
+		case 0x93:
+			subtrahend = regs->E;
+			break;
+		case 0x94:
+			subtrahend = regs->H;
+			break;
+		case 0x95:
+			subtrahend = regs->L;
+			break;
+		case 0x97:
+			subtrahend = regs->A;
+			break;
+	}
+	
+	// Update A and the flags
+	eight_bit_update_flags(regs->A, subtrahend);
+	regs->A -= subtrahend;
+
 	return;
-}		/* -----  end of function and  ----- */
+}		/* -----  end of function sub  ----- */
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  sbc
+ *  Description:  Handles opcodes translating to SBC instructions
+ * =====================================================================================
+ */
+	void
+sbc ()
+{
+	// Set the N flag
+        regs->F |= 0x40;
+
+        unsigned char subtrahend = 0; // Total the operand and the carry flag
+        subtrahend += get_carry_flag();
+        unsigned char reg_hl = combine_registers(regs->H, regs->L);
+
+        // All operations update A, so just need to get sum
+        switch (opcode)
+        {
+                case 0xDE:
+                        ptrs->PC++;
+                        subtrahend += memory[ptrs->PC];
+                        break;
+                case 0x9E:
+                        subtrahend += memory[reg_hl];
+                        break;
+                case 0x9F:
+                        subtrahend += regs->A;
+                        break;
+                case 0x98:
+                        subtrahend += regs->B;
+                        break;
+                case 0x99:
+                        subtrahend += regs->C;
+                        break;
+                case 0x9A:
+                        subtrahend += regs->D;
+                        break;
+                case 0x9B:
+                        subtrahend += regs->E;
+                        break;
+                case 0x9C:
+                        subtrahend += regs->H;
+                        break;
+                case 0x9D:
+                        subtrahend += regs->L;
+                        break;
+        }
+
+        // Update A and the flags
+        eight_bit_update_flags(regs->A, subtrahend);
+        regs->A -= subtrahend;
+
+	return;
+}		/* -----  end of function sbc  ----- */

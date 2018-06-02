@@ -14,16 +14,14 @@
  *
  * =====================================================================================
  */
-
-#include "math_instructions.h"
 #include "register_structures.h"
 #include "global_declarations.h"
 #include "helper_functions.h"
 #include "cpu_emulator.h"
 #include <stdlib.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <assert.h>
+#include <unistd.h>
 
 #define EXIT_SUCCESS 0
 #define MEMORY_SIZE 0xFFFF
@@ -57,7 +55,8 @@ add_tests ()
 	
 	// Read instructions for this test into memory, track how many are read
         int inst_read = 0;
-        FILE *unit_test_file = fopen("add_tests.txt", "r"); // Stream from test file
+	char *add_tests_file = "/Users/MattyG/Documents/Programming/MattyGBoy/tests/add_tests.txt";
+        FILE *unit_test_file = fopen(add_tests_file, "r"); // Stream from test file
 	assert(unit_test_file != NULL);
         char inst_line[5];
         while (fgets(inst_line, 4, unit_test_file) != NULL) 
@@ -145,30 +144,6 @@ int main (int argc, char *argv[])
 	{
 		switch (flag) 
 		{
-			case 'A':
-				reg_init_values[0] = strtol(optarg, NULL, 16);
-				break;
-			case 'B':
-				reg_init_values[1] = strtol(optarg, NULL, 16);
-                		break;
-			case 'C':
-				reg_init_values[2] = strtol(optarg, NULL, 16);
-                		break;
-			case 'D':
-				reg_init_values[3] = strtol(optarg, NULL, 16);
-               			break;
-			case 'E':
-				reg_init_values[4] = strtol(optarg, NULL, 16);
-                		break;
-			case 'F':
-				reg_init_values[5] = strtol(optarg, NULL, 16);
-                		break;
-			case 'H':
-				reg_init_values[6] = strtol(optarg, NULL, 16);
-                		break;
-			case 'L':
-				reg_init_values[7] = strtol(optarg, NULL, 16);
-                		break;
 			case 'v':
 				verbose = 1;
                 		break;

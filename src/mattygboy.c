@@ -18,8 +18,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "register_structures.h"
-#include "math_instructions.h"
 #include "global_declarations.h"
+#include "cpu_emulator.h"
 
 #define EXIT_SUCCESS 0 // Quit without error condition
 #define MEMORY_SIZE 0xFFFF // Top end of address range
