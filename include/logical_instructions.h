@@ -1,24 +1,22 @@
 /*
  * =====================================================================================
  *
- *       Filename:  math_instructions.h
+ *       Filename:  logical_instructions.h
  *
- *    Description:  Header file for the arithmetic cpu instructions source
+ *    Description:  Header file for logical instruction functions
  *
  *        Version:  1.0
- *        Created:  05/28/2018 10:55:27
+ *        Created:  06/01/2018 21:09:49
  *       Revision:  none
  *       Compiler:  gcc
  *
  *         Author:  Matt Gercz (mg), matt.gercz@icloud.com
+ *   Organization:  
  *
  * =====================================================================================
  */
 
-#ifndef MATHINSTRUCTIONS
-#define MATHINSTRUCTIONS
-void add ();
-void adc();
-void sub();
-void sbc();
+#ifndef LOGICALINSTRUCTIONS
+#define LOGICALINSTRUCTIONS
+void and();
 #endif

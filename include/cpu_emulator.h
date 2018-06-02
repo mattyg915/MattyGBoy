@@ -22,6 +22,10 @@ extern unsigned char opcode;
 unsigned short combine_registers(unsigned char reg1, unsigned char reg2);
 void split_between_registers(unsigned short value, 
 		unsigned char *reg1, unsigned char *reg2);
+unsigned char get_zero_flag();
+unsigned char get_subtract_flag();
+unsigned char get_half_carry_flag();
+unsigned char get_carry_flag();
 void eight_bit_update_flags(int value1, int value2);
 void sixteen_bit_update_flags(int value1, int value2);
 void cpu_execution();
