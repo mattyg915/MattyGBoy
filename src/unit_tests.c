@@ -120,17 +120,25 @@ add_tests ()
 
         // Check state of registers
         assert(regs->A == 0x04);
-        assert(regs->B == 0x0);
-        assert(regs->C == 0x5);
-        assert(regs->D == 0xFF);
-        assert(regs->E == 0x0);
         assert(regs->F == 0x30);
-        assert(regs->H == 0xAA);
         assert(regs->L == 0xC0);
 
         // Check state of pointers
-        assert(ptrs->SP == 0xFFFE);
         assert(ptrs->PC == 0x0109);
+
+	/*  Third run tests SP ops */
+
+	do
+        {
+                cpu_execution(); // Emulate instructions until NOP reached
+                if (verbose) // Dump registers after each instruction
+                {
+                        dump_registers();
+                }
+        } while (opcode != 0x00);
+
+	assert(ptrs->SP == 0xFFFD);
+	assert(regs->F == 0x40);
 
 	printf("All add() tests passed successfully\n");
 	return;

@@ -17,7 +17,8 @@
 
 #ifndef MATHINSTRUCTIONS
 #define MATHINSTRUCTIONS
-void add ();
+void eight_bit_add();
+void sixteen_bit_add();
 void adc();
 void sub();
 void sbc();

@@ -23,52 +23,6 @@
 
 unsigned char opcode;
 
-/*
- * ===  FUNCTION  ======================================================================
- *         Name:  combine_registers
- *  Description:  Takes the 8-bit values from 2 registers and returns them as a
- *                single 16-bit value
- *   Parameters:  reg1 is an unsigned char from the register that should occupy
- *                the 8 most significant bits of the new value
- *                reg2 is an unsigned char from the register that should occupy
- *                the lower-order 8 bits of the new value
- *       Return:  an unsigned short that is the concatenation of the passed values
- * =====================================================================================
- */
-        unsigned short
-combine_registers(unsigned char reg1, unsigned char reg2)
-{
-        unsigned short result = (unsigned short)reg1;
-        // bit-shift reg1 8 to the left to get the 8 most significant bits
-        result <<= 8;
-        // Then just add reg2 to get the 8 least significant bits
-        result += reg2;
-
-        return result;
-}	/* -----  end of function combine_registers  ----- */
-
-/* ===  FUNCTION  ======================================================================
- *         Name:  split_between_registers
- *  Description:  Takes a 16-bit value and splits it between two 8-bit registers
- *   Parameters:  value is the 16-bit value to split
- *                reg1 is a pointer to the register where the higher-order bits should
- *                be placed
- *                reg2 is a pointer to the register where the lower-order bits should
- *                be placed
- * =====================================================================================
- */
-        void
-split_between_registers(unsigned short value,
-                unsigned char *reg1, unsigned char *reg2)
-{
-        // Cast as a char to just grab the lower-order bits
-        *reg2 = (unsigned char)value;
-        // Shift the higher bits into the lower position then cast
-        value >>= 8;
-        *reg1 = (unsigned char)value;
-}       /* -----  end of function split_between_registers  ----- */
-
-
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  eight_bit_update_flags
@@ -205,7 +159,7 @@ sixteen_bit_update_flags (int value1, int value2)
                         regs->F &= 0xD0;
                 }
                 // Carry Flag - subtraction
-                if (result > 0)
+                if (result < 0)
                 {
                         regs->F |= 0x10;
                 }
@@ -303,14 +257,18 @@ decode ()
 		case 0x00: // NOP
 			return;
 		// Add instructions
+			// 8-bit
 		case 0xC6:
+		case 0xE8:
 		case 0x80 ... 0x87:
+			eight_bit_add();
+			break;
+			// 16-bit
 		case 0x09:
 		case 0x19:
 		case 0x29:
 		case 0x39:
-		case 0xE8:
-			add();
+			sixteen_bit_add();
 			break;
 		// ADC instructions
 		case 0xCE:

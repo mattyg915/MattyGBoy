@@ -19,6 +19,7 @@
 #include "logical_instructions.h"
 #include "global_declarations.h"
 #include "cpu_emulator.h"
+#include "helper_functions.h"
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -31,7 +32,7 @@ and ()
 {
         // Right operand is dependant on opcode, left is always register A
         unsigned char operand = 0;
-        unsigned reg_hl = combine_registers(regs->H, regs->L);
+        unsigned reg_hl = combine_bytes(regs->H, regs->L);
 
         switch (opcode)
         {

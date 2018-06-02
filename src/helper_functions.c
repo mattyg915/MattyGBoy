@@ -40,4 +40,44 @@ dump_registers()
 	return;
 }		/* -----  end of function dump_registers  ----- */
 
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  combine_bytes
+ *  Description:  Takes two 8-bit values and returns them as a single 16-bit value
+ *   Parameters:  byte1 is an unsigned char that should occupy the 8 most 
+ *   		  significant bits of the new value
+ *                byte2 is an unsigned char that should occupy the lower-order 8 
+ *                bits of the new value
+ *       Return:  an unsigned short that is the concatenation of the passed values
+ * =====================================================================================
+ */
+        unsigned short
+combine_bytes(unsigned char byte1, unsigned char byte2)
+{       
+        unsigned short result = (unsigned short)byte1;
+        result <<= 8;
+        result += byte2;
+        
+        return result;
+}       /* -----  end of function combine_registers  ----- */
 
+/* ===  FUNCTION  ======================================================================
+ *         Name:  split_between_registers
+ *  Description:  Takes a 16-bit value and splits it between two 8-bit registers
+ *   Parameters:  value is the 16-bit value to split
+ *                reg1 is a pointer to the register where the higher-order bits should
+ *                be placed
+ *                reg2 is a pointer to the register where the lower-order bits should
+ *                be placed
+ * =====================================================================================
+ */
+        void
+split_between_registers(unsigned short value,
+                unsigned char *reg1, unsigned char *reg2)
+{
+        // Cast as a char to just grab the lower-order bits
+        *reg2 = (unsigned char)value;
+        // Shift the higher bits into the lower position then cast
+        value >>= 8;
+        *reg1 = (unsigned char)value;
+}       /* -----  end of function split_between_registers  ----- */
