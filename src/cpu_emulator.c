@@ -15,11 +15,13 @@
  * =====================================================================================
  */
 #include <stdlib.h>
+#include <stdio.h>
 #include "math_instructions.h"
 #include "global_declarations.h"
 #include "register_structures.h"
 #include "cpu_emulator.h"
 #include "logical_instructions.h"
+#include "bit_rotate_shift_instructions.h"
 
 unsigned char opcode;
 
@@ -256,41 +258,93 @@ decode ()
 	switch (opcode) {
 		case 0x00: // NOP
 			return;
+		// Rotate A instructions
+		case 0x0F:
+		case 0x1F:
+		case 0x07:
+		case 0x17:
+			rotate_a();
+			return;
+		// Bit test, rotate, and shift instructions
+		case 0xCB:
+			bit_rotate_shift();
+			return;
 		// Add instructions
 			// 8-bit
 		case 0xC6:
 		case 0xE8:
 		case 0x80 ... 0x87:
 			eight_bit_add();
-			break;
+			return;
 			// 16-bit
 		case 0x09:
 		case 0x19:
 		case 0x29:
 		case 0x39:
 			sixteen_bit_add();
-			break;
+			return;
 		// ADC instructions
 		case 0xCE:
 		case 0x88 ... 0x8D:
 			adc();
-			break;
+			return;
 		// AND instructions
 		case 0xE6:
 		case 0xA0 ... 0xA7:
 			and();
-			break;
+			return;
 		// SUB instructions
 		case 0xD6:
 		case 0x97:
 		case 0x90 ... 0x95:
 			sub();
 			break;
+		// SBC instructions
 		case 0xDE:
 		case 0x98 ... 0x9F:
 			sbc();
 			break;
+		// 8-bit INC instructions
+		case 0x34:
+		case 0x3C:
+		case 0x04:
+		case 0x0C:
+		case 0x14:
+		case 0x1C:
+		case 0x24:
+		case 0x2C:
+			eight_bit_inc();
+			break;
+		// 16-bit INC instructions
+		case 0x03:
+		case 0x13:
+		case 0x23:
+		case 0x33:
+			sixteen_bit_inc();
+			break;
+		// 8-bit DEC instructions
+		case 0x35:
+		case 0x3D:
+		case 0x05:
+		case 0x0D:
+		case 0x15:
+		case 0x1D:
+		case 0x25:
+		case 0x2D:
+			eight_bit_dec();
+			break;
+		// 16-bit DEC instructions
+		case 0x0B:
+		case 0x1B:
+		case 0x2B:
+		case 0x3B:
+			sixteen_bit_dec();
+			break;
+		default:
+			printf("ERROR: Invalid or unsupported opcode encountered\n");
+			exit(1);
 	}
+
 	return;
 }		/* -----  end of function decode  ----- */
 

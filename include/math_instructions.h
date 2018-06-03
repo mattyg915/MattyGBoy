@@ -22,4 +22,8 @@ void sixteen_bit_add();
 void adc();
 void sub();
 void sbc();
+void eight_bit_inc();
+void sixteen_bit_inc();
+void eight_bit_dec();
+void sixteen_bit_dec();
 #endif

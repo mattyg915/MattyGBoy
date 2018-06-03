@@ -87,7 +87,7 @@ add_tests ()
         do
         {
         	cpu_execution(); // Emulate instructions until NOP reached
-		if (verbose) // Dump registers after each instruction
+		if (verbose && (opcode != 0x00)) // Dump registers after each instruction
 		{
 			dump_registers();
 		}
@@ -112,7 +112,7 @@ add_tests ()
 	do
         {
                 cpu_execution(); // Emulate instructions until NOP reached
-                if (verbose) // Dump registers after each instruction
+                if (verbose && (opcode != 0x00)) // Dump registers after each instruction
                 {
                         dump_registers();
                 }
@@ -131,7 +131,7 @@ add_tests ()
 	do
         {
                 cpu_execution(); // Emulate instructions until NOP reached
-                if (verbose) // Dump registers after each instruction
+                if (verbose && (opcode != 0x00)) // Dump registers after each instruction
                 {
                         dump_registers();
                 }

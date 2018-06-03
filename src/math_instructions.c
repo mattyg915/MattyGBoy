@@ -20,7 +20,6 @@
 #include "global_declarations.h"
 #include "cpu_emulator.h"
 #include "helper_functions.h"
-#include <stdio.h>
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -397,3 +396,110 @@ sixteen_bit_inc ()
 
 	return;
 }		/* -----  end of function sixteen_bit_inc  ----- */
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  eight_bit_dec
+ *  Description:  Handles opcodes translating to 8-bit DEC instructions
+ * =====================================================================================
+ */
+	void
+eight_bit_dec ()
+{
+        // Set N flag
+        regs->F |= 0x40;
+
+        // Capture state of C flag so it can be preserved
+        unsigned char c_flag = get_carry_flag();
+
+        unsigned char initial_state; // Capture initial state for flag updates
+        unsigned short reg_hl = combine_bytes(regs->H, regs->L);
+        switch (opcode)
+        {
+                case 0x35:
+                        initial_state = memory[reg_hl];
+                        memory[reg_hl]--;
+                        break;
+                case 0x3D:
+                        initial_state = regs->A;
+                        regs->A--;
+                        break;
+                case 0x05:
+                        initial_state = regs->B;
+                        regs->B--;
+                        break;
+                case 0x0D:
+                        initial_state = regs->C;
+                        regs->C--;
+                        break;
+                case 0x15:
+                        initial_state = regs->D;
+                        regs->D--;
+                        break;
+                case 0x1D:
+                        initial_state = regs->E;
+                        regs->E--;
+                        break;
+                case 0x25:
+                        initial_state = regs->H;
+                        regs->H--;
+                        break;
+                case 0x2D:
+                        initial_state = regs->L;
+                        regs->L--;
+                        break;
+        }
+	
+	// Restore C flag, this instruction doesn't set or clear it
+        if (c_flag)
+        {
+                regs->F |= 0x10;
+        }
+        else
+        {
+                regs->F &= 0xE0;
+        }
+
+
+        eight_bit_update_flags(initial_state, 1);
+
+	return;
+}		/* -----  end of function eight_bit_dec  ----- */
+
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  sixteen_bit_dec
+ *  Description:  Handles opcodes translating to 16-bit DEC instructions
+ *  		  This instruction does not affect flags
+ * =====================================================================================
+ */
+	void
+sixteen_bit_dec ()
+{
+	unsigned short value;
+        switch (opcode)
+        {
+                case 0x0B:
+                        value = combine_bytes(regs->B, regs->C);
+                        value--;
+                        split_between_registers(value, &regs->B, &regs->C);
+                        break;
+                case 0x1B:
+                        value = combine_bytes(regs->D, regs->E);
+                        value--;
+                        split_between_registers(value, &regs->D, &regs->E);
+                        break;
+                case 0x2B:
+                        value = combine_bytes(regs->L, regs->L);
+                        value--;
+                        split_between_registers(value, &regs->H, &regs->L);
+                        break;
+                case 0x3B:
+                        ptrs->SP--;
+                        break;
+        }
+
+	return;
+}		/* -----  end of function sixteen_bit_dec  ----- */
