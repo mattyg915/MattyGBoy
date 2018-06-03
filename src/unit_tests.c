@@ -1,9 +1,9 @@
 /*
  * =====================================================================================
  *
- *       Filename:  math_tests.c
+ *       Filename:  unit_tests.c
  *
- *    Description:  Unit tests for arithmetic instructions/functions
+ *    Description:  Unit tests for cpu instructions
  *
  *        Version:  1.0
  *        Created:  05/29/2018 12:52:07
