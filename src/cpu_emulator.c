@@ -254,7 +254,6 @@ get_zero_flag ()
 	static void
 decode ()
 {
-	// TODO: ALL the opcodes
 	switch (opcode) {
 		case 0x00: // NOP
 			return;
@@ -297,12 +296,12 @@ decode ()
 		case 0xD6:
 		case 0x90 ... 0x97:
 			sub();
-			break;
+			return;
 		// SBC instructions
 		case 0xDE:
 		case 0x98 ... 0x9F:
 			sbc();
-			break;
+			return;
 		// 8-bit INC instructions
 		case 0x34:
 		case 0x3C:
@@ -313,14 +312,14 @@ decode ()
 		case 0x24:
 		case 0x2C:
 			eight_bit_inc();
-			break;
+			return;
 		// 16-bit INC instructions
 		case 0x03:
 		case 0x13:
 		case 0x23:
 		case 0x33:
 			sixteen_bit_inc();
-			break;
+			return;
 		// 8-bit DEC instructions
 		case 0x35:
 		case 0x3D:
@@ -331,14 +330,31 @@ decode ()
 		case 0x25:
 		case 0x2D:
 			eight_bit_dec();
-			break;
+			return;
 		// 16-bit DEC instructions
 		case 0x0B:
 		case 0x1B:
 		case 0x2B:
 		case 0x3B:
 			sixteen_bit_dec();
-			break;
+			return;
+		// OR instructions
+		case 0xF6:
+		case 0xB0 ... 0xB7:
+			or();
+			return;
+		// XOR instructions
+		case 0xEE:
+		case 0xA8 ... 0xAF:
+			xor();
+			return;
+		case 0x27:
+			daa();
+			return;
+		case 0x2F:
+			cpl();
+			return;
+		// TODO: keep going!
 		default:
 			printf("ERROR: Invalid or unsupported opcode encountered\n");
 			exit(1);

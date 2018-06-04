@@ -19,4 +19,8 @@
 #ifndef LOGICALINSTRUCTIONS
 #define LOGICALINSTRUCTIONS
 void and();
+void or();
+void xor();
+void daa();
+void cpl();
 #endif
