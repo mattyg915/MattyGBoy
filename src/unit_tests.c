@@ -144,6 +144,81 @@ add_tests ()
 	return;
 }	/* -----  end of function add_tests  ----- */
 
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  sub_tests
+ *  Description:  Unit tests for the sub() function
+ * =====================================================================================
+ */
+        void
+sub_tests()
+{
+	printf("Executing unit tests for sub()\n");
+	
+	reg_init_values[0] = 0x70;
+	reg_init_values[1] = 0x10;
+        reg_init_values[2] = 0x10;
+        reg_init_values[3] = 0x10;
+	reg_init_values[4] = 0x10;
+	reg_init_values[5] = 0x10;
+        reg_init_values[6] = 0x08;
+        reg_init_values[7] = 0x08;
+
+        regs = init_registers(reg_init_values);
+        ptrs = init_pointers();
+        memory = malloc(MEMORY_SIZE);
+
+        // Read instructions for this test into memory, track how many are read
+        int inst_read = 0;
+        char *sub_tests_file = "/Users/MattyG/Documents/Programming/MattyGBoy/tests/sub_tests.txt";
+        FILE *unit_test_file = fopen(sub_tests_file, "r"); // Stream from test file
+        assert(unit_test_file != NULL);
+        char inst_line[5];
+        while (fgets(inst_line, 4, unit_test_file) != NULL)
+        {
+                // Store newly read instruction in virtual memory
+                memory[0x0100 + inst_read] = (unsigned char)strtol(inst_line,
+                                NULL, 16);
+                inst_read++;
+        }
+        // Append 'NOP' so we have a hook to break the execution loop
+        memory[0x0100 + inst_read] = 0x00;
+
+	memory[0x0808] == 0x10;
+
+        fclose(unit_test_file);
+	
+	// First run
+	do
+        {
+                cpu_execution(); // Emulate instructions until NOP reached
+                if (verbose && (opcode != 0x00)) // Dump registers after each instruction
+                {
+                        dump_registers();
+                }
+        } while (opcode != 0x00);
+
+	assert(regs->A == 0x18);
+	assert(regs->F == 0x40);
+
+	// Second run
+	do
+        {
+                cpu_execution(); // Emulate instructions until NOP reached
+                if (verbose && (opcode != 0x00)) // Dump registers after each instruction
+                {
+                        dump_registers();
+                }
+        } while (opcode != 0x00);
+
+	assert(regs->A == 0x0);
+	assert(regs->F == 0xC0);
+
+	printf("All sub() tests passed successfully\n");
+
+	return;
+}		/* -----  end of function sub_tests  ----- */
+
 int main (int argc, char *argv[])
 {
 	// Handle optional command line arguments
@@ -160,6 +235,7 @@ int main (int argc, char *argv[])
 	
 	// Run unit tests for add()
 	add_tests();
-	
+	sub_tests();
+
 	return EXIT_SUCCESS;
 }

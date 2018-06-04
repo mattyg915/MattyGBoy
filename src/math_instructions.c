@@ -223,6 +223,9 @@ sub ()
 		case 0x95:
 			subtrahend = regs->L;
 			break;
+		case 0x96:
+			unsigned short addr = combine_registers(regs->H, regs->L);
+			subtrahend = memory[addr];
 		case 0x97:
 			subtrahend = regs->A;
 			break;

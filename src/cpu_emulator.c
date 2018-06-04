@@ -295,8 +295,7 @@ decode ()
 			return;
 		// SUB instructions
 		case 0xD6:
-		case 0x97:
-		case 0x90 ... 0x95:
+		case 0x90 ... 0x97:
 			sub();
 			break;
 		// SBC instructions
