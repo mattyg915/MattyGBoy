@@ -348,12 +348,39 @@ decode ()
 		case 0xA8 ... 0xAF:
 			xor();
 			return;
+		// DAA
 		case 0x27:
 			daa();
 			return;
+		// CPL
 		case 0x2F:
 			cpl();
 			return;
+		// CP instructions
+		case 0xFE:
+		case 0xB9 ... 0xBF:
+			cp();
+			return;
+		// JP instructions
+		case 0xC3:
+		case 0xE9:
+		case 0xDA:
+		case 0xD2:
+		case 0xC2:
+		case 0xCA:
+			jp();
+			return;
+		// JR instructions
+		case 0x18:
+		case 0x38:
+		case 0x30:
+		case 0x20:
+		case 0x28:
+			jr();
+			return;
+		// CALL instructions
+
+		case 
 		// TODO: keep going!
 		default:
 			printf("ERROR: Invalid or unsupported opcode encountered\n");

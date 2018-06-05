@@ -17,8 +17,6 @@
 
 #ifndef CPUEMULATOR
 #define CPUEMULATOR
-extern unsigned char opcode;
-
 unsigned short combine_registers(unsigned char reg1, unsigned char reg2);
 void split_between_registers(unsigned short value, 
 		unsigned char *reg1, unsigned char *reg2);
