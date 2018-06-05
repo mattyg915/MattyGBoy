@@ -195,14 +195,62 @@ xor ()
         return;
 }               /* -----  end of function xor  ----- */
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  cpl
+ *  Description:  Handles opcodes translating to a CPL instruction
+ * =====================================================================================
+ */
+	void
+cpl ()
+{
+	return;
+}		/* -----  end of function cpl  ----- */
+
 /*
  * ===  FUNCTION  ======================================================================
  *         Name:  daa
  *  Description:  Handles opcodes translating to DAA instructions
+ *  		  Credit for inspiration for this function's algorithm to Eric Haskins
+                  https://ehaskins.com/2018-01-30%20Z80%20DAA/
+		  and /u/mudanhonnyaku on reddit: 
+		  https://www.reddit.com/r/EmuDev/comments/4ycoix/a_guide_to_
+		  the_gameboys_halfcarry_flag/d6p3rtl
  * =====================================================================================
  */
         void
 daa ()
 {
-	//TODO: figure out wtf this instruction does then implement this
+	/* Lots of inspiration for this function's code taken from Eric Haskins at
+	 * https://ehaskins.com/2018-01-30%20Z80%20DAA/ */
+
+	unsigned char correction = 0;
+
+	// If half carry set OR if least significant nibble of A > 9
+	if (get_half_carry_flag() || (!get_subtract_flag() && (regs->A & 0xF) > 0x9))
+	{
+		correction += 0x6;
+	}
+
+	// If carry set OR most significant nibble of A >9
+	if(get_carry_flag() || (!get_subtract_flag() && (regs->A & 0xF0) > 0x9))
+	{
+		correction += 0x60;
+		regs->F |= 0x10; // Carry flag gets set if correct upper nibble
+	}
+
+	regs->F &= 0xD0; // Half-carry flag gets cleared by this op
+
+	// Correction added/subtracted to/from A based on previous op
+	if (get_subtract_flag())
+	{
+		regs->A -= correction;
+	}
+	else
+	{
+		regs->A += correction;
+	}
+
+	return;
 }		/* -----  end of function daa  ----- */

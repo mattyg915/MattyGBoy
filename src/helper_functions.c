@@ -35,7 +35,7 @@ dump_registers()
 			" F: %x H: %x L: %x\n", regs->A, regs->B,
 			regs->C, regs->D, regs->E, regs->F,
 			regs->H, regs->L);
-	printf("Stack pointer: %x Program Counter: %x\n",
+	printf("Stack pointer: %x Program Counter: %x\n\n",
 			ptrs->SP, ptrs->PC);
 	return;
 }		/* -----  end of function dump_registers  ----- */

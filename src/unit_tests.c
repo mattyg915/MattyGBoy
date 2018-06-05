@@ -80,7 +80,7 @@ add_tests ()
         {
                 for (int i = 0x0100; i < 0x0100 + inst_read; i++)
                 {
-                        printf("Opcode at %x is %x\n\n", i, memory[i]);
+                        printf("Opcode at %x is %x\n", i, memory[i]);
                 }
         }
 			/* First run tests basic 8 bit instructions and half-carry */
@@ -140,7 +140,7 @@ add_tests ()
 	assert(ptrs->SP == 0xFFFD);
 	assert(regs->F == 0x40);
 
-	printf("All add() tests passed successfully\n");
+	printf("All add() tests passed successfully\n\n\n");
 	return;
 }	/* -----  end of function add_tests  ----- */
 
@@ -184,7 +184,7 @@ sub_tests()
         // Append 'NOP' so we have a hook to break the execution loop
         memory[0x0100 + inst_read] = 0x00;
 
-	memory[0x0808] == 0x10;
+	memory[0x0808] = 0x10;
 
         fclose(unit_test_file);
 	
@@ -214,7 +214,7 @@ sub_tests()
 	assert(regs->A == 0x0);
 	assert(regs->F == 0xC0);
 
-	printf("All sub() tests passed successfully\n");
+	printf("All sub() tests passed successfully\n\n\n");
 
 	return;
 }		/* -----  end of function sub_tests  ----- */

@@ -198,7 +198,8 @@ sub ()
 
 	// Minuend is always register A
 	unsigned char subtrahend;
-	
+	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
+
 	switch (opcode)
 	{
 		case 0xD6:
@@ -224,8 +225,7 @@ sub ()
 			subtrahend = regs->L;
 			break;
 		case 0x96:
-			unsigned short addr = combine_registers(regs->H, regs->L);
-			subtrahend = memory[addr];
+			subtrahend = memory[reg_hl];
 		case 0x97:
 			subtrahend = regs->A;
 			break;
