@@ -82,6 +82,34 @@ cp ()
         void
 jp ()
 {
+	// Grab 16-bit immediate in case needed, only move PC if it's used
+	// As PC is incremented in the CPU loop, 1 is subtracted from each target
+	unsigned char sixteen_bit_target = combine_bytes(memory[ptrs->PC + 1], 
+			memory[ptrs->PC + 2]) - 1;
+	unsigned short reg_hl = combine_bytes(regs->H, regs->L) - 1;
+
+	switch (opcode)
+	{
+		case 0xC3:
+			ptrs->PC = sixteen_bit_target;
+			return;
+		case 0xE9:
+			ptrs->PC = reg_hl;
+			return;
+		case 0xDA:
+			ptrs->PC = get_carry_flag() ? sixteen_bit_target : ptrs->PC + 2;
+			return;
+		case 0xD2:
+			ptrs->PC = !get_carry_flag() ? sixteen_bit_target : ptrs->PC + 2;
+			return;
+		case 0xC2:
+			ptrs->PC = !get_zero_flag() ? sixteen_bit_target : ptrs->PC + 2;
+			return;
+		case 0xCA:
+			ptrs->PC = get_zero_flag() ? sixteen_bit_target : ptrs->PC + 2;
+			return;
+	}
+
 	return;
 }		/* -----  end of function jp  ----- */
 
@@ -94,6 +122,30 @@ jp ()
         void
 jr ()
 {
+	// All ops use a 1-byte immediate
+	// Don't adjust for cpu() method incrementing PC as it's balanced by
+	// jumping from the address of the immediate value, so 
+	// the proper offset from the initial address would be offset + 1
+	unsigned char eight_bit_offset = memory[ptrs->PC + 1];
+
+	switch (opcode)
+	{
+		case 0x18:
+                        ptrs->PC += eight_bit_target;
+                        return;
+                case 0x38:
+                        ptrs->PC += get_carry_flag() ? eight_bit_target : 1;
+                        return;
+                case 0x30:
+                        ptrs->PC += !get_carry_flag() ? eight_bit_target : 1;
+                        return;
+                case 0x20:
+                        ptrs->PC += !get_zero_flag() ? eight_bit_target : 1;
+                        return;
+                case 0x28:
+                        ptrs->PC += get_zero_flag() ? eight_bit_target : 1;
+                        return;
+        }
         return;
 }               /* -----  end of function jr  ----- */
 
@@ -106,6 +158,36 @@ jr ()
         void
 call ()
 {
+	// All ops take a 2-byte immediate operand
+	// Subtract one from target because PC incremented by CPU function
+	unsigned char target = combine_bytes(memory[ptrs->PC + 1], 
+			memory[ptrs->PC + 2]) - 1;
+	ptrs->PC += 2;
+
+	switch (opcode)
+	{
+		case 0xCD:
+			ptrs->SP -= 2;
+			memory[ptrs->SP + 1] = (unsigned char)(ptrs->PC >> 8);
+			memory[ptrs->SP] = ptrs->PC & 0xf;
+			ptrs->PC = target;
+			return;
+		case 0xDC:
+			if (get_carry_flag)
+			{
+				ptrs->SP -= 2;
+                        	memory[ptrs->SP + 1] = (unsigned char)(ptrs->PC >> 8);
+                        	memory[ptrs->SP] = ptrs->PC & 0xf;
+                        	ptrs->PC = target;
+			}
+			return;
+		case 0xD4:
+			return;
+		case 0xC4:
+			return;
+		case 0xCC:
+			return;
+	}
         return;
 }               /* -----  end of function call  ----- */
 
