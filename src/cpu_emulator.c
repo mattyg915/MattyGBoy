@@ -361,7 +361,7 @@ decode ()
 		case 0xB9 ... 0xBF:
 			cp();
 			return;
-		// JP instructions
+		// Jump instructions
 		case 0xC3:
 		case 0xE9:
 		case 0xDA:
@@ -370,7 +370,6 @@ decode ()
 		case 0xCA:
 			jp();
 			return;
-		// JR instructions
 		case 0x18:
 		case 0x38:
 		case 0x30:
@@ -378,9 +377,34 @@ decode ()
 		case 0x28:
 			jr();
 			return;
-		// CALL instructions
-
-		case 
+		// Call and return instructions
+		case 0xCD:
+		case 0xDC:
+		case 0xD4:
+		case 0xC4:
+		case 0xCC:
+			call();
+			return;
+		case 0xC9:
+		case 0xD8:
+		case 0xD0:
+		case 0xC0:
+		case 0xD8:
+			ret();
+			return;
+		case 0xD9:
+			reti();
+			return;
+		case 0xC7:
+		case 0xCF:
+		case 0xD7:
+		case 0xDF:
+		case 0xE7:
+		case 0xEF:
+		case 0xF7:
+		case 0xFF:
+			rst();
+			return;
 		// TODO: keep going!
 		default:
 			printf("ERROR: Invalid or unsupported opcode encountered\n");
