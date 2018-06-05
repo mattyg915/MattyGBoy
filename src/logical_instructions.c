@@ -205,6 +205,7 @@ xor ()
 	void
 cpl ()
 {
+	regs->A ^= 0xFF; // Just invert the bits to get 1's complement
 	return;
 }		/* -----  end of function cpl  ----- */
 
