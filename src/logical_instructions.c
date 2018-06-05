@@ -206,6 +206,7 @@ xor ()
 cpl ()
 {
 	regs->A ^= 0xFF; // Just invert the bits to get 1's complement
+	regs->F = 0x60; // N and H flags are set, others ignored
 	return;
 }		/* -----  end of function cpl  ----- */
 
