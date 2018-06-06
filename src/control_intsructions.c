@@ -84,7 +84,7 @@ jp ()
 {
 	// Grab 16-bit immediate in case needed, only move PC if it's used
 	// As PC is incremented in the CPU loop, 1 is subtracted from each target
-	unsigned char sixteen_bit_target = combine_bytes(memory[ptrs->PC + 1], 
+	unsigned short sixteen_bit_target = combine_bytes(memory[ptrs->PC + 1], 
 			memory[ptrs->PC + 2]) - 1;
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L) - 1;
 
@@ -131,19 +131,19 @@ jr ()
 	switch (opcode)
 	{
 		case 0x18:
-                        ptrs->PC += eight_bit_target;
+                        ptrs->PC += eight_bit_offset;
                         return;
                 case 0x38:
-                        ptrs->PC += get_carry_flag() ? eight_bit_target : 1;
+                        ptrs->PC += get_carry_flag() ? eight_bit_offset : 1;
                         return;
                 case 0x30:
-                        ptrs->PC += !get_carry_flag() ? eight_bit_target : 1;
+                        ptrs->PC += !get_carry_flag() ? eight_bit_offset : 1;
                         return;
                 case 0x20:
-                        ptrs->PC += !get_zero_flag() ? eight_bit_target : 1;
+                        ptrs->PC += !get_zero_flag() ? eight_bit_offset : 1;
                         return;
                 case 0x28:
-                        ptrs->PC += get_zero_flag() ? eight_bit_target : 1;
+                        ptrs->PC += get_zero_flag() ? eight_bit_offset : 1;
                         return;
         }
         return;
@@ -160,7 +160,7 @@ call ()
 {
 	// All ops take a 2-byte immediate operand
 	// Subtract one from target because PC incremented by CPU function
-	unsigned char target = combine_bytes(memory[ptrs->PC + 1], 
+	unsigned short target = combine_bytes(memory[ptrs->PC + 1], 
 			memory[ptrs->PC + 2]) - 1;
 	ptrs->PC += 2;
 
@@ -271,9 +271,16 @@ ret ()
         void
 reti ()
 {
+	// Execute unconditional return
 	// Decrement since PC will be incremented by cpu function
         unsigned short return_address = combine_bytes(memory[ptrs->SP + 1], 
 			memory[ptrs->SP]) - 1;
+	ptrs->SP += 2;
+        ptrs->PC = return_address;
+
+	// Then enable interupts
+	regs->IME = 1;
+
         return;
 }               /* -----  end of function reti  ----- */
 
@@ -286,5 +293,6 @@ reti ()
         void
 rst ()
 {
+
         return;
 }               /* -----  end of function rst  ----- */

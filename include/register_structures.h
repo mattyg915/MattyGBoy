@@ -20,8 +20,8 @@
 #define REGISTERSTRUCTURES
 
 typedef struct Registers {
-	// Game Boy CPU uses 8 8-bit registers, F is used for flags
-	unsigned char A, B, C, D, E, F, H, L;
+	// F register is used for flags, IME is the Interrupt Master Enable
+	unsigned char A, B, C, D, E, F, H, L, IME;
 } Registers;
 
 typedef struct Pointers {
