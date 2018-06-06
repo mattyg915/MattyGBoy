@@ -173,19 +173,40 @@ call ()
 			ptrs->PC = target;
 			return;
 		case 0xDC:
-			if (get_carry_flag)
+			if (get_carry_flag())
 			{
 				ptrs->SP -= 2;
                         	memory[ptrs->SP + 1] = (unsigned char)(ptrs->PC >> 8);
-                        	memory[ptrs->SP] = ptrs->PC & 0xf;
+                        	memory[ptrs->SP] = (unsigned char)ptrs->PC;
                         	ptrs->PC = target;
 			}
 			return;
 		case 0xD4:
+			if (!get_carry_flag())
+                        {       
+                                ptrs->SP -= 2;
+                                memory[ptrs->SP + 1] = (unsigned char)(ptrs->PC >> 8);
+                                memory[ptrs->SP] = (unsigned char)ptrs->PC;
+                                ptrs->PC = target;
+                        }
 			return;
 		case 0xC4:
+			if (!get_zero_flag())
+                        {
+                                ptrs->SP -= 2;
+                                memory[ptrs->SP + 1] = (unsigned char)(ptrs->PC >> 8);
+                                memory[ptrs->SP] = (unsigned char)ptrs->PC;
+                                ptrs->PC = target;
+                        }
 			return;
 		case 0xCC:
+			if (get_zero_flag())
+                        {
+                                ptrs->SP -= 2;
+                                memory[ptrs->SP + 1] = (unsigned char)(ptrs->PC >> 8);
+                                memory[ptrs->SP] = (unsigned char)ptrs->PC;
+                                ptrs->PC = target;
+                        }
 			return;
 	}
         return;
@@ -200,6 +221,44 @@ call ()
         void
 ret ()
 {
+	switch (opcode)
+	{
+		// Decrement since PC will be incremented by cpu function
+		unsigned short return_address = combine_bytes(memory[ptrs->SP + 1],
+				memory[ptrs->SP]) - 1;
+		case 0xC9:
+			ptrs->SP += 2;
+			ptrs->PC = return_address;
+			return;
+		case 0xD8:
+			if (get_carry_flag())
+			{
+				ptrs->SP += 2;
+                        	ptrs->PC = return_address;
+			}
+			return;
+		case 0xD0:
+			if (!get_carry_flag())
+			{
+				ptrs->SP += 2;
+                        	ptrs->PC = return_address;
+			}
+			return;
+		case 0xC0:
+			if (!get_zero_flag())
+			{
+				ptrs->SP += 2;
+                        	ptrs->PC = return_address;
+			}
+			return;
+		case 0xC8:
+			if (get_zero_flag())
+			{
+				ptrs->SP += 2;
+                        	ptrs->PC = return_address;
+			}
+			return;
+	}
         return;
 }               /* -----  end of function ret  ----- */
 
@@ -212,6 +271,9 @@ ret ()
         void
 reti ()
 {
+	// Decrement since PC will be incremented by cpu function
+        unsigned short return_address = combine_bytes(memory[ptrs->SP + 1], 
+			memory[ptrs->SP]) - 1;
         return;
 }               /* -----  end of function reti  ----- */
 
