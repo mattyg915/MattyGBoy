@@ -83,30 +83,63 @@ cp ()
 jp ()
 {
 	// Grab 16-bit immediate in case needed, only move PC if it's used
-	// As PC is incremented in the CPU loop, 1 is subtracted from each target
-	unsigned short sixteen_bit_target = combine_bytes(memory[ptrs->PC + 1], 
-			memory[ptrs->PC + 2]) - 1;
-	unsigned short reg_hl = combine_bytes(regs->H, regs->L) - 1;
+	unsigned short target = combine_bytes(memory[ptrs->PC + 1], 
+			memory[ptrs->PC + 2]);
+	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
 	switch (opcode)
 	{
 		case 0xC3:
-			ptrs->PC = sixteen_bit_target;
+			ptrs->PC = target;
+			flags->jumped = 1;
 			return;
 		case 0xE9:
-			ptrs->PC = reg_hl;
+			ptrs->PC = memory[reg_hl];
+			flags->jumped = 1;
 			return;
 		case 0xDA:
-			ptrs->PC = get_carry_flag() ? sixteen_bit_target : ptrs->PC + 2;
+			if (get_carry_flag())
+                        {
+                                ptrs->PC += target;
+                                flags->jumped = 1;
+                        }
+                        else
+                        {
+                                ptrs->PC += 2;
+                        }
 			return;
 		case 0xD2:
-			ptrs->PC = !get_carry_flag() ? sixteen_bit_target : ptrs->PC + 2;
+			if (!get_carry_flag())
+                        {
+                                ptrs->PC += target;
+                                flags->jumped = 1;
+                        }
+                        else
+                        {
+                                ptrs->PC += 2;
+                        }
 			return;
 		case 0xC2:
-			ptrs->PC = !get_zero_flag() ? sixteen_bit_target : ptrs->PC + 2;
+			if (!get_zero_flag())
+                        {
+                                ptrs->PC += target;
+                                flags->jumped = 1;
+                        }
+                        else
+                        {
+                                ptrs->PC += 2;
+                        }
 			return;
 		case 0xCA:
-			ptrs->PC = get_zero_flag() ? sixteen_bit_target : ptrs->PC + 2;
+			if (get_zero_flag())
+                        {
+                                ptrs->PC += target;
+                                flags->jumped = 1;
+                        }
+                        else
+                        {
+                                ptrs->PC += 2;
+                        }
 			return;
 	}
 
@@ -123,27 +156,59 @@ jp ()
 jr ()
 {
 	// All ops use a 1-byte immediate
-	// Don't adjust for cpu() method incrementing PC as it's balanced by
-	// jumping from the address of the immediate value, so 
-	// the proper offset from the initial address would be offset + 1
-	unsigned char eight_bit_offset = memory[ptrs->PC + 1];
+	unsigned char offset = memory[ptrs->PC + 1];
 
 	switch (opcode)
 	{
 		case 0x18:
                         ptrs->PC += eight_bit_offset;
+			flags->jumped = 1;
                         return;
                 case 0x38:
-                        ptrs->PC += get_carry_flag() ? eight_bit_offset : 1;
+			if (get_carry_flag())
+			{
+				ptrs->PC += offset;
+				flags->jumped = 1;
+			}
+			else
+			{
+				ptrs->PC++;
+			}
                         return;
                 case 0x30:
-                        ptrs->PC += !get_carry_flag() ? eight_bit_offset : 1;
+                        if (!get_carry_flag())
+                        {
+                                ptrs->PC += offset;
+                                flags->jumped = 1;
+                        }
+			else
+			{
+				ptrs->PC++;
+			}
                         return;
                 case 0x20:
-                        ptrs->PC += !get_zero_flag() ? eight_bit_offset : 1;
+                        if (!get_zero_flag())
+                        {
+                                ptrs->PC += offset;
+                                flags->jumped = 1;
+                        }
+                        else
+                        {
+                                ptrs->PC++;
+                        }
+
                         return;
                 case 0x28:
-                        ptrs->PC += get_zero_flag() ? eight_bit_offset : 1;
+                        if (get_zero_flag())
+                        {
+                                ptrs->PC += offset;
+                                flags->jumped = 1;
+                        }
+                        else
+                        {
+                                ptrs->PC++;
+                        }
+
                         return;
         }
         return;
@@ -167,7 +232,8 @@ call ()
 			memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 			memory[ptrs->SP - 2] = ptrs->PC & 0xf;
  			ptrs->PC = target;
-			ptrs->SP -= 2
+			ptrs->SP -= 2;
+			flags->jumped = 1;
 			return;
 		case 0xDC:
 			if (get_carry_flag())
@@ -175,7 +241,8 @@ call ()
 				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
 	 			ptrs->PC = target;
-				ptrs->SP -= 2
+				ptrs->SP -= 2;
+				flags->jumped = 1;
 			}
 			return;
 		case 0xD4:
@@ -184,7 +251,8 @@ call ()
 				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
 	 			ptrs->PC = target;
-				ptrs->SP -= 2
+				ptrs->SP -= 2;
+				flags->jumped = 1;
                         }
 			return;
 		case 0xC4:
@@ -193,7 +261,8 @@ call ()
 				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
  				ptrs->PC = target;
-				ptrs->SP -= 2
+				ptrs->SP -= 2;
+				flags->jumped = 1;
                         }
 			return;
 		case 0xCC:
@@ -202,7 +271,8 @@ call ()
 				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
  				ptrs->PC = target;
-				ptrs->SP -= 2
+				ptrs->SP -= 2;
+				flags->jumped = 1;
                         }
 			return;
 	}
@@ -223,12 +293,14 @@ ret ()
 	{
 		case 0xC9:
 			ptrs->PC = memory[ptrs->SP] - 1;
+			flags->jumped = 1;
  			ptrs->SP += 2;
 			return;
 		case 0xD8:
 			if (get_carry_flag())
 			{
 				ptrs->PC = memory[ptrs->SP] - 1;
+				flags->jumped = 1;
  				ptrs->SP += 2;
 			}
 			return;
@@ -236,6 +308,7 @@ ret ()
 			if (!get_carry_flag())
 			{
 				ptrs->PC = memory[ptrs->SP] - 1;
+				flags->jumped = 1;
  				ptrs->SP += 2;
 			}
 			return;
@@ -243,6 +316,7 @@ ret ()
 			if (!get_zero_flag())
 			{
 				ptrs->PC = memory[ptrs->SP] - 1;
+				flags->jumped = 1;
  				ptrs->SP += 2;
 			}
 			return;
@@ -250,6 +324,7 @@ ret ()
 			if (get_zero_flag())
 			{
 				ptrs->PC = memory[ptrs->SP] - 1;
+				flags->jumped = 1;
  				ptrs->SP += 2;
 			}
 			return;
@@ -285,6 +360,37 @@ reti ()
         void
 rst ()
 {
+	unsigned char target = 0;
+
+	switch (opcode)
+	{
+		case 0xC7:
+			target = 0x00;
+			return;
+		case 0xCF:
+			target = 0x08;
+			return;
+		case 0xD7:
+			target = 0x10;
+			return;
+		case 0xDF:
+			target = 0x18;
+			return;
+		case 0xE7:
+			target = 0x20;
+			return;
+		case 0xEF:
+			target = 0x28;
+			return;
+		case 0xF7:
+			target = 0x30;
+			return;
+		case 0xFF:
+			target = 0x38;
+			return;
+	}
 	
+	flags->jumped = 1;
+	ptrs-PC = target;
         return;
 }               /* -----  end of function rst  ----- */
