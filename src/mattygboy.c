@@ -27,6 +27,7 @@
 unsigned char *memory;
 Registers *regs;
 Pointers *ptrs;
+CPU_Flags *flags;
 
 int main(int argc, char *argv[]) 
 {
@@ -35,6 +36,7 @@ int main(int argc, char *argv[])
 	// Virtual registers are loaded
 	regs = init_registers(reg_init_values);
 	ptrs = init_pointers();
+	flags = init_flags();
 
 	// TODO:Initialize virtual memory
 	memory = malloc(MEMORY_SIZE);

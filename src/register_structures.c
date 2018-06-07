@@ -34,7 +34,8 @@
 init_registers(int *init_values)
 {
 	Registers *reg_ptr = malloc(sizeof(*reg_ptr));
-	if (reg_ptr == NULL) {
+	if (reg_ptr == NULL) 
+	{
 		return NULL;
 	}
 
@@ -62,7 +63,8 @@ init_registers(int *init_values)
 init_pointers() 
 {
 	Pointers *ptrs_ptr = malloc(sizeof(*ptrs_ptr));
-	if (ptrs_ptr == NULL) {
+	if (ptrs_ptr == NULL) 
+	{
 		return NULL;
 	}
 	// Program counter starts at 0x100, stack at 0xFFFE
@@ -71,3 +73,25 @@ init_pointers()
 
 	return ptrs_ptr;
 }		/* -----  end of function init_pointers  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  init_flags
+ *  Description:  Initializes the special flags used by CPU for jumps and interrupts
+ *       Return:  Pointer to the struct containing the flags
+ * =====================================================================================
+ */
+	CPU_Flags*
+init_flags ()
+{
+	CPU_Flags *flags_ptr = malloc(sizeof(*flags_ptr));
+	if (flags_ptr == NULL)
+	{
+		return NULL;
+	}
+
+	flags_ptr->jumped = 0;
+	flags_ptr->IME = 0;
+
+	return flags_ptr;
+}		/* -----  end of function init_flags  ----- */

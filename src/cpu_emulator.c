@@ -441,6 +441,7 @@ cpu_execution ()
 {
 	fetch();
 	decode();
-	ptrs->PC++;
+	// Don't move the PC after a jump, otherwise increment
+	ptrs->PC = (!flags->jumped) ? ptrs->PC++ : ptrs->PC;
 }		/* -----  end of function cpu_execution  ----- */
 

@@ -68,7 +68,7 @@ cp ()
 	}
 
 	// A's state is unchanged, only the flags are affected
-	eight_bit_update_flags(regs-A, operand);
+	eight_bit_update_flags(regs->A, operand);
 
 	return;
 }		/* -----  end of function cp  ----- */
@@ -158,54 +158,51 @@ jr ()
         void
 call ()
 {
-	// All ops take a 2-byte immediate operand
-	// Subtract one from target because PC incremented by CPU function
-	unsigned short target = combine_bytes(memory[ptrs->PC + 1], 
-			memory[ptrs->PC + 2]) - 1;
-	ptrs->PC += 2;
+	unsigned short target = memory[ptrs->PC + 1];
+	ptrs->PC += 2; // two bytes after opcode are the target addres
 
 	switch (opcode)
 	{
 		case 0xCD:
-			ptrs->SP -= 2;
-			memory[ptrs->SP + 1] = (unsigned char)(ptrs->PC >> 8);
-			memory[ptrs->SP] = ptrs->PC & 0xf;
-			ptrs->PC = target;
+			memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
+			memory[ptrs->SP - 2] = ptrs->PC & 0xf;
+ 			ptrs->PC = target;
+			ptrs->SP -= 2
 			return;
 		case 0xDC:
 			if (get_carry_flag())
 			{
-				ptrs->SP -= 2;
-                        	memory[ptrs->SP + 1] = (unsigned char)(ptrs->PC >> 8);
-                        	memory[ptrs->SP] = (unsigned char)ptrs->PC;
-                        	ptrs->PC = target;
+				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
+				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
+	 			ptrs->PC = target;
+				ptrs->SP -= 2
 			}
 			return;
 		case 0xD4:
 			if (!get_carry_flag())
-                        {       
-                                ptrs->SP -= 2;
-                                memory[ptrs->SP + 1] = (unsigned char)(ptrs->PC >> 8);
-                                memory[ptrs->SP] = (unsigned char)ptrs->PC;
-                                ptrs->PC = target;
+                        {
+				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
+				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
+	 			ptrs->PC = target;
+				ptrs->SP -= 2
                         }
 			return;
 		case 0xC4:
 			if (!get_zero_flag())
                         {
-                                ptrs->SP -= 2;
-                                memory[ptrs->SP + 1] = (unsigned char)(ptrs->PC >> 8);
-                                memory[ptrs->SP] = (unsigned char)ptrs->PC;
-                                ptrs->PC = target;
+				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
+				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
+ 				ptrs->PC = target;
+				ptrs->SP -= 2
                         }
 			return;
 		case 0xCC:
 			if (get_zero_flag())
                         {
-                                ptrs->SP -= 2;
-                                memory[ptrs->SP + 1] = (unsigned char)(ptrs->PC >> 8);
-                                memory[ptrs->SP] = (unsigned char)ptrs->PC;
-                                ptrs->PC = target;
+				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
+				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
+ 				ptrs->PC = target;
+				ptrs->SP -= 2
                         }
 			return;
 	}
@@ -221,41 +218,39 @@ call ()
         void
 ret ()
 {
+
 	switch (opcode)
 	{
-		// Decrement since PC will be incremented by cpu function
-		unsigned short return_address = combine_bytes(memory[ptrs->SP + 1],
-				memory[ptrs->SP]) - 1;
 		case 0xC9:
-			ptrs->SP += 2;
-			ptrs->PC = return_address;
+			ptrs->PC = memory[ptrs->SP] - 1;
+ 			ptrs->SP += 2;
 			return;
 		case 0xD8:
 			if (get_carry_flag())
 			{
-				ptrs->SP += 2;
-                        	ptrs->PC = return_address;
+				ptrs->PC = memory[ptrs->SP] - 1;
+ 				ptrs->SP += 2;
 			}
 			return;
 		case 0xD0:
 			if (!get_carry_flag())
 			{
-				ptrs->SP += 2;
-                        	ptrs->PC = return_address;
+				ptrs->PC = memory[ptrs->SP] - 1;
+ 				ptrs->SP += 2;
 			}
 			return;
 		case 0xC0:
 			if (!get_zero_flag())
 			{
-				ptrs->SP += 2;
-                        	ptrs->PC = return_address;
+				ptrs->PC = memory[ptrs->SP] - 1;
+ 				ptrs->SP += 2;
 			}
 			return;
 		case 0xC8:
 			if (get_zero_flag())
 			{
-				ptrs->SP += 2;
-                        	ptrs->PC = return_address;
+				ptrs->PC = memory[ptrs->SP] - 1;
+ 				ptrs->SP += 2;
 			}
 			return;
 	}
@@ -271,15 +266,12 @@ ret ()
         void
 reti ()
 {
-	// Execute unconditional return
-	// Decrement since PC will be incremented by cpu function
-        unsigned short return_address = combine_bytes(memory[ptrs->SP + 1], 
-			memory[ptrs->SP]) - 1;
-	ptrs->SP += 2;
-        ptrs->PC = return_address;
-
+	// Unconditional return
+	ptrs->PC = memory[ptrs->SP] - 1;
+ 	ptrs->SP += 2;
+	
 	// Then enable interupts
-	regs->IME = 1;
+	flags->IME = 1;
 
         return;
 }               /* -----  end of function reti  ----- */
@@ -293,6 +285,6 @@ reti ()
         void
 rst ()
 {
-
+	
         return;
 }               /* -----  end of function rst  ----- */
