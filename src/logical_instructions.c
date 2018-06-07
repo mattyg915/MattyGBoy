@@ -67,13 +67,13 @@ and ()
         }
 
         // AND instruction clears subtract and carry, but sets half-carry flags
-        regs->F = 0x20;
+        flags->H = 1; flags->C = 0; flags->N = 0;
 
         // Register A & with operand, if yields 0 set zero flag
         regs->A &= operand;
         if (!regs->A)
         {
-                regs->F |= 0x80;
+                flags->Z |= 1;
         }
 
         return;
@@ -125,13 +125,13 @@ or ()
         }
 
         // OR instruction clears half-carry, carry, and subtract flags
-        regs->F = 0x0;
+        flags->H = 0; flags->C = 0; flags->N = 0;
 
         // Register A | with operand, if yields 0 set zero flag
         regs->A |= operand;
         if (!regs->A)
         {
-                regs->F |= 0x80;
+                flags->Z = 1;
         }
 
         return;
@@ -183,13 +183,13 @@ xor ()
         }
 
         // XOR instruction clears half-carry, carry, and subtract flags
-        regs->F = 0x0;
+        flags->H = 0; flags->C = 0; flags->N = 0;
 
         // Register A ^ with operand, if yields 0 set zero flag
         regs->A ^= operand;
         if (!regs->A)
         {
-                regs->F |= 0x80;
+                flags->Z = 1;
         }
 
         return;
@@ -206,7 +206,7 @@ xor ()
 cpl ()
 {
 	regs->A ^= 0xFF; // Just invert the bits to get 1's complement
-	regs->F |= 0x60; // N and H flags are set, others ignored
+	flags->N = 1; flags->H = 1;
 	return;
 }		/* -----  end of function cpl  ----- */
 
@@ -230,22 +230,22 @@ daa ()
 	unsigned char correction = 0;
 
 	// If half carry set OR if least significant nibble of A > 9
-	if (get_half_carry_flag() || (!get_subtract_flag() && (regs->A & 0xF) > 0x9))
+	if (flags->H || (!flags->N && (regs->A & 0xF) > 0x9))
 	{
 		correction += 0x6;
 	}
 
 	// If carry set OR most significant nibble of A >9
-	if(get_carry_flag() || (!get_subtract_flag() && (regs->A & 0xF0) > 0x9))
+	if(flags->C || (!flags->N && (regs->A & 0xF0) > 0x9))
 	{
 		correction += 0x60;
-		regs->F |= 0x10; // Carry flag gets set if correct upper nibble
+		flags->C = 1; // Carry flag gets set if correct upper nibble
 	}
 
-	regs->F &= 0xD0; // Half-carry flag gets cleared by this op
+	flags->H = 0; // Half-carry flag gets cleared by this op
 
 	// Correction added/subtracted to/from A based on previous op
-	if (get_subtract_flag())
+	if (flags->N)
 	{
 		regs->A -= correction;
 	}

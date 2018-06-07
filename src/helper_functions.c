@@ -32,11 +32,14 @@
 dump_registers()
 {
 	printf("Registers: A: %x B: %x C: %x D: %x E: %x"
-			" F: %x H: %x L: %x\n", regs->A, regs->B,
-			regs->C, regs->D, regs->E, regs->F,
-			regs->H, regs->L);
+			" H: %x L: %x\n", regs->A, regs->B,
+			regs->C, regs->D, regs->E, regs->H, 
+			regs->L);
 	printf("Stack pointer: %x Program Counter: %x\n\n",
 			ptrs->SP, ptrs->PC);
+	printf("Flags: Z: %x N: %x H: %x C: %x Jumped: %x IME: %x\n\n",
+			flags->Z, flags->N, flags->H, flags->C,
+			flags->jumped, flags->IME);
 	return;
 }		/* -----  end of function dump_registers  ----- */
 

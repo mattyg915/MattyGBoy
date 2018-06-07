@@ -32,7 +32,7 @@ CPU_Flags *flags;
 int main(int argc, char *argv[]) 
 {
 	// Array containing initializing values for all registers (default to 0)
-	int reg_init_values[8] = { 0 };
+	int reg_init_values[7] = { 0 };
 	// Virtual registers are loaded
 	regs = init_registers(reg_init_values);
 	ptrs = init_pointers();

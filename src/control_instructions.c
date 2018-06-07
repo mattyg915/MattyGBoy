@@ -98,7 +98,7 @@ jp ()
 			flags->jumped = 1;
 			return;
 		case 0xDA:
-			if (get_carry_flag())
+			if (flags->C)
                         {
                                 ptrs->PC += target;
                                 flags->jumped = 1;
@@ -109,7 +109,7 @@ jp ()
                         }
 			return;
 		case 0xD2:
-			if (!get_carry_flag())
+			if (!flags->C)
                         {
                                 ptrs->PC += target;
                                 flags->jumped = 1;
@@ -120,7 +120,7 @@ jp ()
                         }
 			return;
 		case 0xC2:
-			if (!get_zero_flag())
+			if (!flags->Z)
                         {
                                 ptrs->PC += target;
                                 flags->jumped = 1;
@@ -131,7 +131,7 @@ jp ()
                         }
 			return;
 		case 0xCA:
-			if (get_zero_flag())
+			if (flags->Z)
                         {
                                 ptrs->PC += target;
                                 flags->jumped = 1;
@@ -165,7 +165,7 @@ jr ()
 			flags->jumped = 1;
                         return;
                 case 0x38:
-			if (get_carry_flag())
+			if (flags->C)
 			{
 				ptrs->PC += offset;
 				flags->jumped = 1;
@@ -176,7 +176,7 @@ jr ()
 			}
                         return;
                 case 0x30:
-                        if (!get_carry_flag())
+                        if (!flags->C)
                         {
                                 ptrs->PC += offset;
                                 flags->jumped = 1;
@@ -187,7 +187,7 @@ jr ()
 			}
                         return;
                 case 0x20:
-                        if (!get_zero_flag())
+                        if (!flags->Z)
                         {
                                 ptrs->PC += offset;
                                 flags->jumped = 1;
@@ -199,7 +199,7 @@ jr ()
 
                         return;
                 case 0x28:
-                        if (get_zero_flag())
+                        if (flags->Z)
                         {
                                 ptrs->PC += offset;
                                 flags->jumped = 1;
@@ -236,7 +236,7 @@ call ()
 			flags->jumped = 1;
 			return;
 		case 0xDC:
-			if (get_carry_flag())
+			if (flags->C)
 			{
 				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
@@ -246,7 +246,7 @@ call ()
 			}
 			return;
 		case 0xD4:
-			if (!get_carry_flag())
+			if (!flags->C)
                         {
 				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
@@ -256,7 +256,7 @@ call ()
                         }
 			return;
 		case 0xC4:
-			if (!get_zero_flag())
+			if (!flags->Z)
                         {
 				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
@@ -266,7 +266,7 @@ call ()
                         }
 			return;
 		case 0xCC:
-			if (get_zero_flag())
+			if (flags->Z)
                         {
 				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
@@ -297,7 +297,7 @@ ret ()
  			ptrs->SP += 2;
 			return;
 		case 0xD8:
-			if (get_carry_flag())
+			if (flags->C)
 			{
 				ptrs->PC = memory[ptrs->SP] - 1;
 				flags->jumped = 1;
@@ -305,7 +305,7 @@ ret ()
 			}
 			return;
 		case 0xD0:
-			if (!get_carry_flag())
+			if (!flags->C)
 			{
 				ptrs->PC = memory[ptrs->SP] - 1;
 				flags->jumped = 1;
@@ -313,7 +313,7 @@ ret ()
 			}
 			return;
 		case 0xC0:
-			if (!get_zero_flag())
+			if (!flags->Z)
 			{
 				ptrs->PC = memory[ptrs->SP] - 1;
 				flags->jumped = 1;
@@ -321,7 +321,7 @@ ret ()
 			}
 			return;
 		case 0xC8:
-			if (get_zero_flag())
+			if (flags->Z)
 			{
 				ptrs->PC = memory[ptrs->SP] - 1;
 				flags->jumped = 1;

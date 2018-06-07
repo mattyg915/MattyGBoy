@@ -46,8 +46,8 @@ add_tests ()
 	printf("Executing unit tests for add()\n");
 	reg_init_values[2] = 0x5;
 	reg_init_values[3] = 0xFF;
-	reg_init_values[6] = 0xAA;
-	reg_init_values[7] = 0xBB;
+	reg_init_values[5] = 0xAA;
+	reg_init_values[6] = 0xBB;
 
 	regs = init_registers(reg_init_values);
 	ptrs = init_pointers();
@@ -99,7 +99,7 @@ add_tests ()
 	assert(regs->C == 0x5);
 	assert(regs->D == 0xFF);
 	assert(regs->E == 0x0);
-	assert(regs->F == 0x20);
+	assert(flags->H == 1);
 	assert(regs->H == 0xAA);
 	assert(regs->L == 0xBB);
 
@@ -120,7 +120,8 @@ add_tests ()
 
         // Check state of registers
         assert(regs->A == 0x04);
-        assert(regs->F == 0x30);
+        assert(flags->H == 1);
+	assert(flags->C == 1);
         assert(regs->L == 0xC0);
 
         // Check state of pointers
@@ -138,7 +139,7 @@ add_tests ()
         } while (opcode != 0x00);
 
 	assert(ptrs->SP == 0xFFFD);
-	assert(regs->F == 0x40);
+	assert(flags->N == 1);
 
 	printf("All add() tests passed successfully\n\n\n");
 	return;
@@ -160,9 +161,8 @@ sub_tests()
         reg_init_values[2] = 0x10;
         reg_init_values[3] = 0x10;
 	reg_init_values[4] = 0x10;
-	reg_init_values[5] = 0x10;
+        reg_init_values[5] = 0x08;
         reg_init_values[6] = 0x08;
-        reg_init_values[7] = 0x08;
 
         regs = init_registers(reg_init_values);
         ptrs = init_pointers();
@@ -199,7 +199,7 @@ sub_tests()
         } while (opcode != 0x00);
 
 	assert(regs->A == 0x18);
-	assert(regs->F == 0x40);
+	assert(flags->N == 1);
 
 	// Second run
 	do
@@ -212,7 +212,8 @@ sub_tests()
         } while (opcode != 0x00);
 
 	assert(regs->A == 0x0);
-	assert(regs->F == 0xC0);
+	assert(flags->N == 1);
+	assert(flags->Z == 1);
 
 	printf("All sub() tests passed successfully\n\n\n");
 

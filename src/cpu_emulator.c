@@ -41,7 +41,7 @@ eight_bit_update_flags (int value1, int value2)
 {
 	int result;
 
-	if ((regs->F & 0x40) == 0) // Checks that last op was addition
+	if (!flags->Z) // Checks that last op was addition
 	{
 		result = value1 + value2;
 		/*
@@ -51,21 +51,21 @@ eight_bit_update_flags (int value1, int value2)
 		 */
 		if ((((value1 & 0xF) + (value2 & 0xF)) & 0x10) == 0x10)
 		{
-			regs->F |= 0x20;
+			flags->H = 1;
 		}
 		else
 		{
-			regs->F &= 0xD0;
+			flags->H = 0;
 		}
 		
 		// Carry Flag - addition
 		if (result > 0xFF)
 		{
-			regs->F |= 0x10;
+			flags->C = 1;
 		}
 		else
 		{
-			regs->F &= 0xE0;
+			flags->C = 0;
 		}
 	}
 	// Otherwise it was a subtraction
@@ -76,31 +76,31 @@ eight_bit_update_flags (int value1, int value2)
 		// Half Carry Flag - subtraction
 		if ((((value1 & 0xF) - (value2 & 0xF)) & 0x10) < 0)
 		{
-			regs->F |= 0x20;
+			flags->H = 1;
 		}
 		else
 		{
-			regs->F &= 0xD0;
+			flags->H = 0;
 		}
 		// Carry Flag - subtraction
 		if (result < 0)
 		{
-			regs->F |= 0x10;
+			flags->C = 1;
 		}
 		else
 		{
-			regs->F &= 0xE0;
+			flags->C = 0;
 		}
 	}
 
 	// Zero Flag
         if (!result)
         {
-                regs->F |= 0x80;
+                flags->Z = 1;
         }
         else
         {
-                regs->F &= 0x70; // Otherwise clear it
+                flags->Z &= 0; // Otherwise clear it
         }
 
 	return;
@@ -109,7 +109,7 @@ eight_bit_update_flags (int value1, int value2)
 /*
  * ===  FUNCTION  ======================================================================
  *         Name:  sixteen_bit_update_flags
- *  Description:  Handles updates to the Z, H, and C flags in the F register
+ *  Description:  Handles updates to the Z, H, and C flags
  *                after a sixteen-bit instruction executes. Assumes N flag has
  *                been set or cleared before this function is called
  *
@@ -122,18 +122,18 @@ sixteen_bit_update_flags (int value1, int value2)
 {
 	int result;
 
-        if ((regs->F & 0x40) == 0) // Checks that last op was addition
+        if (!flags->Z) // If last op was addition
         {
                 result = value1 + value2;
 
                 // Half-Carry - addition
                 if ((((value1 & 0x0FFF) + (value2 & 0x0FFF)) & 0x1000) == 0x1000)
                 {
-                        regs->F |= 0x20;
+                        flags->H = 1;
                 }
                 else
                 {
-                        regs->F &= 0xD0;
+                        flags->H = 0;
                 }
 
                 // Carry Flag - addition
@@ -146,7 +146,7 @@ sixteen_bit_update_flags (int value1, int value2)
                         regs->F &= 0xE0;
                 }
         }
-	// Otherwise it was a subtraction
+	// Otherwise subtraction
         else
         {
                 result = value1 - value2;
@@ -154,94 +154,35 @@ sixteen_bit_update_flags (int value1, int value2)
                 // Half Carry Flag - subtraction
                 if ((((value1 & 0x0FFF) - (value2 & 0x0FFF)) & 0x1000) < 0)
                 {
-                        regs->F |= 0x20;
+                        flags->H = 1;
                 }
                 else
                 {
-                        regs->F &= 0xD0;
+                        flags->H = 0;
                 }
                 // Carry Flag - subtraction
                 if (result < 0)
                 {
-                        regs->F |= 0x10;
+                        flags->C = 1;
                 }
                 else
                 {
-                        regs->F &= 0xE0;
+                        flags->C = 0;
                 }
         }
 
         // Zero Flag
         if (!result)
         {
-                regs->F |= 0x80;
+                flags->Z = 1;
         }
         else
         {
-                regs->F &= 0x70; // Otherwise clear it
+                flags->Z = 0; // Otherwise clear it
         }
 
 	return;
 }		/* -----  end of function sixteen_bit_update_flags  ----- */
-
-
-/* 
- * ===  FUNCTION  ======================================================================
- *         Name:  get_carry_flag
- *  Description:  Returns 1 if the carry flag (bit 4 of the F register) is set,
- *  		  otherwise returns 0
- *      Returns:  1 or 0 based on whether the carry flag is set
- * =====================================================================================
- */
-	unsigned char
-get_carry_flag ()
-{
-	return regs->F & 0x10;
-}		/* -----  end of function get_carry_flag  ----- */
-
-
-/* 
- * ===  FUNCTION  ======================================================================
- *         Name:  get_half_carry_flag
- *  Description:  Returns 1 if the half carry flag (bit 5 of the F register) is set,
- *                otherwise returns 0
- *      Returns:  1 or 0 based on whether the half carry flag is set
- * =====================================================================================
- */
-	unsigned char
-get_half_carry_flag ()
-{
-	return regs->F & 0x20;
-}		/* -----  end of function get_half_carry_flag  ----- */
-
-
-/* 
- * ===  FUNCTION  ======================================================================
- *         Name:  get_subtract_flag
- *  Description:  Returns 1 if the subtract flag (bit 6 of the F register) is set,
- *                otherwise returns 0
- *      Returns:  1 or 0 based on whether the subtract flag is set
- * =====================================================================================
- */
-	unsigned char
-get_subtract_flag ()
-{
-	return regs->F & 0x40;
-}		/* -----  end of function get_subtract_flag  ----- */
-
-/* 
- * ===  FUNCTION  ======================================================================
- *         Name:  get_zero_flag
- *  Description:  Returns 1 if the zero flag (bit 7 of the F register) is set,
- *                otherwise returns 0
- *      Returns:  1 or 0 based on whether the zero flag is set
- * =====================================================================================
- */
-	unsigned char
-get_zero_flag ()
-{
-	return regs->F & 0x80;
-}		/* -----  end of function get_zero_flag  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -405,6 +346,7 @@ decode ()
 		case 0xFF:
 			rst();
 			return;
+
 		// TODO: keep going!
 		default:
 			printf("ERROR: Invalid or unsupported opcode encountered\n");

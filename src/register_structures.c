@@ -25,7 +25,7 @@
  *         Name:  init_registers
  *  Description:  Initializes the virtual registers
  *   Parameters:  init_values a pointer to the beginning of an int array
- *   		  containing 8 values, which will be assigned as the 
+ *   		  containing 7 values, which will be assigned as the 
  *   		  initializing value of each register in alphabetical order
  *       Return:  Pointer to the struct containing the virtual registers
  * =====================================================================================
@@ -45,9 +45,8 @@ init_registers(int *init_values)
 	reg_ptr->C = init_values[2];
 	reg_ptr->D = init_values[3];
 	reg_ptr->E = init_values[4];
-	reg_ptr->F = init_values[5];
-	reg_ptr->H = init_values[6];
-	reg_ptr->L = init_values[7];
+	reg_ptr->H = init_values[5];
+	reg_ptr->L = init_values[6];
 
 	return reg_ptr;
 }		/* -----  end of function init_registers  ----- */
@@ -77,7 +76,7 @@ init_pointers()
 /*
  * ===  FUNCTION  ======================================================================
  *         Name:  init_flags
- *  Description:  Initializes the special flags used by CPU for jumps and interrupts
+ *  Description:  Initializes the flags used by CPU
  *       Return:  Pointer to the struct containing the flags
  * =====================================================================================
  */
@@ -90,6 +89,10 @@ init_flags ()
 		return NULL;
 	}
 
+	flags->Z = 0;
+	flags->N = 0;
+	flags->H = 0;
+	flags->C = 0;
 	flags_ptr->jumped = 0;
 	flags_ptr->IME = 0;
 

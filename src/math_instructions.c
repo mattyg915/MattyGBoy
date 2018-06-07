@@ -31,7 +31,7 @@
 eight_bit_add ()
 {
 	// Clear the N flag
-	regs->F &= 0xB0;
+	flags->N = 0;
 
 	/* Grab the next byte in case an immediate value is needed
 	 * but don't increment PC unless it's actually used */
@@ -100,6 +100,9 @@ eight_bit_add ()
         void
 sixteen_bit_add ()
 {
+	// Clear N
+	flags->N = 0;
+
 	// Left operand always HL
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 	unsigned short value;
@@ -137,7 +140,7 @@ sixteen_bit_add ()
 adc ()
 {
         // Clear the N flag
-        regs->F &= 0xB0;
+        flags->N = 0;
 
 	unsigned char sum = 0; // Total the operand and the carry flag
         sum += get_carry_flag();
@@ -194,7 +197,7 @@ adc ()
 sub ()
 {
 	// Set the N flag
-	regs->F |= 0x40;
+	flags->N = 1;
 
 	// Minuend is always register A
 	unsigned char subtrahend;
@@ -249,7 +252,7 @@ sub ()
 sbc ()
 {
 	// Set the N flag
-        regs->F |= 0x40;
+        flags->N = 1;
 
         unsigned char subtrahend = 0; // Total the operand and the carry flag
         subtrahend += get_carry_flag();
@@ -306,9 +309,10 @@ sbc ()
 eight_bit_inc ()
 {
 	// Clear N flag
-	regs->F &= 0xB0;
+	flags->N = 0;
+
 	// Capture state of C flag so it can be preserved
-	unsigned char c_flag = get_carry_flag();
+	unsigned char c_flag = flags->C
 
 	unsigned char initial_state; // Capture initial state for flag updates
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
@@ -351,14 +355,7 @@ eight_bit_inc ()
 	eight_bit_update_flags(initial_state, 1);
 
 	// Restore C flag, this instruction doesn't set or clear it
-	if (c_flag)
-	{
-		regs->F |= 0x10;
-	}
-	else
-	{
-		regs->F &= 0xE0;
-	}
+	flags->C = c_flag;
 
 	return;
 }		/* -----  end of function eight_bit_inc  ----- */
@@ -411,10 +408,10 @@ sixteen_bit_inc ()
 eight_bit_dec ()
 {
         // Set N flag
-        regs->F |= 0x40;
+        flags->N = 1;
 
         // Capture state of C flag so it can be preserved
-        unsigned char c_flag = get_carry_flag();
+        unsigned char c_flag = flags->C;
 
         unsigned char initial_state; // Capture initial state for flag updates
         unsigned short reg_hl = combine_bytes(regs->H, regs->L);
@@ -455,16 +452,8 @@ eight_bit_dec ()
         }
 	
 	// Restore C flag, this instruction doesn't set or clear it
-        if (c_flag)
-        {
-                regs->F |= 0x10;
-        }
-        else
-        {
-                regs->F &= 0xE0;
-        }
-
-
+        flags->C = c_flag;
+        
         eight_bit_update_flags(initial_state, 1);
 
 	return;

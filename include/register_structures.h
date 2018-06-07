@@ -21,8 +21,7 @@
 
 typedef struct Registers 
 {
-	// F register is used for flags
-	unsigned char A, B, C, D, E, F, H, L;
+	unsigned char A, B, C, D, E, H, L;
 } Registers;
 
 typedef struct Pointers 
@@ -33,13 +32,13 @@ typedef struct Pointers
 
 typedef struct CPU_Flags 
 {
-	// Special flags used only by CPU
+	// Z, N, H, and C are the zero, subtract, half-carry, carry flags respectively
 	// jumped set when an instruction sets the PC and cleared after each cyycle
 	// IME is the Interrupt Master Enable flag
-	unsigned char jumped, IME;
+	unsigned char Z, N, H, C, jumped, IME;
 } CPU_Flags;
 
-Registers* init_registers();
+Registers* init_registers(int *init_values);
 CPU_Flags* init_flags();
 Pointers* init_pointers();
 
