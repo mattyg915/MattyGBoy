@@ -30,7 +30,7 @@
         void
 cp ()
 {
-	regs->F |= 0x40; // CP sets the N flag
+	flags->N = 1; // CP sets the N flag
 
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 	unsigned char operand;
@@ -161,7 +161,7 @@ jr ()
 	switch (opcode)
 	{
 		case 0x18:
-                        ptrs->PC += eight_bit_offset;
+                        ptrs->PC += offset;
 			flags->jumped = 1;
                         return;
                 case 0x38:
@@ -391,6 +391,6 @@ rst ()
 	}
 	
 	flags->jumped = 1;
-	ptrs-PC = target;
+	ptrs->PC = target;
         return;
 }               /* -----  end of function rst  ----- */

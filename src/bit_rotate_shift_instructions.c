@@ -15,59 +15,92 @@
  *
  * =====================================================================================
  */
-#include <stdlib.h>
 #include "bit_rotate_shift_instructions.h"
+#include "global_declarations.h"
+#include "cpu_emulator.h"
+#include "helper_functions.h"
 
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  rlc
+ *  Description:  Handles all RLC instructions
+ *   Parameters:  reg is a pointer to the register to be rotated
+ * =====================================================================================
+ */
+        void
+rlc (unsigned char *reg)
+{
+        // Clears N and H flags
+        flags->N = 0; flags->H = 0;
+        // Each bit of A shifts left one with bit 7 shifting 
+        // into C AND bit 0
+        flags->C = (regs->A & 0x80);
+        regs->A <<= 1;
+        regs->A |= flags->C;
+	return;
+}               /* -----  end of function rlc  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  rl
+ *  Description:  Handles all RL instructions
+ *   Parameters:  reg is a pointer to the register to be rotated
+ * =====================================================================================
+ */
+        void
+rl (unsigned char *reg)
+{
+        // Clears N and H flags
+        flags->N = 0; flags->H = 0;
+        // Each bit of register shifts left one with bit 0 shifting
+        // into C and c going into bit 7
+        unsigned char initial_c = flags->C;
+        flags->C = (*reg & 0x80);
+        *reg <<= 1;
+        *reg |= initial_c;
+        return;
+}               /* -----  end of function rl  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  rr
+ *  Description:  Handles all RR instructions
+ *   Parameters:  reg is a pointer to the register to be rotated
+ * =====================================================================================
+ */
+        void
+rr (unsigned char *reg)
+{
+        // Clears N and H flags
+        flags->N = 0; flags->H = 0;
+        // Each bit of register shifts right one with bit 0 shifting
+        // into C and C goes into bit 7
+	unsigned char initial_c = flags->C;
+        flags->C = (*reg & 0x1);
+        *reg >>= 1;
+        *reg |= (initial_c << 7);
+        return;
+}               /* -----  end of function rr  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
- *         Name:  rotate_a
- *  Description:  Handles opcodes that translate to rotate instructions for 
- *  		  the A register
+ *         Name:  rrc
+ *  Description:  Handles all RRC instructions
+ *   Parameters:  reg is a pointer to the register to be rotated
  * =====================================================================================
  */
 	void
-rotate_a ()
+rrc (unsigned char *reg)
 {
-	// Clear N, H, and Z flags
-	flags->Z = 0; flags->N = 0; flags->H = 0;
-	switch (opcode)
-	{
-		case 0x07: // RLCA
-			// Each bit of A shifts left one with bit 7 shifting 
-			// into C AND bit 0
-			flags->C = (regs->A & 0x80);
-			regs->A <<= 1;
-			regs->A |= flags->C;
-			return;
-		case 0x17: // RLA
-			// A bit shifts 1 to the left, but 7 goes int C, 
-			// C goes into bit 0
-			unsigned char initial_c = flags->C;
-			flags->C = (regs->A & 0x80);
-			regs->A <<= 1;
-			regs->A |= initial_c;
-			return;
-		case 0x0F: // RRCA
-			// Each bit of A shifts right one with bit 0 shifting
-                        // into C AND bit 7
-                        flags->C = (regs->A & 0x1);
-                        regs->A >>= 1;
-                        regs->A |= (flags->C << 7);
-			return;
-		case 0x1F: // RRA
-			// A bit shifts 1 to the right, bit 0 goes int C,
-                        // C goes into bit 7
-                        unsigned char initial_c = flags->C;
-                        flags->C = (regs->A & 0x1);
-                        regs->A >>= 1;
-                        regs->A |= (initial_c << 7);
-			return;
-	}
-
+	// Clears N and H flags
+        flags->N = 0; flags->H = 0;
+	// Each bit of register shifts right one with bit 0 shifting
+        // into C AND bit 7
+        flags->C = (*reg & 0x1);
+        *reg >>= 1;
+        *reg |= (flags->C << 7);
 	return;
-}		/* -----  end of function rotate_a  ----- */
-
+}		/* -----  end of function rrc  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -79,5 +112,10 @@ rotate_a ()
 	void
 bit_rotate_shift ()
 {
+	switch (opcode)
+	{
+		case 0x00:
+			return;
+	}
 	return;
 }		/* -----  end of function bit_rotate_shift  ----- */

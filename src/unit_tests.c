@@ -29,6 +29,7 @@
 unsigned char *memory;
 Registers *regs;
 Pointers *ptrs;
+CPU_Flags *flags;
 // Check variable for verbose flag
 static int verbose;
 // Array containing initializing values for all registers (default to 0)
@@ -51,6 +52,7 @@ add_tests ()
 
 	regs = init_registers(reg_init_values);
 	ptrs = init_pointers();
+	flags = init_flags();
 	memory = malloc(MEMORY_SIZE);
 	
 	// Read instructions for this test into memory, track how many are read
@@ -106,7 +108,7 @@ add_tests ()
 	// Check state of pointers
 	assert(ptrs->SP == 0xFFFE);
 	assert(ptrs->PC == 0x0106);
-
+	printf("First run success\n");
 		/* Second run tests 16-bit instructions and carry */
 
 	do
@@ -166,6 +168,7 @@ sub_tests()
 
         regs = init_registers(reg_init_values);
         ptrs = init_pointers();
+	flags = init_flags();
         memory = malloc(MEMORY_SIZE);
 
         // Read instructions for this test into memory, track how many are read

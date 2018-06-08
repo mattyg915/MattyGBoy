@@ -89,10 +89,10 @@ init_flags ()
 		return NULL;
 	}
 
-	flags->Z = 0;
-	flags->N = 0;
-	flags->H = 0;
-	flags->C = 0;
+	flags_ptr->Z = 0;
+	flags_ptr->N = 0;
+	flags_ptr->H = 0;
+	flags_ptr->C = 0;
 	flags_ptr->jumped = 0;
 	flags_ptr->IME = 0;
 

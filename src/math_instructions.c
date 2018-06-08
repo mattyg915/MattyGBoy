@@ -52,7 +52,7 @@ eight_bit_add ()
 		case 0xE8:
 			if ((char)value < 0)
 			{
-				regs->F |= 0x40;
+				flags->N = 1;
 			}
 			sixteen_bit_update_flags(ptrs->SP, (char)value);
 			ptrs->SP += (char)value;
@@ -143,7 +143,7 @@ adc ()
         flags->N = 0;
 
 	unsigned char sum = 0; // Total the operand and the carry flag
-        sum += get_carry_flag();
+        sum += flags->C;
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
 	// All operations update A, so just need to get sum
@@ -255,7 +255,7 @@ sbc ()
         flags->N = 1;
 
         unsigned char subtrahend = 0; // Total the operand and the carry flag
-        subtrahend += get_carry_flag();
+        subtrahend += flags->C;
         unsigned char reg_hl = combine_bytes(regs->H, regs->L);
 
         // All operations update A, so just need to get sum
@@ -312,7 +312,7 @@ eight_bit_inc ()
 	flags->N = 0;
 
 	// Capture state of C flag so it can be preserved
-	unsigned char c_flag = flags->C
+	unsigned char c_flag = flags->C;
 
 	unsigned char initial_state; // Capture initial state for flag updates
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);

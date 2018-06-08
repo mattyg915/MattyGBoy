@@ -22,6 +22,7 @@
 #include "cpu_emulator.h"
 #include "logical_instructions.h"
 #include "bit_rotate_shift_instructions.h"
+#include "control_instructions.h"
 
 unsigned char opcode;
 
@@ -139,11 +140,11 @@ sixteen_bit_update_flags (int value1, int value2)
                 // Carry Flag - addition
                 if (result > 0xFFFF)
                 {
-                        regs->F |= 0x10;
+                        flags->C = 1;
                 }
                 else
                 {
-                        regs->F &= 0xE0;
+                        flags->C = 0;
                 }
         }
 	// Otherwise subtraction
@@ -186,6 +187,20 @@ sixteen_bit_update_flags (int value1, int value2)
 
 /* 
  * ===  FUNCTION  ======================================================================
+ *         Name:  fetch
+ *  Description:  Sets the global variable opcode to the current instruction being
+ *                executed by the CPU
+ * =====================================================================================
+ */
+        static void
+fetch ()
+{
+        opcode = memory[ptrs->PC];
+        return;
+}               /* -----  end of function fetch  ----- */
+
+/* 
+ * ===  FUNCTION  ======================================================================
  *         Name:  decode
  *  Description:  Takes the current opcode pointed to by PC and determines 
  *  		  its generalized instruction (e.g. this is a 'load' instruction), 
@@ -200,13 +215,21 @@ decode ()
 			return;
 		// Rotate A instructions
 		case 0x0F:
+			rrc(&regs->A);
+			return;
 		case 0x1F:
+			rr(&regs->A);
+			return;
 		case 0x07:
+			rlc(&regs->A);
+			return;
 		case 0x17:
-			rotate_a();
+			rl(&regs->A);
 			return;
 		// Bit test, rotate, and shift instructions
 		case 0xCB:
+			ptrs->PC++;
+			fetch();
 			bit_rotate_shift();
 			return;
 		// Add instructions
@@ -330,7 +353,6 @@ decode ()
 		case 0xD8:
 		case 0xD0:
 		case 0xC0:
-		case 0xD8:
 			ret();
 			return;
 		case 0xD9:
@@ -356,34 +378,18 @@ decode ()
 	return;
 }		/* -----  end of function decode  ----- */
 
-/* 
- * ===  FUNCTION  ======================================================================
- *         Name:  fetch
- *  Description:  Sets the global variable opcode to the current instruction being
- *  		  executed by the CPU
- * =====================================================================================
- */
-	static void
-fetch ()
-{
-	opcode = memory[ptrs->PC];
-	return;
-}		/* -----  end of function fetch  ----- */
-
-
-/* 
+/*
  * ===  FUNCTION  ======================================================================
  *         Name:  cpu_execution
- *  Description:  Emulates the three primary functions of the CPU using associated 
- *  		  functions: fetch an opcode, decode it, execute it's instruction
+ *  Description:  Emulates the three primary functions of the CPU using associated
+ *                functions: fetch an opcode, decode it, execute it's instruction
  * =====================================================================================
  */
-	void
+        void
 cpu_execution ()
 {
-	fetch();
-	decode();
-	// Don't move the PC after a jump, otherwise increment
-	ptrs->PC = (!flags->jumped) ? ptrs->PC++ : ptrs->PC;
-}		/* -----  end of function cpu_execution  ----- */
-
+        fetch();
+        decode();
+        // Don't move the PC after a jump, otherwise increment
+        ptrs->PC = (!flags->jumped) ? (ptrs->PC + 1) : ptrs->PC;
+}               /* -----  end of function cpu_execution  ----- */

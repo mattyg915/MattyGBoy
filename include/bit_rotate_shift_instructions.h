@@ -18,6 +18,9 @@
 
 #ifndef BITROTATESHIFTINSTRUCTIONS
 #define BITROTATESHIFTINSTRUCTIONS
-void bit_rotate_shift();
-void rotate_a();
+void rr (unsigned char *reg);
+void rrc (unsigned char *reg);
+void rl (unsigned char *reg);
+void rlc (unsigned char *reg);
+void bit_rotate_shift ();
 #endif
