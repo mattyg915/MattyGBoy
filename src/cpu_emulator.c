@@ -216,15 +216,19 @@ decode ()
 		// Rotate A instructions
 		case 0x0F:
 			rrc(&regs->A);
+			flags->Z = 0; // Z flag always cleared
 			return;
 		case 0x1F:
 			rr(&regs->A);
+			flags->Z = 0; // Z flag always cleared
 			return;
 		case 0x07:
 			rlc(&regs->A);
+			flags->Z = 0; // Z flag always cleared
 			return;
 		case 0x17:
 			rl(&regs->A);
+			flags->Z = 0; // Z flag always cleared
 			return;
 		// Bit test, rotate, and shift instructions
 		case 0xCB:

@@ -34,9 +34,10 @@ rlc (unsigned char *reg)
         flags->N = 0; flags->H = 0;
         // Each bit of A shifts left one with bit 7 shifting 
         // into C AND bit 0
-        flags->C = (regs->A & 0x80);
-        regs->A <<= 1;
-        regs->A |= flags->C;
+        flags->C = (*reg & 0x80);
+        *reg <<= 1;
+        *reg |= flags->C;
+	flags->Z = ? (*reg == 0) 1 : 0;
 	return;
 }               /* -----  end of function rlc  ----- */
 
@@ -58,6 +59,7 @@ rl (unsigned char *reg)
         flags->C = (*reg & 0x80);
         *reg <<= 1;
         *reg |= initial_c;
+	flags->Z = ? (*reg == 0) 1 : 0;
         return;
 }               /* -----  end of function rl  ----- */
 
@@ -79,6 +81,7 @@ rr (unsigned char *reg)
         flags->C = (*reg & 0x1);
         *reg >>= 1;
         *reg |= (initial_c << 7);
+	flags->Z = ? (*reg == 0) 1 : 0;
         return;
 }               /* -----  end of function rr  ----- */
 
@@ -99,8 +102,11 @@ rrc (unsigned char *reg)
         flags->C = (*reg & 0x1);
         *reg >>= 1;
         *reg |= (flags->C << 7);
+	flags->Z = ? (*reg == 0) 1 : 0;
 	return;
 }		/* -----  end of function rrc  ----- */
+
+
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -112,10 +118,35 @@ rrc (unsigned char *reg)
 	void
 bit_rotate_shift ()
 {
+	// For ones where HL is needed
+        unsigned short reg_hl = combine_bytes(regs->H, regs->L);
+
 	switch (opcode)
 	{
 		case 0x00:
+			rlc(&regs->B);
 			return;
+		case 0x01:
+			rlc(&regs->C);
+			return;
+		case 0x02:
+                        rlc(&regs->D);
+                        return;
+		case 0x03:
+                        rlc(&regs->E);
+                        return;
+		case 0x04:
+                        rlc(&regs->H);
+                        return;
+		case 0x05:
+                        rlc(&regs->L);
+                        return;
+		case 0x06:
+                        rlc(&(memory[reg_hl]));
+                        return;
+		case 0x07:
+                        rlc(&regs->);
+                        return;
 	}
 	return;
 }		/* -----  end of function bit_rotate_shift  ----- */

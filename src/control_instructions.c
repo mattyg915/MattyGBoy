@@ -48,7 +48,7 @@ cp ()
 			operand = regs->A;
 			break;
 		case 0xB8:
-                        operand = regs->D;
+                        operand = regs->B;
                         break;
 		case 0xB9:
                         operand = regs->C;
