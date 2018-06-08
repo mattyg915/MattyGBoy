@@ -123,6 +123,7 @@ bit_rotate_shift ()
 
 	switch (opcode)
 	{
+		// RLC instructions
 		case 0x00:
 			rlc(&regs->B);
 			return;
@@ -145,8 +146,35 @@ bit_rotate_shift ()
                         rlc(&(memory[reg_hl]));
                         return;
 		case 0x07:
-                        rlc(&regs->);
+                        rlc(&regs->A);
                         return;
+		// RRC instructions
+		case 0x08:
+			rrc(&regs->B);
+			return;
+		case 0x09:
+                        rrc(&regs->C);
+                        return;
+		case 0x0A:
+                        rrc(&regs->D);
+                        return;
+		case 0x0B:
+                        rrc(&regs->E);
+                        return;
+		case 0x0C:
+                        rrc(&regs->H);
+                        return;
+		case 0x0D:
+                        rrc(&regs->L);
+                        return;
+		case 0x0E:
+                        rrc(&(memory[reg_hl]));
+                        return;
+		case 0x0F:
+                        rrc(&regs->A);
+                        return;
+		// 
+
 	}
 	return;
 }		/* -----  end of function bit_rotate_shift  ----- */
