@@ -23,6 +23,7 @@
 #include "logical_instructions.h"
 #include "bit_rotate_shift_instructions.h"
 #include "control_instructions.h"
+#include "load_instructions.h"
 
 unsigned char opcode;
 
@@ -372,7 +373,13 @@ decode ()
 		case 0xFF:
 			rst();
 			return;
-
+		case 0x40 ... 0x75:
+		case 0x77 ... 0x7F:
+			basic_ld();
+			return;
+		case 0x76:
+			// TODO:HALT
+			return;
 		// TODO: keep going!
 		default:
 			printf("ERROR: Invalid or unsupported opcode encountered\n");

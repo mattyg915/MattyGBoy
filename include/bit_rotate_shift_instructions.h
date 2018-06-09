@@ -22,5 +22,12 @@ void rr (unsigned char *reg);
 void rrc (unsigned char *reg);
 void rl (unsigned char *reg);
 void rlc (unsigned char *reg);
+void sla (unsigned char *reg);
+void sra (unsigned char *reg);
+void swap (unsigned char *reg);
+void srl (unsigned char *reg);
+void bit (unsigned char *reg);
+void res (unsigned char *reg);
+void set (unsigned char *reg);
 void bit_rotate_shift ();
 #endif

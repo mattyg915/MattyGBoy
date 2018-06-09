@@ -125,8 +125,14 @@ rrc (unsigned char *reg)
 	void
 sla (unsigned char *reg)
 {
-	*reg <<= 1;
+	// N and H are cleared, C and Z set by result
+	flags->N = 0; flags->H = 0;
+	flags->C = (((int)(*reg) << 1) > 0xFF) ? 1 : 0;
 
+	*reg <<= 1;
+	
+	flags->Z = (*reg) ? 0 : 1;
+	
 	return;
 }		/* -----  end of function sla  ----- */
 
@@ -140,10 +146,16 @@ sla (unsigned char *reg)
         void
 sra (unsigned char *reg)
 {
+	// N and H are cleared, C and Z set by result
+        flags->N = 0; flags->H = 0;
+        flags->C = (((int)(*reg) >> 1) > 0xFF) ? 1 : 0;
+
 	// Need to convert the register to signed value so it will shift arithmetically
 	char reg_value = (char)(*reg);
 	reg_value >>= 1;
 	*reg = reg_value;
+
+	flags->Z = (*reg) ? 0 : 1;
 
         return;
 }               /* -----  end of function sra  ----- */
@@ -178,8 +190,14 @@ swap (unsigned char *reg)
         void
 srl (unsigned char *reg)
 {
+	// N and H are cleared, C and Z set by result
+        flags->N = 0; flags->H = 0;
+        flags->C = (((int)(*reg) << 1) > 0xFF) ? 1 : 0;
+
 	*reg >>= 1;
         
+	flags->Z = (*reg) ? 0 : 1;
+
 	return;
 }               /* -----  end of function srl  ----- */
 
