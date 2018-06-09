@@ -15,6 +15,7 @@
  *
  * =====================================================================================
  */
+#include <math.h>
 #include "bit_rotate_shift_instructions.h"
 #include "global_declarations.h"
 #include "cpu_emulator.h"
@@ -32,12 +33,14 @@ rlc (unsigned char *reg)
 {
         // Clears N and H flags
         flags->N = 0; flags->H = 0;
-        // Each bit of A shifts left one with bit 7 shifting 
+        
+	// Each bit of A shifts left one with bit 7 shifting 
         // into C AND bit 0
         flags->C = (*reg & 0x80);
         *reg <<= 1;
         *reg |= flags->C;
-	flags->Z = ? (*reg == 0) 1 : 0;
+	flags->Z = (*reg == 0) ? 1 : 0;
+	
 	return;
 }               /* -----  end of function rlc  ----- */
 
@@ -59,8 +62,9 @@ rl (unsigned char *reg)
         flags->C = (*reg & 0x80);
         *reg <<= 1;
         *reg |= initial_c;
-	flags->Z = ? (*reg == 0) 1 : 0;
-        return;
+	flags->Z = (*reg == 0) ? 1 : 0;
+        
+	return;
 }               /* -----  end of function rl  ----- */
 
 /*
@@ -75,21 +79,23 @@ rr (unsigned char *reg)
 {
         // Clears N and H flags
         flags->N = 0; flags->H = 0;
-        // Each bit of register shifts right one with bit 0 shifting
+        
+	// Each bit of register shifts right one with bit 0 shifting
         // into C and C goes into bit 7
 	unsigned char initial_c = flags->C;
         flags->C = (*reg & 0x1);
         *reg >>= 1;
         *reg |= (initial_c << 7);
-	flags->Z = ? (*reg == 0) 1 : 0;
-        return;
+	flags->Z = (*reg == 0) ? 1 : 0;
+        
+	return;
 }               /* -----  end of function rr  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  rrc
  *  Description:  Handles all RRC instructions
- *   Parameters:  reg is a pointer to the register to be rotated
+ *   Parameters:  reg is a pointer to the register or memory location to be rotated
  * =====================================================================================
  */
 	void
@@ -97,16 +103,145 @@ rrc (unsigned char *reg)
 {
 	// Clears N and H flags
         flags->N = 0; flags->H = 0;
+	
 	// Each bit of register shifts right one with bit 0 shifting
         // into C AND bit 7
         flags->C = (*reg & 0x1);
         *reg >>= 1;
         *reg |= (flags->C << 7);
-	flags->Z = ? (*reg == 0) 1 : 0;
+	flags->Z = (*reg == 0) ? 1 : 0;
+	
 	return;
 }		/* -----  end of function rrc  ----- */
 
 
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  sla
+ *  Description:  Handles SLA instructions
+ *   Parameters:  reg is a pointer to the register/memory location to be shifted
+ * =====================================================================================
+ */
+	void
+sla (unsigned char *reg)
+{
+	*reg <<= 1;
+
+	return;
+}		/* -----  end of function sla  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  sra
+ *  Description:  Handles SRA instructions
+ *   Parameters:  reg is a pointer to the register/memory location to be shifted
+ * =====================================================================================
+ */
+        void
+sra (unsigned char *reg)
+{
+	// Need to convert the register to signed value so it will shift arithmetically
+	char reg_value = (char)(*reg);
+	reg_value >>= 1;
+	*reg = reg_value;
+
+        return;
+}               /* -----  end of function sra  ----- */
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  swap
+ *  Description:  Handles SWAP instructions
+ *   Parameters:  reg is a pointer to the register/memory location to be swapped
+ * =====================================================================================
+ */
+        void
+swap (unsigned char *reg)
+{
+	unsigned char low_nibble = *reg & 0xF;
+	
+	// Shift upper nibble to lower position
+	*reg >>= 4;
+	// And add back left-shifted lower nibble
+	*reg += (low_nibble << 4);
+        
+	return;
+}               /* -----  end of function swap  ----- */
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  srl
+ *  Description:  Handles SRL instructions
+ *   Parameters:  reg is a pointer to the register/memory location to be shifted
+ * =====================================================================================
+ */
+        void
+srl (unsigned char *reg)
+{
+	*reg >>= 1;
+        
+	return;
+}               /* -----  end of function srl  ----- */
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  bit
+ *  Description:  Handles BIT instructions
+ *   Parameters:  reg is a pointer to the register/memory location to be bit tested
+ * =====================================================================================
+ */
+        void
+bit (unsigned char *reg)
+{
+	// Bit to test is a function of the opcode
+	unsigned char bitmask = (opcode - 0x40) / 8;
+	bitmask = (unsigned char)pow(2, bitmask);
+
+	// BIT sets N to 0, H to 1
+	flags->N = 0; flags->H = 1;
+
+	// Z is 0 if bit is not 0, else 1
+	flags->Z = (*reg & bitmask) ? 0 : 1; // 2^bit used as mask to get the needed bit
+
+        return;
+}               /* -----  end of function bit  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  res
+ *  Description:  Handles RES instructions; No flags are affected
+ *   Parameters:  reg is a pointer to the register/memory location to be bit reset
+ * =====================================================================================
+ */
+        void
+res (unsigned char *reg)
+{
+	unsigned char bitmask = (opcode - 0x40) / 8;
+	bitmask ^= 0xFF;
+
+	// Set bit to 0
+	*reg &= bitmask;
+        
+	return;
+}               /* -----  end of function res  ----- */
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  set
+ *  Description:  Handles SET instructions; No flags are affected
+ *   Parameters:  reg is a pointer to the register/memory location to be bit set
+ * =====================================================================================
+ */
+        void
+set (unsigned char *reg)
+{
+	unsigned char bit = (opcode - 0x40) / 8;
+	
+	// Set bit to 1
+	*reg |= (unsigned char)pow(2, bit);
+
+        return;
+}               /* -----  end of function set  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -118,63 +253,84 @@ rrc (unsigned char *reg)
 	void
 bit_rotate_shift ()
 {
-	// For ones where HL is needed
+	// For ones where memory[HL] is needed
         unsigned short reg_hl = combine_bytes(regs->H, regs->L);
+	
+	// The affected registers/memory depend on the 4 lsb of the opcode
+	unsigned char *argument;
+	unsigned char arg_nibble = opcode & 0xF;
+
+	switch (arg_nibble)
+	{
+		case 0x00:
+		case 0x08:
+			argument = &regs->B;
+			break;
+		case 0x01:
+		case 0x09:
+			argument = &regs->C;
+		case 0x02:
+                case 0x0A:
+                        argument = &regs->D;
+                        break;
+		case 0x03:
+                case 0x0B:
+                        argument = &regs->E;
+                        break;
+		case 0x04:
+                case 0x0C:
+                        argument = &regs->H;
+                        break;
+		case 0x05:
+                case 0x0D:
+                        argument = &regs->L;
+                        break;
+		case 0x06:
+                case 0x0E:
+                        argument = memory + reg_hl;
+                        break;
+		case 0x07:
+                case 0x0F:
+                        argument = &regs->A;
+                        break;
+	}
 
 	switch (opcode)
 	{
-		// RLC instructions
-		case 0x00:
-			rlc(&regs->B);
+		case 0x00 ... 0x07:
+			rlc(argument);
 			return;
-		case 0x01:
-			rlc(&regs->C);
+		case 0x08 ... 0x0F:
+			rrc(argument);
 			return;
-		case 0x02:
-                        rlc(&regs->D);
-                        return;
-		case 0x03:
-                        rlc(&regs->E);
-                        return;
-		case 0x04:
-                        rlc(&regs->H);
-                        return;
-		case 0x05:
-                        rlc(&regs->L);
-                        return;
-		case 0x06:
-                        rlc(&(memory[reg_hl]));
-                        return;
-		case 0x07:
-                        rlc(&regs->A);
-                        return;
-		// RRC instructions
-		case 0x08:
-			rrc(&regs->B);
+		case 0x10 ... 0x17:
+			rl(argument);
 			return;
-		case 0x09:
-                        rrc(&regs->C);
-                        return;
-		case 0x0A:
-                        rrc(&regs->D);
-                        return;
-		case 0x0B:
-                        rrc(&regs->E);
-                        return;
-		case 0x0C:
-                        rrc(&regs->H);
-                        return;
-		case 0x0D:
-                        rrc(&regs->L);
-                        return;
-		case 0x0E:
-                        rrc(&(memory[reg_hl]));
-                        return;
-		case 0x0F:
-                        rrc(&regs->A);
-                        return;
-		// 
-
+		case 0x18 ... 0x1F:
+			rr(argument);
+			return;
+		case 0x20 ... 0x27:
+			sla(argument);
+			return;
+		case 0x28 ... 0x2F:
+			sra(argument);
+			return;
+		case 0x30 ... 0x37:
+			swap(argument);
+			return;
+		case 0x38 ... 0x3F:
+			srl(argument);
+			return;
+		case 0x40 ... 0x7F:
+			bit(argument);
+			return;
+		case 0x80 ... 0xBF:
+			res(argument);
+			return;
+		case 0xC0 ... 0xFF:
+			set(argument);
+			return;
 	}
+
 	return;
 }		/* -----  end of function bit_rotate_shift  ----- */
