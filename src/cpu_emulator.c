@@ -24,6 +24,7 @@
 #include "bit_rotate_shift_instructions.h"
 #include "control_instructions.h"
 #include "load_instructions.h"
+#include "cpu_control_instructions.h"
 
 unsigned char opcode;
 
@@ -377,8 +378,25 @@ decode ()
 		case 0x77 ... 0x7F:
 			basic_ld();
 			return;
+		case 0x06:
+		case 0x0E:
+		case 0x16:
+		case 0x1E:
+		case 0x26:
+		case 0x2E:
+		case 0x36:
+		case 0x3E:
+			load_one_byte_imm();
+			return;
+		case 0x0A:
+		case 0x1A:
+		case 0xFA:
+		case 0x02:
+		case 0x12:
+		case 0xEA:
+			load_from_to_mem();
 		case 0x76:
-			// TODO:HALT
+			halt();
 			return;
 		// TODO: keep going!
 		default:

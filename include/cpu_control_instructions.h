@@ -1,12 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  load_instructions.h
+ *       Filename:  cpu_control_instructions.h
  *
- *    Description:  Header file containing declarations for load instructions
+ *    Description:  Contains declarations for cpu control functions
  *
  *        Version:  1.0
- *        Created:  06/09/2018 15:55:38
+ *        Created:  06/09/2018 20:43:09
  *       Revision:  none
  *       Compiler:  gcc
  *
@@ -15,10 +15,7 @@
  *
  * =====================================================================================
  */
-#ifndef LOADINSTRUCTIONS
-#define LOADINSTRUCTIONS
-void basic_ld();
-void load_from_to_mem();
-void load_one_byte_imm();
-void load_hl();
+#ifndef CPUCONTROLINSTRUCTIONS
+#define CPUCONTROLINSTRUCTIONS
+void halt();
 #endif
