@@ -16,6 +16,7 @@
  *
  * =====================================================================================
  */
+#include <stdio.h>
 #include <stdlib.h>
 #include "global_declarations.h"
 #include "cpu_emulator.h"
@@ -82,15 +83,14 @@ cp ()
         void
 jp ()
 {
-	// Grab 16-bit immediate in case needed, only move PC if it's used
-	unsigned short target = combine_bytes(memory[ptrs->PC + 1], 
-			memory[ptrs->PC + 2]);
+	// Grab 16-bit immediate for the target
+	unsigned short *target = (unsigned short *)(memory + ptrs->PC + 1);
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
 	switch (opcode)
 	{
 		case 0xC3:
-			ptrs->PC = target;
+			ptrs->PC = *target;
 			flags->jumped = 1;
 			return;
 		case 0xE9:
@@ -100,7 +100,7 @@ jp ()
 		case 0xDA:
 			if (flags->C)
                         {
-                                ptrs->PC += target;
+                                ptrs->PC += *target;
                                 flags->jumped = 1;
                         }
                         else
@@ -111,7 +111,7 @@ jp ()
 		case 0xD2:
 			if (!flags->C)
                         {
-                                ptrs->PC += target;
+                                ptrs->PC += *target;
                                 flags->jumped = 1;
                         }
                         else
@@ -122,7 +122,7 @@ jp ()
 		case 0xC2:
 			if (!flags->Z)
                         {
-                                ptrs->PC += target;
+                                ptrs->PC += *target;
                                 flags->jumped = 1;
                         }
                         else
@@ -133,7 +133,7 @@ jp ()
 		case 0xCA:
 			if (flags->Z)
                         {
-                                ptrs->PC += target;
+                                ptrs->PC += *target;
                                 flags->jumped = 1;
                         }
                         else

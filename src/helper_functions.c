@@ -15,12 +15,31 @@
  *
  * =====================================================================================
  */
-
+#include <time.h>
 #include <stdio.h>
 #include "helper_functions.h"
 #include "register_structures.h"
 #include "global_declarations.h"
 #include "cpu_emulator.h"
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  delay
+ *  Description:  Handle timing of a much slower CPU by delaying execution on the 
+ *  		  emulating system's CPU
+ *  		  Credit: https://stackoverflow.com/questions/27447195/how-to-use-
+ *  		  delay-function-in-c-using-codeblocks-13-12mingw
+ *   Parameters:  mseconds is the number of milliseconds to delay
+ * =====================================================================================
+ */
+	void
+delay (unsigned int mseconds)
+{
+	clock_t goal = mseconds + clock();
+    	while (goal > clock());
+
+	return;
+}		/* -----  end of function delay  ----- */
 
 /*
  * ===  FUNCTION  ======================================================================

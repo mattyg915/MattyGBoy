@@ -20,5 +20,7 @@
 void basic_ld();
 void load_from_to_mem();
 void load_one_byte_imm();
+void read_write_io();
 void load_hl();
+void sixteen_bit_load();
 #endif

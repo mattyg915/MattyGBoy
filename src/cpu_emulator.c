@@ -28,6 +28,33 @@
 
 unsigned char opcode;
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  load_rom
+ *  Description:  Takes a gameboy ROM file and loads into the emulator's virtual memory
+ *   Parameters:  rom is the name of a .gb file to load
+ * =====================================================================================
+ */
+	void
+load_rom (char *rom)
+{
+	FILE *binary_file = fopen(rom, "rb");
+	long file_length;
+	
+	// Get info about the file, like it's length
+        fseek(binary_file, 0, SEEK_END);
+        file_length = ftell(binary_file);
+        rewind(binary_file);
+        
+	// Copy instructions into memory
+        fread(memory, file_length, 1, binary_file);
+	memory[file_length + 1] = 0x76;
+        fclose(binary_file);
+
+	return;
+}		/* -----  end of function load_rom  ----- */
+
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  eight_bit_update_flags
@@ -374,6 +401,7 @@ decode ()
 		case 0xFF:
 			rst();
 			return;
+		// Load instructions
 		case 0x40 ... 0x75:
 		case 0x77 ... 0x7F:
 			basic_ld();
@@ -395,6 +423,19 @@ decode ()
 		case 0x12:
 		case 0xEA:
 			load_from_to_mem();
+			return;
+		case 0x01:
+		case 0x08:
+		case 0x11:
+		case 0x21:
+		case 0x31:
+			sixteen_bit_load();
+		case 0xF0:
+		case 0xE0:
+		case 0xF2:
+		case 0xE2:
+			read_write_io();
+			return;
 		case 0x76:
 			halt();
 			return;
@@ -419,6 +460,10 @@ cpu_execution ()
 {
         fetch();
         decode();
-        // Don't move the PC after a jump, otherwise increment
-        ptrs->PC = (!flags->jumped) ? (ptrs->PC + 1) : ptrs->PC;
+        
+	// Don't move the PC after a jump, otherwise increment
+        ptrs->PC = (flags->jumped) ? ptrs->PC : (ptrs->PC + 1);
+	flags->jumped = 0; // reset jumped flag after every instruction
+	
+	return;
 }               /* -----  end of function cpu_execution  ----- */

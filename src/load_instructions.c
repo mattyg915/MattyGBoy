@@ -173,8 +173,7 @@ load_from_to_mem ()
                         regs->A = memory[addr];
 			return;
 		case 0xFA:
-			addr = combine_bytes(memory[ptrs->PC + 1], 
-					memory[ptrs->PC + 2]);
+			addr = memory[ptrs->PC + 1];
 			ptrs->PC += 2;
 			regs->A = memory[addr];
 			return;
@@ -187,8 +186,7 @@ load_from_to_mem ()
 			memory[addr] = regs->A;
 			return;
 		case 0xEA:
-			addr = combine_bytes(memory[ptrs->PC + 1],
-                                        memory[ptrs->PC + 2]);
+			addr = memory[ptrs->PC + 1];
                         ptrs->PC += 2;
 			memory[addr] = regs->A;
 			return;
@@ -214,28 +212,68 @@ load_hl ()
 		case 0x22:
 			memory[reg_hl] = regs->A;
 			reg_hl++;
-			split_between_registers(reg_hl, regs->H, regs->L);
+			split_between_registers(reg_hl, &regs->H, &regs->L);
 			return;
 		case 0x2A:
 			regs->A = memory[reg_hl];
 			reg_hl++;
-                        split_between_registers(reg_hl, regs->H, regs->L);
+                        split_between_registers(reg_hl, &regs->H, &regs->L);
 			return;
 		case 0x32:
-			memory[reg_hl] = regs->A
+			memory[reg_hl] = regs->A;
 			reg_hl--;
-                        split_between_registers(reg_hl, regs->H, regs->L);
+                        split_between_registers(reg_hl, &regs->H, &regs->L);
 			return;
 		case 0x3A:
 			regs->A = memory[reg_hl];
 			reg_hl--;
-                        split_between_registers(reg_hl, regs->H, regs->L);
+                        split_between_registers(reg_hl, &regs->H, &regs->L);
 			return;
 	}
 
 	return;
 }		/* -----  end of function load_hl  ----- */
 
+
+/* 
+ * ===  FUNCTION  ======================================================================
+ *         Name:  sixteen_bit_load
+ *  Description:  Handles instructions to load 16-bit values
+ * =====================================================================================
+ */
+	void
+sixteen_bit_load ()
+{
+	unsigned short imm;
+	switch (opcode)
+	{
+		case 0x01:
+			imm = memory[ptrs->PC + 1];
+			ptrs->PC += 2;
+			split_between_registers(imm, &regs->B, &regs->C);
+			return;
+		case 0x08:
+			memory[ptrs->PC + 1] = ptrs->SP &0xF;
+                        memory[ptrs->PC + 2] = (unsigned char)(ptrs->SP >> 8);
+			return;
+		case 0x11:
+			imm = memory[ptrs->PC + 1];
+                        ptrs->PC += 2;
+			split_between_registers(imm, &regs->D, &regs->E);
+			return;
+		case 0x21:
+			imm = memory[ptrs->PC + 1];
+                        ptrs->PC += 2;
+			split_between_registers(imm, &regs->H, &regs->L);
+			return;
+		case 0x31:
+			imm = memory[ptrs->PC + 1];
+                        ptrs->PC += 2;
+			ptrs->SP = imm;
+			return;
+	}
+	return;
+}		/* -----  end of function sixteen_bit_load  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -246,5 +284,28 @@ load_hl ()
 	void
 read_write_io ()
 {
+	unsigned char imm = memory[ptrs->PC + 1];
+	switch (opcode)
+	{
+		case 0xF0:
+			ptrs->PC++;
+			imm += 0xFF00;
+			regs->A = memory[imm];
+			return;
+		case 0xE0:
+			ptrs->PC++;
+                        imm += 0xFF00;
+			memory[imm] = regs->A;
+			return;
+		case 0xF2:
+			imm = regs->C + 0xFF00;
+			regs->A = memory[imm];
+			return;
+		case 0xE2:
+			imm = regs->C + 0xFF00;
+			memory[imm] = regs->A;
+			return;
+	}
+
 	return;
 }		/* -----  end of function read_write_io  ----- */
