@@ -34,11 +34,10 @@ typedef struct CPU_Flags
 {
 	// Z, N, H, and C are the zero, subtract, half-carry, carry flags respectively
 	// jumped set when an instruction sets the PC and cleared after each cyycle
-	// IME is the Interrupt Master Enable flag
-	unsigned char Z, N, H, C, jumped, IME;
+	unsigned char Z, N, H, C, jumped;
 } CPU_Flags;
 
-Registers* init_registers(int *init_values);
+Registers* init_registers();
 CPU_Flags* init_flags();
 Pointers* init_pointers();
 

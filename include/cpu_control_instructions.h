@@ -18,4 +18,9 @@
 #ifndef CPUCONTROLINSTRUCTIONS
 #define CPUCONTROLINSTRUCTIONS
 void halt();
+void stop();
+void push();
+void pop();
+void ei();
+void di();
 #endif

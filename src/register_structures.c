@@ -31,7 +31,7 @@
  * =====================================================================================
  */
 	Registers*
-init_registers(int *init_values)
+init_registers()
 {
 	Registers *reg_ptr = malloc(sizeof(*reg_ptr));
 	if (reg_ptr == NULL) 
@@ -39,14 +39,14 @@ init_registers(int *init_values)
 		return NULL;
 	}
 
-	// Initialize with specified values
-	reg_ptr->A = init_values[0];
-	reg_ptr->B = init_values[1];
-	reg_ptr->C = init_values[2];
-	reg_ptr->D = init_values[3];
-	reg_ptr->E = init_values[4];
-	reg_ptr->H = init_values[5];
-	reg_ptr->L = init_values[6];
+	// Initialize registers
+	reg_ptr->A = 0x01;
+	reg_ptr->B = 0x01;
+	reg_ptr->C = 0x13;
+	reg_ptr->D = 0x00;
+	reg_ptr->E = 0xD8;
+	reg_ptr->H = 0x01;
+	reg_ptr->L = 0x4D;
 
 	return reg_ptr;
 }		/* -----  end of function init_registers  ----- */
@@ -89,12 +89,11 @@ init_flags ()
 		return NULL;
 	}
 
-	flags_ptr->Z = 0;
+	flags_ptr->Z = 1;
 	flags_ptr->N = 0;
-	flags_ptr->H = 0;
-	flags_ptr->C = 0;
+	flags_ptr->H = 1;
+	flags_ptr->C = 1;
 	flags_ptr->jumped = 0;
-	flags_ptr->IME = 0;
 
 	return flags_ptr;
 }		/* -----  end of function init_flags  ----- */
