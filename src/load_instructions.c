@@ -15,6 +15,7 @@
  *
  * =====================================================================================
  */
+#include <stdio.h>
 #include "load_instructions.h"
 #include "global_declarations.h"
 #include "cpu_emulator.h"
@@ -114,7 +115,7 @@ load_one_byte_imm ()
 	unsigned char imm = memory[ptrs->PC + 1];
 	unsigned char *load_to;
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
-	unsigned char left_operand = opcode % 8;
+	int left_operand = opcode / 8;
 
 	switch (left_operand)
 	{
@@ -161,7 +162,9 @@ load_one_byte_imm ()
 	void
 load_from_to_mem ()
 {
-	unsigned short addr = 0;
+	unsigned short *mem_addr = (unsigned short *)(memory + ptrs->PC + 1);
+	unsigned short addr;
+
 	switch (opcode)
 	{
 		case 0x0A:
@@ -173,9 +176,8 @@ load_from_to_mem ()
                         regs->A = memory[addr];
 			return;
 		case 0xFA:
-			addr = memory[ptrs->PC + 1];
 			ptrs->PC += 2;
-			regs->A = memory[addr];
+			regs->A = memory[*mem_addr];
 			return;
 		case 0x02:
 			addr = combine_bytes(regs->B, regs->C);
@@ -244,32 +246,30 @@ load_hl ()
 	void
 sixteen_bit_load ()
 {
-	unsigned short imm;
+	unsigned short *imm = (unsigned short *)(memory + ptrs->PC + 1);
+	
 	switch (opcode)
 	{
 		case 0x01:
-			imm = memory[ptrs->PC + 1];
 			ptrs->PC += 2;
-			split_between_registers(imm, &regs->B, &regs->C);
+			split_between_registers(*imm, &regs->B, &regs->C);
 			return;
 		case 0x08:
+			ptrs->PC += 2;
 			memory[ptrs->PC + 1] = ptrs->SP &0xF;
                         memory[ptrs->PC + 2] = (unsigned char)(ptrs->SP >> 8);
 			return;
 		case 0x11:
-			imm = memory[ptrs->PC + 1];
                         ptrs->PC += 2;
-			split_between_registers(imm, &regs->D, &regs->E);
+			split_between_registers(*imm, &regs->D, &regs->E);
 			return;
 		case 0x21:
-			imm = memory[ptrs->PC + 1];
                         ptrs->PC += 2;
-			split_between_registers(imm, &regs->H, &regs->L);
+			split_between_registers(*imm, &regs->H, &regs->L);
 			return;
 		case 0x31:
-			imm = memory[ptrs->PC + 1];
                         ptrs->PC += 2;
-			ptrs->SP = imm;
+			ptrs->SP = *imm;
 			return;
 	}
 	return;

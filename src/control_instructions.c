@@ -223,15 +223,14 @@ jr ()
         void
 call ()
 {
-	unsigned short target = memory[ptrs->PC + 1];
-	ptrs->PC += 2; // two bytes after opcode are the target addres
+	unsigned short *target = (unsigned short *)(memory + ptrs->PC + 1);
 
 	switch (opcode)
 	{
 		case 0xCD:
 			memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 			memory[ptrs->SP - 2] = ptrs->PC & 0xf;
- 			ptrs->PC = target;
+ 			ptrs->PC = *target;
 			ptrs->SP -= 2;
 			flags->jumped = 1;
 			return;
@@ -240,7 +239,7 @@ call ()
 			{
 				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
-	 			ptrs->PC = target;
+	 			ptrs->PC = *target;
 				ptrs->SP -= 2;
 				flags->jumped = 1;
 			}
@@ -250,7 +249,7 @@ call ()
                         {
 				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
-	 			ptrs->PC = target;
+	 			ptrs->PC = *target;
 				ptrs->SP -= 2;
 				flags->jumped = 1;
                         }
@@ -260,7 +259,7 @@ call ()
                         {
 				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
- 				ptrs->PC = target;
+ 				ptrs->PC = *target;
 				ptrs->SP -= 2;
 				flags->jumped = 1;
                         }
@@ -270,7 +269,7 @@ call ()
                         {
 				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
 				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
- 				ptrs->PC = target;
+ 				ptrs->PC = *target;
 				ptrs->SP -= 2;
 				flags->jumped = 1;
                         }
@@ -288,18 +287,18 @@ call ()
         void
 ret ()
 {
-
+	unsigned short *return_address = (unsigned short *)(memory + ptrs->SP - 1);
 	switch (opcode)
 	{
 		case 0xC9:
-			ptrs->PC = memory[ptrs->SP] - 1;
+			ptrs->PC = *return_address;
 			flags->jumped = 1;
  			ptrs->SP += 2;
 			return;
 		case 0xD8:
 			if (flags->C)
 			{
-				ptrs->PC = memory[ptrs->SP] - 1;
+				ptrs->PC = *return_address;
 				flags->jumped = 1;
  				ptrs->SP += 2;
 			}
@@ -307,7 +306,7 @@ ret ()
 		case 0xD0:
 			if (!flags->C)
 			{
-				ptrs->PC = memory[ptrs->SP] - 1;
+				ptrs->PC = *return_address;
 				flags->jumped = 1;
  				ptrs->SP += 2;
 			}
@@ -315,7 +314,7 @@ ret ()
 		case 0xC0:
 			if (!flags->Z)
 			{
-				ptrs->PC = memory[ptrs->SP] - 1;
+				ptrs->PC = *return_address;
 				flags->jumped = 1;
  				ptrs->SP += 2;
 			}
@@ -323,7 +322,7 @@ ret ()
 		case 0xC8:
 			if (flags->Z)
 			{
-				ptrs->PC = memory[ptrs->SP] - 1;
+				ptrs->PC = *return_address;
 				flags->jumped = 1;
  				ptrs->SP += 2;
 			}
@@ -341,8 +340,9 @@ ret ()
         void
 reti ()
 {
+	unsigned short *return_address = (unsigned short *)(memory + ptrs->SP - 1);
 	// Unconditional return
-	ptrs->PC = memory[ptrs->SP] - 1;
+	ptrs->PC = *return_address;
  	ptrs->SP += 2;
 	
 	// Then enable interupts

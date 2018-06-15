@@ -12,10 +12,10 @@ _OBJ = cpu_control_instructions.o load_instructions.o control_instructions.o bit
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 $(ODIR)/%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+	$(CC) -ggdb -c -o $@ $< $(CFLAGS)
 
 mattygboy: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -ggdb -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
 

@@ -32,7 +32,7 @@ CPU_Flags *flags;
 
 int main(int argc, char **argv) 
 {
-	int verbose = 1;
+	int verbose = 0;
 	// Handle optional command line arguments
 	int flag;
 	while ((flag = getopt(argc, argv, "v")) != -1)
@@ -60,8 +60,8 @@ int main(int argc, char **argv)
 	// TODO just set up for testing for the moment
 	while (opcode != 0x76)
 	{
+		printf("opcode: %x\n", memory[ptrs->PC]);
 		cpu_execution();
-		printf("opcode: %x\n", opcode);
 		if (verbose)
 		{
 			dump_registers();

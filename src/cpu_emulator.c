@@ -406,6 +406,12 @@ decode ()
 		case 0x77 ... 0x7F:
 			basic_ld();
 			return;
+		case 0x22:
+		case 0x2A:
+		case 0x32:
+		case 0x3A:
+			load_hl();
+			return;
 		case 0x06:
 		case 0x0E:
 		case 0x16:
@@ -441,7 +447,7 @@ decode ()
 			return;
 		// TODO: keep going!
 		default:
-			printf("ERROR: Invalid or unsupported opcode encountered\n");
+			printf("ERROR: Invalid or unsupported opcode, %x, encountered\n", opcode);
 			exit(1);
 	}
 
@@ -458,12 +464,12 @@ decode ()
         void
 cpu_execution ()
 {
+	flags->jumped = 0; // reset jumped flag after every instruction
         fetch();
         decode();
         
 	// Don't move the PC after a jump, otherwise increment
         ptrs->PC = (flags->jumped) ? ptrs->PC : (ptrs->PC + 1);
-	flags->jumped = 0; // reset jumped flag after every instruction
 	
 	return;
 }               /* -----  end of function cpu_execution  ----- */
