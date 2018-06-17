@@ -36,8 +36,7 @@ cp ()
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 	unsigned char operand;
 
-	switch (opcode)
-	{
+	switch (opcode) {
 		case 0xFE:
 			ptrs->PC++;
 			operand = memory[ptrs->PC];
@@ -49,29 +48,29 @@ cp ()
 			operand = regs->A;
 			break;
 		case 0xB8:
-                        operand = regs->B;
-                        break;
+			operand = regs->B;
+			break;
 		case 0xB9:
-                        operand = regs->C;
-                        break;
+			operand = regs->C;
+			break;
 		case 0xBA:
-                        operand = regs->D;
-                        break;
+			operand = regs->D;
+			break;
 		case 0xBB:
-                        operand = regs->E;
-                        break;
+			operand = regs->E;
+			break;
 		case 0xBC:
-                        operand = regs->H;
-                        break;
+			operand = regs->H;
+			break;
 		case 0xBD:
-                        operand = regs->L;
-                        break;
+			operand = regs->L;
+			break;
+		default:
+			printf("ERROR: Invalid or unsupported opcode, %x, encountered\n", opcode);
+			exit(1);
 	}
-
 	// A's state is unchanged, only the flags are affected
 	eight_bit_update_flags(regs->A, operand);
-
-	return;
 }		/* -----  end of function cp  ----- */
 
 /*

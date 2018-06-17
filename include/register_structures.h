@@ -34,7 +34,7 @@ typedef struct CPU_Flags
 {
 	// Z, N, H, and C are the zero, subtract, half-carry, carry flags respectively
 	// jumped set when an instruction sets the PC and cleared after each cyycle
-	unsigned char Z, N, H, C, jumped;
+	unsigned char Z, N, H, C, jumped, ime;
 } CPU_Flags;
 
 Registers* init_registers();

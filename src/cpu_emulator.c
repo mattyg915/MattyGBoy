@@ -28,34 +28,7 @@
 
 unsigned char opcode;
 
-
-/* 
- * ===  FUNCTION  ======================================================================
- *         Name:  load_rom
- *  Description:  Takes a gameboy ROM file and loads into the emulator's virtual memory
- *   Parameters:  rom is the name of a .gb file to load
- * =====================================================================================
- */
-	void
-load_rom (char *rom)
-{
-	FILE *binary_file = fopen(rom, "rb");
-	long file_length;
-	
-	// Get info about the file, like it's length
-        fseek(binary_file, 0, SEEK_END);
-        file_length = ftell(binary_file);
-        rewind(binary_file);
-        
-	// Copy instructions into memory
-        fread(memory, file_length, 1, binary_file);
-	memory[file_length + 1] = 0x76;
-        fclose(binary_file);
-
-	return;
-}		/* -----  end of function load_rom  ----- */
-
-/* 
+/*
  * ===  FUNCTION  ======================================================================
  *         Name:  eight_bit_update_flags
  *  Description:  Handles updates to the Z, H, and C flags in the F register 
@@ -132,8 +105,6 @@ eight_bit_update_flags (int value1, int value2)
         {
                 flags->Z &= 0; // Otherwise clear it
         }
-
-	return;
 }		/* -----  end of function eight_bit_update_flags  ----- */
 
 /*
@@ -210,8 +181,6 @@ sixteen_bit_update_flags (int value1, int value2)
         {
                 flags->Z = 0; // Otherwise clear it
         }
-
-	return;
 }		/* -----  end of function sixteen_bit_update_flags  ----- */
 
 /* 
@@ -225,7 +194,6 @@ sixteen_bit_update_flags (int value1, int value2)
 fetch ()
 {
         opcode = memory[ptrs->PC];
-        return;
 }               /* -----  end of function fetch  ----- */
 
 /* 
@@ -242,7 +210,7 @@ decode ()
 	switch (opcode) {
 		case 0x00: // NOP
 			return;
-		// Rotate A instructions
+			// Rotate A instructions
 		case 0x0F:
 			rrc(&regs->A);
 			flags->Z = 0; // Z flag always cleared
@@ -259,13 +227,13 @@ decode ()
 			rl(&regs->A);
 			flags->Z = 0; // Z flag always cleared
 			return;
-		// Bit test, rotate, and shift instructions
+			// Bit test, rotate, and shift instructions
 		case 0xCB:
 			ptrs->PC++;
 			fetch();
 			bit_rotate_shift();
 			return;
-		// Add instructions
+			// Add instructions
 			// 8-bit
 		case 0xC6:
 		case 0xE8:
@@ -279,27 +247,27 @@ decode ()
 		case 0x39:
 			sixteen_bit_add();
 			return;
-		// ADC instructions
+			// ADC instructions
 		case 0xCE:
 		case 0x88 ... 0x8D:
 			adc();
 			return;
-		// AND instructions
+			// AND instructions
 		case 0xE6:
 		case 0xA0 ... 0xA7:
 			and();
 			return;
-		// SUB instructions
+			// SUB instructions
 		case 0xD6:
 		case 0x90 ... 0x97:
 			sub();
 			return;
-		// SBC instructions
+			// SBC instructions
 		case 0xDE:
 		case 0x98 ... 0x9F:
 			sbc();
 			return;
-		// 8-bit INC instructions
+			// 8-bit INC instructions
 		case 0x34:
 		case 0x3C:
 		case 0x04:
@@ -310,14 +278,14 @@ decode ()
 		case 0x2C:
 			eight_bit_inc();
 			return;
-		// 16-bit INC instructions
+			// 16-bit INC instructions
 		case 0x03:
 		case 0x13:
 		case 0x23:
 		case 0x33:
 			sixteen_bit_inc();
 			return;
-		// 8-bit DEC instructions
+			// 8-bit DEC instructions
 		case 0x35:
 		case 0x3D:
 		case 0x05:
@@ -328,37 +296,37 @@ decode ()
 		case 0x2D:
 			eight_bit_dec();
 			return;
-		// 16-bit DEC instructions
+			// 16-bit DEC instructions
 		case 0x0B:
 		case 0x1B:
 		case 0x2B:
 		case 0x3B:
 			sixteen_bit_dec();
 			return;
-		// OR instructions
+			// OR instructions
 		case 0xF6:
 		case 0xB0 ... 0xB7:
 			or();
 			return;
-		// XOR instructions
+			// XOR instructions
 		case 0xEE:
 		case 0xA8 ... 0xAF:
 			xor();
 			return;
-		// DAA
+			// DAA
 		case 0x27:
 			daa();
 			return;
-		// CPL
+			// CPL
 		case 0x2F:
 			cpl();
 			return;
-		// CP instructions
+			// CP instructions
 		case 0xFE:
 		case 0xB9 ... 0xBF:
 			cp();
 			return;
-		// Jump instructions
+			// Jump instructions
 		case 0xC3:
 		case 0xE9:
 		case 0xDA:
@@ -374,7 +342,7 @@ decode ()
 		case 0x28:
 			jr();
 			return;
-		// Call and return instructions
+			// Call and return instructions
 		case 0xCD:
 		case 0xDC:
 		case 0xD4:
@@ -401,7 +369,7 @@ decode ()
 		case 0xFF:
 			rst();
 			return;
-		// Load instructions
+			// Load instructions
 		case 0x40 ... 0x75:
 		case 0x77 ... 0x7F:
 			basic_ld();
@@ -445,13 +413,11 @@ decode ()
 		case 0x76:
 			halt();
 			return;
-		// TODO: keep going!
+			// TODO: keep going!
 		default:
 			printf("ERROR: Invalid or unsupported opcode, %x, encountered\n", opcode);
 			exit(1);
 	}
-
-	return;
 }		/* -----  end of function decode  ----- */
 
 /*
@@ -469,7 +435,7 @@ cpu_execution ()
         decode();
         
 	// Don't move the PC after a jump, otherwise increment
-        ptrs->PC = (flags->jumped) ? ptrs->PC : (ptrs->PC + 1);
+        ptrs->PC = flags->jumped ? ptrs->PC : (ptrs->PC + 1);
 	
 	return;
 }               /* -----  end of function cpu_execution  ----- */

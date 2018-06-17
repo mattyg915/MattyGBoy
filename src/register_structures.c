@@ -94,6 +94,7 @@ init_flags ()
 	flags_ptr->H = 1;
 	flags_ptr->C = 1;
 	flags_ptr->jumped = 0;
+	flags_ptr->ime = 0;
 
 	return flags_ptr;
 }		/* -----  end of function init_flags  ----- */

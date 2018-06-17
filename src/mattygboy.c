@@ -41,23 +41,21 @@ int main(int argc, char **argv)
 		{
 			case 'v':
 				verbose = 1;
-                		break;
+				break;
 		}
 	}
 
-	// Array containing initializing values for all registers (default to 0)
-	int reg_init_values[7] = { 0 };
 	// Virtual registers are loaded
-	regs = init_registers(reg_init_values);
+	regs = init_registers();
 	ptrs = init_pointers();
 	flags = init_flags();
 
-	// TODO:Initialize virtual memory
-	memory = malloc(MEMORY_SIZE);
-	// TODO:Load cartridge data into virtual memory
-	load_rom(argv[optind]); // TODO this is just set this way for testing for now
+	// TODO: for now just load rom via command line argument
+	// TODO: Initialize virtual memory
+	unsigned char *cartridge = load_cartridge(argv[optind]);
+	memory = init_memory(cartridge);
 	// TODO:Main program loop, fetch/decode/execute
-	// TODO just set up for testing for the moment
+	// TODO: just set up for testing for the moment
 	while (opcode != 0x76)
 	{
 		printf("opcode: %x\n", memory[ptrs->PC]);
