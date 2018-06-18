@@ -27,14 +27,15 @@
 extern unsigned char *memory;
 
 // Track ROM banking
-static unsigned char mbc1;
-static unsigned char mbc2;
-static unsigned char current_rom_bank; // bank 0 is gameboy internal rom
+static unsigned char banking_mode;
+static MBC1_Registers mbc1;
+static MBC2_Registers mbc2;
+static unsigned char rom_bank_number; // bank 0 is gameboy internal rom
 
 // Track RAM banking
-static unsigned char ext_ram_bank;
+static unsigned char ext_ram_bank; // Single array to virtualize all RAM banks
 static unsigned char num_ram_banks;
-static unsigned char current_ram_bank;
+static unsigned char ram_bank_number;
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -161,6 +162,7 @@ free_all_memory()
 read_memory(unsigned short addr)
 {
 	void *mem;
+
 }		/* -----  end of function read_memory  ----- */
 /*
  * ===  FUNCTION  ======================================================================
@@ -174,7 +176,7 @@ read_memory(unsigned short addr)
 	unsigned char
 write_memory(unsigned short addr, unsigned char data)
 {
-	if (addr <= 0x7FFF) // ROM
+	if (addr <= 0x) // ROM
 	{
 		printf("ERROR: Memory at address %x is read-only, unable to write %x\n",
 			   addr, data);

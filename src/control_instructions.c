@@ -22,6 +22,9 @@
 #include "cpu_emulator.h"
 #include "helper_functions.h"
 
+// TODO: optimize the conditional jumps so that we only have the PC moving on one line
+// TODO: fix call and possibly others because you need the 'else' part that just moves PC
+
 /*
  * ===  FUNCTION  ======================================================================
  *         Name:  cp
