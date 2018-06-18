@@ -34,43 +34,42 @@ cp ()
 	flags->N = 1; // CP sets the N flag
 
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
-	unsigned char operand;
+	unsigned char *operand;
 
 	switch (opcode) {
 		case 0xFE:
 			ptrs->PC++;
-			operand = memory[ptrs->PC];
+			operand = read_memory(ptrs->PC);
 			break;
 		case 0xBE:
-			operand = memory[reg_hl];
+			operand = read_memory(reg_hl);
 			break;
 		case 0xBF:
-			operand = regs->A;
+			operand = &regs->A;
 			break;
 		case 0xB8:
-			operand = regs->B;
+			operand = &regs->B;
 			break;
 		case 0xB9:
-			operand = regs->C;
+			operand = &regs->C;
 			break;
 		case 0xBA:
-			operand = regs->D;
+			operand = &regs->D;
 			break;
 		case 0xBB:
-			operand = regs->E;
+			operand = &regs->E;
 			break;
 		case 0xBC:
-			operand = regs->H;
+			operand = &regs->H;
 			break;
 		case 0xBD:
-			operand = regs->L;
+			operand = &regs->L;
 			break;
 		default:
-			printf("ERROR: Invalid or unsupported opcode, %x, encountered\n", opcode);
-			exit(1);
+			return;
 	}
 	// A's state is unchanged, only the flags are affected
-	eight_bit_update_flags(regs->A, operand);
+	eight_bit_update_flags(regs->A, *operand);
 }		/* -----  end of function cp  ----- */
 
 /*
@@ -83,7 +82,8 @@ cp ()
 jp ()
 {
 	// Grab 16-bit immediate for the target
-	unsigned short *target = (unsigned short *)(memory + ptrs->PC + 1);
+	unsigned short *target = read_memory((unsigned short) (ptrs->PC + 0x1));
+
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
 	switch (opcode)
@@ -93,56 +93,57 @@ jp ()
 			flags->jumped = 1;
 			return;
 		case 0xE9:
-			ptrs->PC = memory[reg_hl];
+			target = read_memory(reg_hl);
+			ptrs->PC = *target;
 			flags->jumped = 1;
 			return;
 		case 0xDA:
 			if (flags->C)
-                        {
-                                ptrs->PC += *target;
-                                flags->jumped = 1;
-                        }
-                        else
-                        {
-                                ptrs->PC += 2;
-                        }
+			{
+				ptrs->PC += *target;
+				flags->jumped = 1;
+			}
+			else
+			{
+				ptrs->PC += 2;
+			}
 			return;
 		case 0xD2:
 			if (!flags->C)
-                        {
-                                ptrs->PC += *target;
-                                flags->jumped = 1;
-                        }
-                        else
-                        {
-                                ptrs->PC += 2;
-                        }
+			{
+				ptrs->PC += *target;
+				flags->jumped = 1;
+			}
+			else
+			{
+				ptrs->PC += 2;
+			}
 			return;
 		case 0xC2:
 			if (!flags->Z)
-                        {
-                                ptrs->PC += *target;
-                                flags->jumped = 1;
-                        }
-                        else
-                        {
-                                ptrs->PC += 2;
-                        }
+			{
+				ptrs->PC += *target;
+				flags->jumped = 1;
+			}
+			else
+			{
+				ptrs->PC += 2;
+			}
 			return;
 		case 0xCA:
 			if (flags->Z)
-                        {
-                                ptrs->PC += *target;
-                                flags->jumped = 1;
-                        }
-                        else
-                        {
-                                ptrs->PC += 2;
-                        }
+			{
+				ptrs->PC += *target;
+				flags->jumped = 1;
+			}
+			else
+			{
+				ptrs->PC += 2;
+			}
+			return;
+		default:
 			return;
 	}
-
-	return;
 }		/* -----  end of function jp  ----- */
 
 /*
@@ -155,18 +156,18 @@ jp ()
 jr ()
 {
 	// All ops use a 1-byte immediate
-	unsigned char offset = memory[ptrs->PC + 1];
+	unsigned char *offset = read_memory((unsigned short) (ptrs->PC + 1));
 
 	switch (opcode)
 	{
 		case 0x18:
-                        ptrs->PC += offset;
+			ptrs->PC += *offset;
 			flags->jumped = 1;
-                        return;
-                case 0x38:
+			return;
+		case 0x38:
 			if (flags->C)
 			{
-				ptrs->PC += offset;
+				ptrs->PC += *offset;
 				flags->jumped = 1;
 			}
 			else
@@ -174,43 +175,42 @@ jr ()
 				ptrs->PC++;
 			}
                         return;
-                case 0x30:
-                        if (!flags->C)
-                        {
-                                ptrs->PC += offset;
-                                flags->jumped = 1;
-                        }
+		case 0x30:
+			if (!flags->C)
+			{
+				ptrs->PC += *offset;
+				flags->jumped = 1;
+			}
 			else
 			{
 				ptrs->PC++;
 			}
-                        return;
-                case 0x20:
-                        if (!flags->Z)
-                        {
-                                ptrs->PC += offset;
-                                flags->jumped = 1;
-                        }
-                        else
-                        {
-                                ptrs->PC++;
-                        }
-
-                        return;
-                case 0x28:
-                        if (flags->Z)
-                        {
-                                ptrs->PC += offset;
-                                flags->jumped = 1;
-                        }
-                        else
-                        {
-                                ptrs->PC++;
-                        }
-
-                        return;
-        }
-        return;
+			return;
+		case 0x20:
+			if (!flags->Z)
+			{
+				ptrs->PC += *offset;
+				flags->jumped = 1;
+			}
+			else
+			{
+				ptrs->PC++;
+			}
+			return;
+		case 0x28:
+			if (flags->Z)
+			{
+				ptrs->PC += *offset;
+				flags->jumped = 1;
+			}
+			else
+			{
+				ptrs->PC++;
+			}
+			return;
+		default:
+			break;
+	}
 }               /* -----  end of function jr  ----- */
 
 /*
@@ -222,22 +222,32 @@ jr ()
         void
 call ()
 {
-	unsigned short *target = (unsigned short *)(memory + ptrs->PC + 1);
+	unsigned short *target = read_memory((unsigned short) (ptrs->PC + 0x1));
+
+	// Grab both nibbles of PC to store on the stack
+	unsigned char pc_high = (unsigned char)(ptrs->PC >> 0x8u);
+	unsigned char pc_low = (unsigned char) (ptrs->PC & 0xFu);
 
 	switch (opcode)
 	{
 		case 0xCD:
-			memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
-			memory[ptrs->SP - 2] = ptrs->PC & 0xf;
+			// Allocate space on stack and store PC there
+			ptrs->SP--;
+			write_memory(ptrs->SP, pc_high);
+			ptrs->SP--;
+			write_memory(ptrs->SP, pc_low);
+
  			ptrs->PC = *target;
-			ptrs->SP -= 2;
 			flags->jumped = 1;
 			return;
 		case 0xDC:
 			if (flags->C)
 			{
-				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
-				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
+				ptrs->SP--;
+				write_memory(ptrs->SP, pc_high);
+				ptrs->SP--;
+				write_memory(ptrs->SP, pc_low);
+
 	 			ptrs->PC = *target;
 				ptrs->SP -= 2;
 				flags->jumped = 1;
@@ -245,36 +255,46 @@ call ()
 			return;
 		case 0xD4:
 			if (!flags->C)
-                        {
-				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
-				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
+			{
+				ptrs->SP--;
+				write_memory(ptrs->SP, pc_high);
+				ptrs->SP--;
+				write_memory(ptrs->SP, pc_low);
+
 	 			ptrs->PC = *target;
 				ptrs->SP -= 2;
 				flags->jumped = 1;
-                        }
+			}
 			return;
 		case 0xC4:
 			if (!flags->Z)
-                        {
-				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
-				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
+			{
+				ptrs->SP--;
+				write_memory(ptrs->SP, pc_high);
+				ptrs->SP--;
+				write_memory(ptrs->SP, pc_low);
+
  				ptrs->PC = *target;
 				ptrs->SP -= 2;
 				flags->jumped = 1;
-                        }
+			}
 			return;
 		case 0xCC:
 			if (flags->Z)
-                        {
-				memory[ptrs->SP - 1] = (unsigned char)(ptrs->PC >> 8);
-				memory[ptrs->SP - 2] = ptrs->PC & 0xf;
+			{
+				ptrs->SP--;
+				write_memory(ptrs->SP, pc_high);
+				ptrs->SP--;
+				write_memory(ptrs->SP, pc_low);
+
  				ptrs->PC = *target;
 				ptrs->SP -= 2;
 				flags->jumped = 1;
-                        }
+			}
+			return;
+		default:
 			return;
 	}
-        return;
 }               /* -----  end of function call  ----- */
 
 /*
@@ -286,7 +306,7 @@ call ()
         void
 ret ()
 {
-	unsigned short *return_address = (unsigned short *)(memory + ptrs->SP - 1);
+	unsigned short *return_address = read_memory((unsigned short) (ptrs->SP - 0x1));
 	switch (opcode)
 	{
 		case 0xC9:
@@ -326,8 +346,9 @@ ret ()
  				ptrs->SP += 2;
 			}
 			return;
+		default:
+			return;
 	}
-        return;
 }               /* -----  end of function ret  ----- */
 
 /*
@@ -339,15 +360,10 @@ ret ()
         void
 reti ()
 {
-	unsigned short *return_address = (unsigned short *)(memory + ptrs->SP - 1);
+	unsigned short *return_address = read_memory((unsigned short) (ptrs->SP - 0x1));
 	// Unconditional return
 	ptrs->PC = *return_address;
  	ptrs->SP += 2;
-	
-	// Then enable interupts
-	flags->IME = 1;
-
-        return;
 }               /* -----  end of function reti  ----- */
 
 /*
@@ -365,31 +381,32 @@ rst ()
 	{
 		case 0xC7:
 			target = 0x00;
-			return;
+			break;
 		case 0xCF:
 			target = 0x08;
-			return;
+			break;
 		case 0xD7:
 			target = 0x10;
-			return;
+			break;
 		case 0xDF:
 			target = 0x18;
-			return;
+			break;
 		case 0xE7:
 			target = 0x20;
-			return;
+			break;
 		case 0xEF:
 			target = 0x28;
-			return;
+			break;
 		case 0xF7:
 			target = 0x30;
-			return;
+			break;
 		case 0xFF:
 			target = 0x38;
+			break;
+		default:
 			return;
 	}
 	
 	flags->jumped = 1;
 	ptrs->PC = target;
-        return;
 }               /* -----  end of function rst  ----- */

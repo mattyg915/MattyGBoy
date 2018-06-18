@@ -24,6 +24,8 @@
 #include "helper_functions.h"
 #include "memory.h"
 
+extern unsigned char *memory;
+
 // Track ROM banking
 char mbc1;
 char mbc2;
@@ -91,13 +93,15 @@ load_cartridge(char *file)
 	// Determine if/which banking used by this game
 	switch (cartridge[0x147])
 	{
-		case 0x1 .. 0x3:
+		case 0x1 ... 0x3:
 			mbc1 = 1;
 			mbc2 = 0;
 			break;
 		case 0x4 ... 0x5:
 			mbc1 = 0;
 			mbc2 = 1;
+			break;
+		default: // Other banking not handled yet
 			break;
 	}
 

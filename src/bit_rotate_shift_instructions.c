@@ -16,6 +16,7 @@
  * =====================================================================================
  */
 #include <math.h>
+#include <stdio.h>
 #include "bit_rotate_shift_instructions.h"
 #include "global_declarations.h"
 #include "helper_functions.h"
@@ -35,7 +36,7 @@ rlc (unsigned char *reg)
         
 	// Each bit of A shifts left one with bit 7 shifting 
         // into C AND bit 0
-        flags->C = (unsigned char) (*reg & 0x80);
+        flags->C = (unsigned char) (*reg & 0x80u);
         *reg <<= 1;
         *reg |= flags->C;
 	flags->Z = (unsigned char) (*reg == 0 ? 1 : 0);
@@ -56,7 +57,7 @@ rl (unsigned char *reg)
         // Each bit of register shifts left one with bit 0 shifting
         // into C and c going into bit 7
         unsigned char initial_c = flags->C;
-        flags->C = (unsigned char) (*reg & 0x80);
+        flags->C = (unsigned char) (*reg & 0x80u);
         *reg <<= 1;
         *reg |= initial_c;
 	flags->Z = (unsigned char) ((*reg == 0) ? 1 : 0);
@@ -78,9 +79,9 @@ rr (unsigned char *reg)
 	// Each bit of register shifts right one with bit 0 shifting
         // into C and C goes into bit 7
 	unsigned char initial_c = flags->C;
-        flags->C = (unsigned char) (*reg & 0x1);
+        flags->C = (unsigned char) (*reg & 0x1u);
         *reg >>= 1;
-        *reg |= (initial_c << 7);
+        *reg |= (initial_c << 0x7u);
 	flags->Z = (unsigned char) ((*reg == 0) ? 1 : 0);
 }               /* -----  end of function rr  ----- */
 
@@ -99,9 +100,9 @@ rrc (unsigned char *reg)
 	
 	// Each bit of register shifts right one with bit 0 shifting
         // into C AND bit 7
-        flags->C = (unsigned char) (*reg & 0x1);
+        flags->C = (unsigned char) (*reg & 0x1u);
         *reg >>= 1;
-        *reg |= (flags->C << 7);
+        *reg |= (flags->C << 0x7u);
 	flags->Z = (unsigned char) ((*reg == 0) ? 1 : 0);
 }		/* -----  end of function rrc  ----- */
 
@@ -118,10 +119,10 @@ sla (unsigned char *reg)
 {
 	// N and H are cleared, C and Z set by result
 	flags->N = 0; flags->H = 0;
-	flags->C = (unsigned char) ((int) (*reg) << 1 > 0xFF ? 1 : 0);
+	flags->C = (unsigned char) ((unsigned short) *reg << 0x1u > 0xFF ? 0x1 : 0x0);
 
 	*reg <<= 1;
-	
+
 	flags->Z = (unsigned char) ((*reg) ? 0 : 1);
 }		/* -----  end of function sla  ----- */
 
@@ -136,8 +137,8 @@ sla (unsigned char *reg)
 sra (unsigned char *reg)
 {
 	// N and H are cleared, C and Z set by result
-        flags->N = 0; flags->H = 0;
-        flags->C = (unsigned char) ((int) *reg >> 1 > 0xFF ? 1 : 0);
+    flags->N = 0; flags->H = 0;
+    flags->C = (unsigned char) ((unsigned short) *reg >> 0x1u > 0xFF ? 0x1 : 0x0);
 
 	// Need to convert the register to signed value so it will shift arithmetically
 	char reg_value = (char)(*reg);
@@ -157,12 +158,12 @@ sra (unsigned char *reg)
         void
 swap (unsigned char *reg)
 {
-	unsigned char low_nibble = (unsigned char) (*reg & 0xF);
+	unsigned char low_nibble = (unsigned char) (*reg & 0xFu);
 	
 	// Shift upper nibble to lower position
-	*reg >>= 4;
+	*reg >>= 0x4;
 	// And add back left-shifted lower nibble
-	*reg += (low_nibble << 4);
+	*reg += (low_nibble << 0x4u);
 }               /* -----  end of function swap  ----- */
 
 /* 
@@ -176,12 +177,12 @@ swap (unsigned char *reg)
 srl (unsigned char *reg)
 {
 	// N and H are cleared, C and Z set by result
-        flags->N = 0; flags->H = 0;
-        flags->C = (unsigned char) ((int) (*reg) << 1 > 0xFF ? 1 : 0);
+    flags->N = 0; flags->H = 0;
+    flags->C = (unsigned char) ((unsigned short) (*reg) << 0x1u > 0xFF ? 0x1u : 0x0u);
 
 	*reg >>= 1;
         
-	flags->Z = (unsigned char) ((*reg) ? 0 : 1);
+	flags->Z = (unsigned char) ((*reg) ? 0x0 : 0x1);
 }               /* -----  end of function srl  ----- */
 
 /* 
@@ -195,14 +196,14 @@ srl (unsigned char *reg)
 bit (const unsigned char *reg)
 {
 	// Bit to test is a function of the opcode
-	unsigned char bitmask = (unsigned char) ((opcode - 0x40) / 8);
+	unsigned char bitmask = (unsigned char) ((opcode - 0x40) / 0x8);
 	bitmask = (unsigned char)pow(2, bitmask);
 
 	// BIT sets N to 0, H to 1
 	flags->N = 0; flags->H = 1;
 
 	// Z is 0 if bit is not 0, else 1
-	flags->Z = (unsigned char) ((*reg & bitmask) ? 0 : 1);
+	flags->Z = (unsigned char) ((*reg & bitmask) ? 0x0 : 0x1);
 }               /* -----  end of function bit  ----- */
 
 /*
@@ -215,7 +216,7 @@ bit (const unsigned char *reg)
         void
 res (unsigned char *reg)
 {
-	unsigned char bitmask = (unsigned char) ((opcode - 0x40) / 8);
+	unsigned char bitmask = (unsigned char) ((opcode - 0x40) / 0x8);
 	bitmask ^= 0xFF;
 
 	// Set bit to 0
@@ -232,7 +233,7 @@ res (unsigned char *reg)
         void
 set (unsigned char *reg)
 {
-	unsigned char bit = (unsigned char) ((opcode - 0x40) / 8);
+	unsigned char bit = (unsigned char) ((opcode - 0x40) / 0x8);
 	
 	// Set bit to 1
 	*reg |= (unsigned char)pow(2, bit);
@@ -253,7 +254,7 @@ bit_rotate_shift ()
 	
 	// The affected registers/memory depend on the 4 lsb of the opcode
 	unsigned char *argument;
-	unsigned char arg_nibble = (unsigned char) (opcode & 0xF);
+	unsigned char arg_nibble = (unsigned char) (opcode & 0xFu);
 
 	switch (arg_nibble)
 	{
@@ -289,6 +290,9 @@ bit_rotate_shift ()
 		case 0x0F:
 			argument = &regs->A;
 			break;
+        default:
+            printf("ERROR: Unable to process opcode %x\n", opcode);
+            return;
 	}
 
 	switch (opcode)
@@ -325,6 +329,9 @@ bit_rotate_shift ()
 			return;
 		case 0xC0 ... 0xFF:
 			set(argument);
+			return;
+		default:
+			printf("ERROR: Unable to process opcode %x\n", opcode);
 			return;
 	}
 }		/* -----  end of function bit_rotate_shift  ----- */

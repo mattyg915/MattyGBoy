@@ -2,9 +2,12 @@
   <dictionary name="MattyG">
     <words>
       <w>addr</w>
+      <w>bitmask</w>
       <w>bitrotateshiftinstructions</w>
       <w>hram</w>
       <w>opcode</w>
+      <w>registerstructures</w>
+      <w>reti</w>
       <w>vram</w>
     </words>
   </dictionary>

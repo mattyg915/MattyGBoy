@@ -29,7 +29,7 @@
 	void
 pop ()
 {
-	return;
+
 }		/* -----  end of function pop  ----- */
 
 /* 
@@ -41,7 +41,7 @@ pop ()
 	void
 push ()
 {
-	return;
+
 }		/* -----  end of function push  ----- */
 
 /* 
@@ -53,8 +53,7 @@ push ()
 	void
 halt ()
 {
-	
-	return;
+
 }		/* -----  end of function halt  ----- */
 
 /* 
@@ -66,7 +65,7 @@ halt ()
 	void
 ei ()
 {
-	flags->IME = 1;
+	flags->ime = 1;
 }		/* -----  end of function ei  ----- */
 
 /* 
@@ -78,7 +77,7 @@ ei ()
 	void
 di ()
 {
-	flags->IME = 0;
+	flags->ime = 0;
 }		/* -----  end of function di  ----- */
 
 /* 
@@ -90,5 +89,5 @@ di ()
 	void
 stop ()
 {
-	return;
+
 }		/* -----  end of function stop  ----- */

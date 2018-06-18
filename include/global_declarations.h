@@ -22,7 +22,6 @@
 #define GLOBALDECLARATIONS
 
 extern unsigned char opcode;
-extern unsigned char *memory; // Pointer to the beginning of the address space
 extern Registers *regs; // Pointer to the general registers
 extern Pointers *ptrs; // Pointer to stack pointer and program counter
 extern CPU_Flags *flags; // Pointer to the cpu flags
