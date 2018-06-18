@@ -27,13 +27,14 @@
 extern unsigned char *memory;
 
 // Track ROM banking
-char mbc1;
-char mbc2;
-char current_rom_bank;
+static unsigned char mbc1;
+static unsigned char mbc2;
+static unsigned char current_rom_bank; // bank 0 is gameboy internal rom
 
 // Track RAM banking
-char num_banks;
-char current_ram_bank;
+static unsigned char ext_ram_bank;
+static unsigned char num_ram_banks;
+static unsigned char current_ram_bank;
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -68,10 +69,13 @@ init_memory(unsigned char *cartridge)
 	write_memory(0xFF48, 0xFF);
 	write_memory(0xFF49, 0xFF);
 
-	// TODO: read the cartridge into memory
-	current_rom_bank = 1; // We start on bank 1
-	current_ram_bank = 1;
-
+	// TODO: finish handling reading cartridge into ROM
+	
+	// Read first 0x8000 bytes of cartridge into ROM
+	for (int i = 0x0; i < 0x8000; i++)
+	{
+		memory[i] = cartridge[i];
+	}
 
 	return memory;
 }		/* -----  end of function init_memory  ----- */
@@ -79,7 +83,7 @@ init_memory(unsigned char *cartridge)
 /*
  * ===  FUNCTION  ======================================================================
  *         Name:  load_cartridge
- *  Description:  Loads the game cartridge rom
+ *  Description:  Loads the game cartridge rom and parses the cartridge header
  * =====================================================================================
  */
 	unsigned char*
@@ -90,24 +94,62 @@ load_cartridge(char *file)
 	fread(cartridge, 0x1, 0x200000, binary_file);
 	fclose(binary_file);
 
-	// Determine if/which banking used by this game
-	switch (cartridge[0x147])
+	// Parse fields of the header to determine rom/ram banking used
+	switch (cartridge[0x147]) // Which mbc should be used
 	{
+		case 0x0:
+			mbc1 = 0;
+			mbc2 = 0;
+			break;
 		case 0x1 ... 0x3:
 			mbc1 = 1;
 			mbc2 = 0;
 			break;
-		case 0x4 ... 0x5:
+		case 0x5 ... 0x6:
 			mbc1 = 0;
 			mbc2 = 1;
 			break;
 		default: // Other banking not handled yet
+			mbc1 = 0;
+			mbc2 = 0;
 			break;
 	}
+	current_rom_bank = 1;
+
+	switch (cartridge[0x149])
+	{
+		case 0x0:
+			num_ram_banks = 0;
+			break;
+		case 0x1:
+			num_ram_banks = 1;
+			ext_ram_bank = malloc(0x800);
+		case 0x2:
+			num_ram_banks = 1;
+			ext_ram_bank = malloc(0x2000);
+		case 0x3:
+			num_ram_banks = 4;
+			ext_ram_bank = malloc(0x8000);
+		default:
+			break;
+	}
+	current_ram_bank = 0;
 
 	return cartridge;
 }               /* -----  end of function load_cartridge  ----- */
 
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  free_all_memory
+ *  Description:  Frees all allocated memory for the various structures used in the 
+ *  		  emulator's virtual memory
+ * =====================================================================================
+ */
+        void*
+free_all_memory()
+{
+        
+}               /* -----  end of function free_all_memory  ----- */
 
 /*
  * ===  FUNCTION  ======================================================================

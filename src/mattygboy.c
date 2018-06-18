@@ -51,22 +51,11 @@ int main(int argc, char **argv)
 	flags = init_flags();
 
 	// TODO: for now just load rom via command line argument
-	// TODO: Initialize virtual memory
 	unsigned char *cartridge = load_cartridge(argv[optind]);
 	memory = init_memory(cartridge);
-	// TODO:Main program loop, fetch/decode/execute
-	// TODO: just set up for testing for the moment
-	while (opcode != 0x76)
-	{
-		printf("opcode: %x\n", memory[ptrs->PC]);
-		cpu_execution();
-		if (verbose)
-		{
-			dump_registers();
-		}
-	}
-	dump_registers();
 
-	free(regs); free(ptrs); free(memory);
+	// TODO:Main program loop, fetch/decode/execute
+
+	free(regs); free(ptrs); free(flags); free_all_memory();
 	return EXIT_SUCCESS;
 }
