@@ -18,7 +18,6 @@
 #include <stdio.h>
 #include "math_instructions.h"
 #include "global_declarations.h"
-#include "register_structures.h"
 #include "cpu_emulator.h"
 #include "logical_instructions.h"
 #include "bit_rotate_shift_instructions.h"

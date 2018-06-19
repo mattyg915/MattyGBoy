@@ -21,8 +21,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "global_declarations.h"
-#include "helper_functions.h"
-#include "memory.h"
 
 extern unsigned char *memory;
 

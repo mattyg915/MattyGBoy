@@ -16,6 +16,7 @@
  */
 
 #include "register_structures.h"
+#include "helper_functions.h"
 #include "memory.h"
 
 #ifndef GLOBALDECLARATIONS

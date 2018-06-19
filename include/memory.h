@@ -17,6 +17,7 @@
  */
 #ifndef MEMORY
 #define MEMORY
+
 typedef struct MBC_Registers
 {
 	unsigned char ram_enable; // Must be !0 in order to read/write external RAM
@@ -31,4 +32,5 @@ unsigned char* init_memory(unsigned char *cartridge);
 void write_memory(unsigned short addr, unsigned char data);
 void* read_memory(unsigned short addr);
 unsigned char* load_cartridge(char *file);
+
 #endif
