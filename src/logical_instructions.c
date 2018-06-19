@@ -30,53 +30,55 @@
         void
 and ()
 {
-        // Right operand is dependant on opcode, left is always register A
-        unsigned char operand = 0;
-        unsigned reg_hl = combine_bytes(regs->H, regs->L);
+    // Right operand is dependant on opcode, left is always register A
 
-        switch (opcode)
-        {
-                case 0xE6:
-                        ptrs->PC++;
-                        operand = memory[ptrs->PC];
-                        break;
-                case 0xA0:
-                        operand = regs->B;
-                        break;
-                case 0xA1:
-                        operand = regs->C;
-                        break;
-                case 0xA2:
-                        operand = regs->D;
-                        break;
-                case 0xA3:
-                        operand = regs->E;
-                        break;
-                case 0xA4:
-                        operand = regs->H;
-                        break;
-                case 0xA5:
-                        operand = regs->L;
-                        break;
-                case 0xA6:
-                        operand = memory[reg_hl];
-                        break;
-                case 0xA7:
-                        operand = regs->A;
-                        break;
-        }
+    unsigned char operand = 0;
+    unsigned char *op_ptr;
+    unsigned reg_hl = combine_bytes(regs->H, regs->L);
 
-        // AND instruction clears subtract and carry, but sets half-carry flags
-        flags->H = 1; flags->C = 0; flags->N = 0;
+    switch (opcode)
+    {
+        case 0xE6:
+            ptrs->PC++;
+            op_ptr = read_memory(ptrs->PC);
+            operand = *op_ptr;
+            break;
+        case 0xA0:
+            operand = regs->B;
+            break;
+        case 0xA1:
+            operand = regs->C;
+            break;
+        case 0xA2:
+            operand = regs->D;
+            break;
+        case 0xA3:
+            operand = regs->E;
+            break;
+        case 0xA4:
+            operand = regs->H;
+            break;
+        case 0xA5:
+            operand = regs->L;
+            break;
+        case 0xA6:
+            op_ptr = read_memory(ptrs->PC);
+            operand = *op_ptr;
+            break;
+        case 0xA7:
+            operand = regs->A;
+            break;
+    }
 
-        // Register A & with operand, if yields 0 set zero flag
-        regs->A &= operand;
-        if (!regs->A)
-        {
-                flags->Z |= 1;
-        }
+    // AND instruction clears subtract and carry, but sets half-carry flags
+    flags->H = 1; flags->C = 0; flags->N = 0;
 
-        return;
+    // Register A & with operand, if yields 0 set zero flag
+    regs->A &= operand;
+    if (!regs->A)
+    {
+            flags->Z |= 1;
+    }
 }               /* -----  end of function and  ----- */
 
 /*
@@ -90,13 +92,15 @@ or ()
 {
         // Right operand is dependant on opcode, left is always register A
         unsigned char operand = 0;
-        unsigned reg_hl = combine_bytes(regs->H, regs->L);
+        unsigned char *op_ptr;
+        unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
         switch (opcode)
         {
                 case 0xF6:
                         ptrs->PC++;
-                        operand = memory[ptrs->PC];
+                        op_ptr = read_memory(ptrs->PC);
+                        operand = *op_ptr;
                         break;
                 case 0xB0:
                         operand = regs->B;
@@ -117,7 +121,8 @@ or ()
                         operand = regs->L;
                         break;
                 case 0xB6:
-                        operand = memory[reg_hl];
+                        op_ptr = read_memory(reg_hl);
+                        operand = *op_ptr;
                         break;
                 case 0xB7:
                         operand = regs->A;
@@ -148,13 +153,15 @@ xor ()
 {
         // Right operand is dependant on opcode, left is always register A
         unsigned char operand = 0;
-        unsigned reg_hl = combine_bytes(regs->H, regs->L);
+        unsigned char *op_ptr;
+        unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
         switch (opcode)
         {
                 case 0xEE:
                         ptrs->PC++;
-                        operand = memory[ptrs->PC];
+                        op_ptr = read_memory(ptrs->PC);
+                        operand = *op_ptr;
                         break;
                 case 0xA8:
                         operand = regs->B;
@@ -175,7 +182,8 @@ xor ()
                         operand = regs->L;
                         break;
                 case 0xAE:
-                        operand = memory[reg_hl];
+                        op_ptr = read_memory(reg_hl);
+                        operand = *op_ptr;
                         break;
                 case 0xAF:
                         operand = regs->A;

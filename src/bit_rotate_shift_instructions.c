@@ -284,7 +284,7 @@ bit_rotate_shift ()
 			break;
 		case 0x06:
 		case 0x0E:
-			argument = memory + reg_hl;
+			argument = read_memory(reg_hl);
 			break;
 		case 0x07:
 		case 0x0F:
