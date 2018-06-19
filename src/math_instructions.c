@@ -35,7 +35,8 @@ eight_bit_add ()
 
 	/* Grab the next byte in case an immediate value is needed
 	 * but don't increment PC unless it's actually used */
-	unsigned char value = memory[ptrs->PC + 1];
+	unsigned char *val_ptr = read_memory(ptrs->PC + 1);
+	unsigned char value = *val_ptr;
 
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
@@ -81,7 +82,8 @@ eight_bit_add ()
 			value = regs->A;
 			break;
 		case 0x86:
-			value = memory[reg_hl];
+			val_ptr = read_memory(reg_hl);
+			value = *val_ptr;
 			break;
 	}
 	
@@ -141,7 +143,8 @@ adc ()
 {
         // Clear the N flag
         flags->N = 0;
-
+	
+	unsigned char *val_ptr;
 	unsigned char sum = 0; // Total the operand and the carry flag
         sum += flags->C;
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
@@ -151,10 +154,12 @@ adc ()
         {
                 case 0xCE:
                         ptrs->PC++;
-                        sum += memory[ptrs->PC];
+			val_ptr = read_memory(ptrs->PC);
+                        sum += *val_ptr;
                         break;
 		case 0x8E:
-			sum += memory[reg_hl];
+			val_ptr = read_memory(reg_hl);
+                        sum += *val_ptr;
 			break;
 		case 0x8F:
 			sum += regs->A;
@@ -199,6 +204,8 @@ sub ()
 	// Set the N flag
 	flags->N = 1;
 
+	unsigned char *val_ptr;
+
 	// Minuend is always register A
 	unsigned char subtrahend;
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
@@ -207,7 +214,8 @@ sub ()
 	{
 		case 0xD6:
 			ptrs->PC++;
-			subtrahend = memory[ptrs->PC];
+			val_ptr = read_memory(ptrs->PC);
+			subtrahend = *val_ptr;
 			break;
 		case 0x90:
 			subtrahend = regs->B;
@@ -228,7 +236,8 @@ sub ()
 			subtrahend = regs->L;
 			break;
 		case 0x96:
-			subtrahend = memory[reg_hl];
+			val_ptr = read_memory(reg_hl);
+			subtrahend = *val_ptr;
 		case 0x97:
 			subtrahend = regs->A;
 			break;
@@ -253,7 +262,8 @@ sbc ()
 {
 	// Set the N flag
         flags->N = 1;
-
+	
+	unsigned char *val_ptr;
         unsigned char subtrahend = 0; // Total the operand and the carry flag
         subtrahend += flags->C;
         unsigned char reg_hl = combine_bytes(regs->H, regs->L);
@@ -263,10 +273,12 @@ sbc ()
         {
                 case 0xDE:
                         ptrs->PC++;
-                        subtrahend += memory[ptrs->PC];
+			val_ptr = read_memory(ptrs->PC);
+                        subtrahend += *val_ptr;
                         break;
                 case 0x9E:
-                        subtrahend += memory[reg_hl];
+			val_ptr = read_memory(reg_hl);
+                        subtrahend += *val_ptr;
                         break;
                 case 0x9F:
                         subtrahend += regs->A;
@@ -313,14 +325,16 @@ eight_bit_inc ()
 
 	// Capture state of C flag so it can be preserved
 	unsigned char c_flag = flags->C;
-
+	
+	unsigned char *state_ptr;
 	unsigned char initial_state; // Capture initial state for flag updates
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 	switch (opcode)
 	{
 		case 0x34:
-			initial_state = memory[reg_hl];
-			memory[reg_hl]++;
+			state_ptr = read_memory(reg_hl);
+			initial_state = *state_ptr;
+			write_memory(reg_hl, initial_state + 1);
 			break;
 		case 0x3C:
 			initial_state = regs->A;
@@ -412,14 +426,16 @@ eight_bit_dec ()
 
         // Capture state of C flag so it can be preserved
         unsigned char c_flag = flags->C;
-
+	
+	unsigned char *state_ptr;
         unsigned char initial_state; // Capture initial state for flag updates
         unsigned short reg_hl = combine_bytes(regs->H, regs->L);
         switch (opcode)
         {
                 case 0x35:
-                        initial_state = memory[reg_hl];
-                        memory[reg_hl]--;
+			state_ptr = read_memory(reg_hl);
+                        initial_state = *state_ptr
+                        write_memory(reg_hl, initial_state - 1);
                         break;
                 case 0x3D:
                         initial_state = regs->A;

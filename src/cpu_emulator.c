@@ -192,7 +192,8 @@ sixteen_bit_update_flags (int value1, int value2)
         static void
 fetch ()
 {
-        opcode = memory[ptrs->PC];
+        opcode_ptr = read_memory(ptrs->PC);
+        opcode = *opcode_ptr;
 }               /* -----  end of function fetch  ----- */
 
 /* 
