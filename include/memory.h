@@ -17,22 +17,18 @@
  */
 #ifndef MEMORY
 #define MEMORY
-typedef struct MBC1_Registers
+typedef struct MBC_Registers
 {
 	unsigned char ram_enable; // Must be !0 in order to read/write external RAM
 	unsigned char rom_bank_number;
 	unsigned char ram_rom_bank_number; // Purpose of field depends on next field
 	unsigned char ram_rom_select; // Sets if above field is ram bank or rom
-} MBC1_Registers;
+} MBC_Registers;
 
-typedef struct MBC2_Registers
-{
-	// No RAM Banks used with MBC2
-	unsigned char ram_enable;
-	unsigned char rom_bank_number;
-} MBC2_Registers;
+MBC_Registers* init_mbc();
+void free_all_memory();
 unsigned char* init_memory(unsigned char *cartridge);
-unsigned char write_memory(unsigned short addr, unsigned char data);
+void write_memory(unsigned short addr, unsigned char data);
 void* read_memory(unsigned short addr);
 unsigned char* load_cartridge(char *file);
 #endif

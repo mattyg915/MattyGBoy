@@ -8,6 +8,7 @@
       <w>opcode</w>
       <w>registerstructures</w>
       <w>reti</w>
+      <w>virtualize</w>
       <w>vram</w>
     </words>
   </dictionary>
