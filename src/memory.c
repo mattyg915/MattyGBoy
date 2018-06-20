@@ -159,8 +159,8 @@ init_mbc()
 	{
 		mbc_ptr->ram_enable = 0x0;
 		mbc_ptr->rom_bank_number = 0x1;
-		mbc_ptr->ram_rom_bank_number = NULL;
-		mbc_ptr->ram_rom_select = NULL;
+		mbc_ptr->ram_rom_bank_number = 0xFF;
+		mbc_ptr->ram_rom_select = 0xFF;
 	}
 
 	return mbc_ptr;
@@ -176,6 +176,10 @@ init_mbc()
 read_memory(unsigned short addr)
 {
 	void *mem;
+	if (banking_mode == 1)
+	{
+
+	}
 	return mem;
 }		/* -----  end of function read_memory  ----- */
 /*

@@ -37,8 +37,6 @@ delay (unsigned int mseconds)
 {
 	clock_t goal = mseconds + clock();
     	while (goal > clock());
-
-	return;
 }		/* -----  end of function delay  ----- */
 
 /*
@@ -56,10 +54,9 @@ dump_registers()
 			regs->L);
 	printf("Stack pointer: %x Program Counter: %x\n",
 			ptrs->SP, ptrs->PC);
-	printf("Flags: Z: %x N: %x H: %x C: %x Jumped: %x IME: %x\n\n",
+	printf("Flags: Z: %x N: %x H: %x C: %x Jumped: %x\n\n",
 			flags->Z, flags->N, flags->H, flags->C,
-			flags->jumped, flags->IME);
-	return;
+			flags->jumped);
 }		/* -----  end of function dump_registers  ----- */
 
 /*

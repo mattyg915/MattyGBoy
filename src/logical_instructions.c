@@ -34,7 +34,7 @@ and ()
 
     unsigned char operand = 0;
     unsigned char *op_ptr;
-    unsigned reg_hl = combine_bytes(regs->H, regs->L);
+    unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
     switch (opcode)
     {
@@ -62,7 +62,7 @@ and ()
             operand = regs->L;
             break;
         case 0xA6:
-            op_ptr = read_memory(ptrs->PC);
+            op_ptr = read_memory(reg_hl);
             operand = *op_ptr;
             break;
         case 0xA7:

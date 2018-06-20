@@ -51,7 +51,7 @@ eight_bit_update_flags (int value1, int value2)
 		 * https://stackoverflow.com/questions/8868396/gbz80-what-constitutes
 		 * -a-half-carry/
 		 */
-		if ((((value1 & 0xF) + (value2 & 0xF)) & 0x10) == 0x10)
+		if ((((value1 & 0xF) + (value2 & 0xF)) & 0x10) == 0x10) //NOLINT
 		{
 			flags->H = 1;
 		}
@@ -76,7 +76,7 @@ eight_bit_update_flags (int value1, int value2)
 		result = value1 - value2;
 
 		// Half Carry Flag - subtraction
-		if ((((value1 & 0xF) - (value2 & 0xF)) & 0x10) < 0)
+		if ((((value1 & 0xF) - (value2 & 0xF)) & 0x10) < 0) //NOLINT
 		{
 			flags->H = 1;
 		}
@@ -127,8 +127,8 @@ sixteen_bit_update_flags (int value1, int value2)
                 result = value1 + value2;
 
                 // Half-Carry - addition
-                if ((((value1 & 0x0FFF) + (value2 & 0x0FFF)) & 0x1000) == 0x1000)
-                {
+                if ((((value1 & 0x0FFF) + (value2 & 0x0FFF)) & 0x1000) == 0x1000) //NOLINT
+				{
                         flags->H = 1;
                 }
                 else
@@ -152,7 +152,7 @@ sixteen_bit_update_flags (int value1, int value2)
                 result = value1 - value2;
 
                 // Half Carry Flag - subtraction
-                if ((((value1 & 0x0FFF) - (value2 & 0x0FFF)) & 0x1000) < 0)
+                if ((((value1 & 0x0FFF) - (value2 & 0x0FFF)) & 0x1000) < 0) // NOLINT
                 {
                         flags->H = 1;
                 }
@@ -192,7 +192,7 @@ sixteen_bit_update_flags (int value1, int value2)
         static void
 fetch ()
 {
-        opcode_ptr = read_memory(ptrs->PC);
+        unsigned char *opcode_ptr = read_memory(ptrs->PC);
         opcode = *opcode_ptr;
 }               /* -----  end of function fetch  ----- */
 
@@ -435,7 +435,5 @@ cpu_execution ()
         decode();
         
 	// Don't move the PC after a jump, otherwise increment
-        ptrs->PC = flags->jumped ? ptrs->PC : (ptrs->PC + 1);
-	
-	return;
+        ptrs->PC = (unsigned short) (flags->jumped ? ptrs->PC : ptrs->PC + 1);
 }               /* -----  end of function cpu_execution  ----- */

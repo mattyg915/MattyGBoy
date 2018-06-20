@@ -35,7 +35,7 @@ eight_bit_add ()
 
 	/* Grab the next byte in case an immediate value is needed
 	 * but don't increment PC unless it's actually used */
-	unsigned char *val_ptr = read_memory(ptrs->PC + 1);
+	unsigned char *val_ptr = read_memory((unsigned short) (ptrs->PC + 1));
 	unsigned char value = *val_ptr;
 
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
@@ -85,12 +85,12 @@ eight_bit_add ()
 			val_ptr = read_memory(reg_hl);
 			value = *val_ptr;
 			break;
+		default:
+			break;
 	}
 	
 	eight_bit_update_flags(regs->A, value);
 	regs->A += value;
-
-	return;
 }		/* -----  end of function add  ----- */
 
 /* 
@@ -112,23 +112,24 @@ sixteen_bit_add ()
 	switch (opcode)
 	{
 		case 0x09:
-                        value = combine_bytes(regs->B, regs->C);
-                        break;
-                case 0x19:
-                        value = combine_bytes(regs->D, regs->E);
-                        break;
-                case 0x29:
+			value = combine_bytes(regs->B, regs->C);
+			break;
+		case 0x19:
+			value = combine_bytes(regs->D, regs->E);
+			break;
+		case 0x29:
 			value = reg_hl;
-                        break;
-                case 0x39:
-                        value = ptrs->SP;
-                        break;
-        }
+			break;
+		case 0x39:
+			value = ptrs->SP;
+			break;
+		default:
+			value = 0;
+			break;
+	}
 
 	sixteen_bit_update_flags(reg_hl, value);
 	split_between_registers((reg_hl + value), &(regs->H), &(regs->L));
-
-        return;
 }		/* -----  end of function sixteen_bit_add  ----- */
 	
 
@@ -152,14 +153,14 @@ adc ()
 	// All operations update A, so just need to get sum
         switch (opcode)
         {
-                case 0xCE:
-                        ptrs->PC++;
+		case 0xCE:
+			ptrs->PC++;
 			val_ptr = read_memory(ptrs->PC);
-                        sum += *val_ptr;
-                        break;
+			sum += *val_ptr;
+			break;
 		case 0x8E:
 			val_ptr = read_memory(reg_hl);
-                        sum += *val_ptr;
+			sum += *val_ptr;
 			break;
 		case 0x8F:
 			sum += regs->A;
@@ -182,13 +183,13 @@ adc ()
 		case 0x8D:
 			sum += regs->L;
 			break;
-	}
+		default:
+			break;
+		}
 
 	// Update A and the flags
 	eight_bit_update_flags(regs->A, sum);
 	regs->A += sum;
-			
-        return;
 }               /* -----  end of function adc  ----- */
 
 
@@ -238,16 +239,18 @@ sub ()
 		case 0x96:
 			val_ptr = read_memory(reg_hl);
 			subtrahend = *val_ptr;
+			break;
 		case 0x97:
 			subtrahend = regs->A;
+			break;
+		default:
+			subtrahend = 0;
 			break;
 	}
 	
 	// Update A and the flags
 	eight_bit_update_flags(regs->A, subtrahend);
 	regs->A -= subtrahend;
-
-	return;
 }		/* -----  end of function sub  ----- */
 
 
@@ -266,48 +269,48 @@ sbc ()
 	unsigned char *val_ptr;
         unsigned char subtrahend = 0; // Total the operand and the carry flag
         subtrahend += flags->C;
-        unsigned char reg_hl = combine_bytes(regs->H, regs->L);
+        unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
         // All operations update A, so just need to get sum
         switch (opcode)
         {
-                case 0xDE:
-                        ptrs->PC++;
-			val_ptr = read_memory(ptrs->PC);
-                        subtrahend += *val_ptr;
-                        break;
-                case 0x9E:
-			val_ptr = read_memory(reg_hl);
-                        subtrahend += *val_ptr;
-                        break;
-                case 0x9F:
-                        subtrahend += regs->A;
-                        break;
-                case 0x98:
-                        subtrahend += regs->B;
-                        break;
-                case 0x99:
-                        subtrahend += regs->C;
-                        break;
-                case 0x9A:
-                        subtrahend += regs->D;
-                        break;
-                case 0x9B:
-                        subtrahend += regs->E;
-                        break;
-                case 0x9C:
-                        subtrahend += regs->H;
-                        break;
-                case 0x9D:
-                        subtrahend += regs->L;
-                        break;
-        }
+			case 0xDE:
+				ptrs->PC++;
+				val_ptr = read_memory(ptrs->PC);
+				subtrahend += *val_ptr;
+				break;
+			case 0x9E:
+				val_ptr = read_memory(reg_hl);
+				subtrahend += *val_ptr;
+				break;
+			case 0x9F:
+				subtrahend += regs->A;
+				break;
+			case 0x98:
+				subtrahend += regs->B;
+				break;
+			case 0x99:
+				subtrahend += regs->C;
+				break;
+			case 0x9A:
+				subtrahend += regs->D;
+				break;
+			case 0x9B:
+				subtrahend += regs->E;
+				break;
+			case 0x9C:
+				subtrahend += regs->H;
+				break;
+			case 0x9D:
+				subtrahend += regs->L;
+				break;
+			default:
+				break;
+		}
 
         // Update A and the flags
         eight_bit_update_flags(regs->A, subtrahend);
         regs->A -= subtrahend;
-
-	return;
 }		/* -----  end of function sbc  ----- */
 
 
@@ -334,44 +337,45 @@ eight_bit_inc ()
 		case 0x34:
 			state_ptr = read_memory(reg_hl);
 			initial_state = *state_ptr;
-			write_memory(reg_hl, initial_state + 1);
+			write_memory(reg_hl, (unsigned char) (initial_state + 1));
 			break;
 		case 0x3C:
 			initial_state = regs->A;
 			regs->A++;
-		        break;
+			break;
 		case 0x04:
 			initial_state = regs->B;
 			regs->B++;
-		        break;
+			break;
 		case 0x0C:
 			initial_state = regs->C;
 			regs->C++;
-		        break;
+			break;
 		case 0x14:
 			initial_state = regs->D;
 			regs->D++;
-		        break;
+			break;
 		case 0x1C:
 			initial_state = regs->E;
 			regs->E++;
-		        break;
+			break;
 		case 0x24:
 			initial_state = regs->H;
 			regs->H++;
-		        break;
+			break;
 		case 0x2C:
 			initial_state = regs->L;
 			regs->L++;
-		        break;
+			break;
+		default:
+			initial_state = 0;
+			break;
 	}
 
 	eight_bit_update_flags(initial_state, 1);
 
 	// Restore C flag, this instruction doesn't set or clear it
 	flags->C = c_flag;
-
-	return;
 }		/* -----  end of function eight_bit_inc  ----- */
 
 
@@ -406,9 +410,9 @@ sixteen_bit_inc ()
 		case 0x33:
 			ptrs->SP++;
 			break;
+		default:
+			break;
 	}
-
-	return;
 }		/* -----  end of function sixteen_bit_inc  ----- */
 
 
@@ -432,47 +436,48 @@ eight_bit_dec ()
         unsigned short reg_hl = combine_bytes(regs->H, regs->L);
         switch (opcode)
         {
-                case 0x35:
-			state_ptr = read_memory(reg_hl);
-                        initial_state = *state_ptr
-                        write_memory(reg_hl, initial_state - 1);
-                        break;
-                case 0x3D:
-                        initial_state = regs->A;
-                        regs->A--;
-                        break;
-                case 0x05:
-                        initial_state = regs->B;
-                        regs->B--;
-                        break;
-                case 0x0D:
-                        initial_state = regs->C;
-                        regs->C--;
-                        break;
-                case 0x15:
-                        initial_state = regs->D;
-                        regs->D--;
-                        break;
-                case 0x1D:
-                        initial_state = regs->E;
-                        regs->E--;
-                        break;
-                case 0x25:
-                        initial_state = regs->H;
-                        regs->H--;
-                        break;
-                case 0x2D:
-                        initial_state = regs->L;
-                        regs->L--;
-                        break;
-        }
+			case 0x35:
+				state_ptr = read_memory(reg_hl);
+				initial_state = *state_ptr;
+				write_memory(reg_hl, (unsigned char) (initial_state - 1));
+				break;
+			case 0x3D:
+				initial_state = regs->A;
+				regs->A--;
+				break;
+			case 0x05:
+				initial_state = regs->B;
+				regs->B--;
+				break;
+			case 0x0D:
+				initial_state = regs->C;
+				regs->C--;
+				break;
+			case 0x15:
+				initial_state = regs->D;
+				regs->D--;
+				break;
+			case 0x1D:
+				initial_state = regs->E;
+				regs->E--;
+				break;
+			case 0x25:
+				initial_state = regs->H;
+				regs->H--;
+				break;
+			case 0x2D:
+				initial_state = regs->L;
+				regs->L--;
+				break;
+			default:
+				initial_state = 0;
+				break;
+		}
 	
 	// Restore C flag, this instruction doesn't set or clear it
         flags->C = c_flag;
         
         eight_bit_update_flags(initial_state, 1);
-
-	return;
 }		/* -----  end of function eight_bit_dec  ----- */
 
 
@@ -489,25 +494,25 @@ sixteen_bit_dec ()
 	unsigned short value;
         switch (opcode)
         {
-                case 0x0B:
-                        value = combine_bytes(regs->B, regs->C);
-                        value--;
-                        split_between_registers(value, &regs->B, &regs->C);
-                        break;
-                case 0x1B:
-                        value = combine_bytes(regs->D, regs->E);
-                        value--;
-                        split_between_registers(value, &regs->D, &regs->E);
-                        break;
-                case 0x2B:
-                        value = combine_bytes(regs->L, regs->L);
-                        value--;
-                        split_between_registers(value, &regs->H, &regs->L);
-                        break;
-                case 0x3B:
-                        ptrs->SP--;
-                        break;
-        }
-
-	return;
+			case 0x0B:
+				value = combine_bytes(regs->B, regs->C);
+				value--;
+				split_between_registers(value, &regs->B, &regs->C);
+				break;
+			case 0x1B:
+				value = combine_bytes(regs->D, regs->E);
+				value--;
+				split_between_registers(value, &regs->D, &regs->E);
+				break;
+			case 0x2B:
+				value = combine_bytes(regs->L, regs->L);
+				value--;
+				split_between_registers(value, &regs->H, &regs->L);
+				break;
+			case 0x3B:
+				ptrs->SP--;
+				break;
+			default:
+				break;
+		}
 }		/* -----  end of function sixteen_bit_dec  ----- */
