@@ -178,7 +178,7 @@ read_memory(unsigned short addr)
 	void *mem;
 	if (banking_mode == 1)
 	{
-
+		if ((addr > 0x3FFF) && (addr))
 	}
 	return mem;
 }		/* -----  end of function read_memory  ----- */
@@ -195,7 +195,8 @@ write_memory(unsigned short addr, unsigned char data)
 {
 	if (addr <= 0x1FFF) // RAM enable
 	{
-		mbc->ram_enable = data;
+		// Enable RAM if lower nibble of data == 0xA
+		mbc->ram_enable = (unsigned char) ((data & 0x0Fu) == 0xA ? 1 : 0);
 		return;
 	}
 	else if ((addr >= 0x2000) && (addr <= 0x3FFF)) // Set low 5 bits of rom bank
