@@ -60,7 +60,7 @@ int main(int argc, char **argv)
 
 	// TODO:Main program loop, fetch/decode/execute
 	// TODO just set up for testing for the moment
-	while (opcode != 0x76)
+	while (1)
 	{
 		cpu_execution();
 		//printf("opcode: %x\n", opcode);

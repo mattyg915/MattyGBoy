@@ -192,8 +192,9 @@ sixteen_bit_update_flags (int value1, int value2)
         static void
 fetch ()
 {
-        unsigned char *opcode_ptr = read_memory(ptrs->PC);
-        opcode = *opcode_ptr;
+    unsigned char *opcode_ptr = read_memory(ptrs->PC);
+    ptrs->PC++;
+    opcode = *opcode_ptr;
 }               /* -----  end of function fetch  ----- */
 
 /* 
@@ -457,10 +458,6 @@ decode ()
         void
 cpu_execution ()
 {
-	flags->jumped = 0; // reset jumped flag after every instruction
-        fetch();
-        decode();
-        
-	// Don't move the PC after a jump, otherwise increment
-        ptrs->PC = (unsigned short) (flags->jumped ? ptrs->PC : ptrs->PC + 1);
+    fetch();
+    decode();
 }               /* -----  end of function cpu_execution  ----- */

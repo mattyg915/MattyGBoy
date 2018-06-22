@@ -292,9 +292,10 @@ write_memory(unsigned short addr, unsigned char data)
 	// TODO this is here for testing
 	else if ((addr >= 0xFF00) && (addr <= 0xFF7F))
 	{
+	    printf("io access %x: %x\n",addr, data);
 		if ((addr == 0xFF02) && (data == 0x81))
 		{
-			printf("%c",memory[0xFF01]);
+			printf("%c", (char)memory[0xFF01]);
 			fflush(stdout);
 		}
 		else

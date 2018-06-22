@@ -54,9 +54,8 @@ dump_registers()
 			regs->L);
 	printf("Stack pointer: %x Program Counter: %x\n",
 			ptrs->SP, ptrs->PC);
-	printf("Flags: Z: %x N: %x H: %x C: %x Jumped: %x\n\n",
-			flags->Z, flags->N, flags->H, flags->C,
-			flags->jumped);
+	printf("Flags: Z: %x N: %x H: %x C: %x\n\n",
+			flags->Z, flags->N, flags->H, flags->C);
 }		/* -----  end of function dump_registers  ----- */
 
 /*

@@ -120,6 +120,7 @@ load_one_byte_imm ()
 {
 	// Immediate to load and place to load it to
 	unsigned char *imm_ptr = read_memory((unsigned short) (ptrs->PC + 1));
+	ptrs->PC++;
 	unsigned char imm = *imm_ptr;
 	unsigned char *load_to;
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
@@ -158,7 +159,6 @@ load_one_byte_imm ()
 			break;
 	}
 	*load_to = imm;
-	ptrs->PC++;
 }		/* -----  end of function load_one_byte_imm  ----- */
 
 

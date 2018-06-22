@@ -89,7 +89,7 @@ halt ()
 	void
 ei ()
 {
-	flags->ime = 1;
+	write_memory(0xFFFF, 0x1);
 }		/* -----  end of function ei  ----- */
 
 /* 
@@ -101,7 +101,7 @@ ei ()
 	void
 di ()
 {
-	flags->ime = 0;
+	write_memory(0xFFFF, 0x1);
 }		/* -----  end of function di  ----- */
 
 /* 
