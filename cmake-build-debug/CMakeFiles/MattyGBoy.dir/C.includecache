@@ -17,6 +17,8 @@
 ../include/global_declarations.h
 register_structures.h
 ../include/register_structures.h
+helper_functions.h
+../include/helper_functions.h
 memory.h
 ../include/memory.h
 
@@ -75,8 +77,6 @@ math_instructions.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/math_instructions.h
 global_declarations.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/global_declarations.h
-register_structures.h
-/Users/MattyG/Documents/Programming/MattyGBoy/src/register_structures.h
 cpu_emulator.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/cpu_emulator.h
 logical_instructions.h
@@ -111,10 +111,6 @@ load_instructions.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/load_instructions.h
 global_declarations.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/global_declarations.h
-cpu_emulator.h
-/Users/MattyG/Documents/Programming/MattyGBoy/src/cpu_emulator.h
-helper_functions.h
-/Users/MattyG/Documents/Programming/MattyGBoy/src/helper_functions.h
 
 /Users/MattyG/Documents/Programming/MattyGBoy/src/logical_instructions.c
 stdlib.h

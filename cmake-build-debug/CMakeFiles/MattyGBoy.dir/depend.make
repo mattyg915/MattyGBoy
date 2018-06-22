@@ -28,6 +28,7 @@ CMakeFiles/MattyGBoy.dir/src/cpu_emulator.c.o: ../include/control_instructions.h
 CMakeFiles/MattyGBoy.dir/src/cpu_emulator.c.o: ../include/cpu_control_instructions.h
 CMakeFiles/MattyGBoy.dir/src/cpu_emulator.c.o: ../include/cpu_emulator.h
 CMakeFiles/MattyGBoy.dir/src/cpu_emulator.c.o: ../include/global_declarations.h
+CMakeFiles/MattyGBoy.dir/src/cpu_emulator.c.o: ../include/helper_functions.h
 CMakeFiles/MattyGBoy.dir/src/cpu_emulator.c.o: ../include/load_instructions.h
 CMakeFiles/MattyGBoy.dir/src/cpu_emulator.c.o: ../include/logical_instructions.h
 CMakeFiles/MattyGBoy.dir/src/cpu_emulator.c.o: ../include/math_instructions.h
@@ -42,7 +43,6 @@ CMakeFiles/MattyGBoy.dir/src/helper_functions.c.o: ../include/memory.h
 CMakeFiles/MattyGBoy.dir/src/helper_functions.c.o: ../include/register_structures.h
 CMakeFiles/MattyGBoy.dir/src/helper_functions.c.o: ../src/helper_functions.c
 
-CMakeFiles/MattyGBoy.dir/src/load_instructions.c.o: ../include/cpu_emulator.h
 CMakeFiles/MattyGBoy.dir/src/load_instructions.c.o: ../include/global_declarations.h
 CMakeFiles/MattyGBoy.dir/src/load_instructions.c.o: ../include/helper_functions.h
 CMakeFiles/MattyGBoy.dir/src/load_instructions.c.o: ../include/load_instructions.h

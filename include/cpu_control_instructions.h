@@ -23,4 +23,6 @@ void push();
 void pop();
 void ei();
 void di();
+void ccf();
+void scf();
 #endif

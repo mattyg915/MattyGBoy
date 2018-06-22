@@ -23,9 +23,9 @@
 #include "helper_functions.h"
 
 #define EXIT_SUCCESS 0 // Quit without error condition
-#define MEMORY_SIZE 0xFFFF // Top end of address range
 
 unsigned char *memory;
+unsigned char *cartridge;
 Registers *regs;
 Pointers *ptrs;
 CPU_Flags *flags;
@@ -33,14 +33,18 @@ CPU_Flags *flags;
 int main(int argc, char **argv) 
 {
 	int verbose = 0;
+
 	// Handle optional command line arguments
 	int flag;
+
 	while ((flag = getopt(argc, argv, "v")) != -1)
 	{
 		switch (flag)
 		{
 			case 'v':
 				verbose = 1;
+				break;
+			default:
 				break;
 		}
 	}
@@ -51,11 +55,18 @@ int main(int argc, char **argv)
 	flags = init_flags();
 
 	// TODO: for now just load rom via command line argument
-	unsigned char *cartridge = load_cartridge(argv[optind]);
-	memory = init_memory(cartridge);
+	cartridge = load_cartridge(argv[optind]);
+	memory = init_memory();
 
 	// TODO:Main program loop, fetch/decode/execute
+	// TODO just set up for testing for the moment
+	while (opcode != 0x76)
+	{
+		cpu_execution();
+		//printf("opcode: %x\n", opcode);
+		//dump_registers();
+	}
 
-	free(regs); free(ptrs); free(flags); free_all_memory();
+	free(regs); free(ptrs); free(flags);
 	return EXIT_SUCCESS;
 }

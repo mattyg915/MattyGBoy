@@ -4,6 +4,7 @@
       <w>addr</w>
       <w>bitmask</w>
       <w>bitrotateshiftinstructions</w>
+      <w>cpucontrolinstructions</w>
       <w>globaldeclarations</w>
       <w>hram</w>
       <w>opcode</w>

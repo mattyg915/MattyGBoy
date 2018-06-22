@@ -20,9 +20,11 @@
  */
 #include <stdlib.h>
 #include <stdio.h>
+#include "memory.h"
 #include "global_declarations.h"
 
 extern unsigned char *memory;
+extern unsigned char *cartridge;
 
 // Track ROM banking
 static unsigned char banking_mode;
@@ -39,40 +41,38 @@ static unsigned char *ext_ram_bank; // Single array to virtualize all RAM banks
  * =====================================================================================
  */
 	unsigned char*
-init_memory(unsigned char *cartridge)
+init_memory()
 {
-	unsigned char *memory = malloc(0xFFFF);
+	unsigned char *new_memory = malloc(0xFFFF);
 
 	// Initialize hardware registers
-	write_memory(0xFF10, 0x80);
-	write_memory(0xFF11, 0xBF);
-	write_memory(0xFF12, 0xF3);
-	write_memory(0xFF14, 0xBF);
-	write_memory(0xFF16, 0x3F);
-	write_memory(0xFF19, 0xBF);
-	write_memory(0xFF1A, 0xFF);
-	write_memory(0xFF1B, 0x7F);
-	write_memory(0xFF1C, 0x9F);
-	write_memory(0xFF1E, 0xBF);
-	write_memory(0xFF20, 0xFF);
-	write_memory(0xFF23, 0xBF);
-	write_memory(0xFF24, 0x77);
-	write_memory(0xFF25, 0xF3);
-	write_memory(0xFF26, 0xF1);
-	write_memory(0xFF40, 0x91);
-	write_memory(0xFF47, 0xFC);
-	write_memory(0xFF48, 0xFF);
-	write_memory(0xFF49, 0xFF);
-
-	// TODO: finish handling reading cartridge into ROM
+	new_memory[0xFF10] = 0x80;
+	new_memory[0xFF11] = 0xBF;
+	new_memory[0xFF12] = 0xF3;
+	new_memory[0xFF14] = 0xBF;
+	new_memory[0xFF16] = 0x3F;
+	new_memory[0xFF19] = 0xBF;
+	new_memory[0xFF1A] = 0xFF;
+	new_memory[0xFF1B] = 0x7F;
+	new_memory[0xFF1C] = 0x9F;
+	new_memory[0xFF1E] = 0xBF;
+	new_memory[0xFF20] = 0xFF;
+	new_memory[0xFF23] = 0xBF;
+	new_memory[0xFF24] = 0x77;
+	new_memory[0xFF25] = 0xF3;
+	new_memory[0xFF26] = 0xF1;
+	new_memory[0xFF40] = 0x91;
+	new_memory[0xFF47] = 0xFC;
+	new_memory[0xFF48] = 0xFF;
+	new_memory[0xFF49] = 0xFF;
 	
 	// Read first 0x4000 bytes of cartridge into ROM
 	for (int i = 0x0; i < 0x4000; i++)
 	{
-		memory[i] = cartridge[i];
+		new_memory[i] = cartridge[i];
 	}
 
-	return memory;
+	return new_memory;
 }		/* -----  end of function init_memory  ----- */
 
 /*
@@ -84,13 +84,13 @@ init_memory(unsigned char *cartridge)
 	unsigned char*
 load_cartridge(char *file)
 {
-	unsigned char *cartridge = malloc(0x200000);
+	unsigned char *new_cartridge = malloc(0x200000);
 	FILE *binary_file = fopen(file, "rb");
-	fread(cartridge, 0x1, 0x200000, binary_file);
+	fread(new_cartridge, 0x1, 0x200000, binary_file);
 	fclose(binary_file);
 
 	// Parse fields of the header to determine rom/ram banking used
-	switch (cartridge[0x147]) // Which mbc should be used
+	switch (new_cartridge[0x147]) // Which mbc should be used
 	{
 		case 0x0:
 			banking_mode = 0; // ROM only
@@ -108,7 +108,7 @@ load_cartridge(char *file)
 			break;
 	}
 
-	switch (cartridge[0x149])
+	switch (new_cartridge[0x149])
 	{
 		case 0x1:
 			ext_ram_bank = malloc(0x800);
@@ -120,21 +120,8 @@ load_cartridge(char *file)
 			break;
 	}
 
-	return cartridge;
+	return new_cartridge;
 }               /* -----  end of function load_cartridge  ----- */
-
-/*
- * ===  FUNCTION  ======================================================================
- *         Name:  free_all_memory
- *  Description:  Frees all allocated memory for the various structures used in the 
- *  		      emulator's virtual memory
- * =====================================================================================
- */
-        void
-free_all_memory()
-{
-        
-}               /* -----  end of function free_all_memory  ----- */
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -143,7 +130,7 @@ free_all_memory()
  *      Returns:  Pointer to a struct containing registers for MBC chip
  * =====================================================================================
  */
-	MBC_Registers*
+MBC_Registers*
 init_mbc()
 {
 	MBC_Registers *mbc_ptr = malloc(sizeof(*mbc_ptr));
@@ -151,7 +138,7 @@ init_mbc()
 	{
 		mbc_ptr->ram_enable = 0x0;
 		mbc_ptr->rom_bank_number = 0x1;
-		mbc_ptr->ram_rom_bank_number = 0x0;
+		mbc_ptr->ram_bank_number = 0x0;
 		mbc_ptr->ram_rom_select = 0x0;
 	}
 
@@ -159,7 +146,7 @@ init_mbc()
 	{
 		mbc_ptr->ram_enable = 0x0;
 		mbc_ptr->rom_bank_number = 0x1;
-		mbc_ptr->ram_rom_bank_number = 0xFF;
+		mbc_ptr->ram_bank_number = 0xFF;
 		mbc_ptr->ram_rom_select = 0xFF;
 	}
 
@@ -172,16 +159,49 @@ init_mbc()
  *  Description:  Returns a void pointer to the start of the requested memory
  * =====================================================================================
  */
-	void*
+void*
 read_memory(unsigned short addr)
 {
 	void *mem;
-	if (banking_mode == 1)
+
+	if (addr < 0x4000) // Read from onboard ROM
 	{
-		if ((addr > 0x3FFF) && (addr))
+		mem = memory + addr;
+	}
+	else if (banking_mode == 1) // MBC1
+	{
+		if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
+		{
+			mem = cartridge + addr + (mbc->rom_bank_number * 0x4000);
+		}
+		else if ((addr > 0x9FFF) && (addr < 0xC000) && mbc->ram_enable)
+		// Read from RAM banks
+		{
+			mem = ext_ram_bank + addr + (mbc->ram_bank_number * 0x2000);
+		}
+		else
+		{
+			mem = memory + addr;
+		}
+	}
+	else if (banking_mode == 2) // MBC2
+	{
+		if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
+		{
+			mem = cartridge + addr + (mbc->rom_bank_number * 0x4000);
+		}
+		else
+		{
+			mem = memory + addr;
+		}
+	}
+	else // No memory banking
+	{
+		mem = memory + addr;
 	}
 	return mem;
 }		/* -----  end of function read_memory  ----- */
+
 /*
  * ===  FUNCTION  ======================================================================
  *         Name:  write_memory
@@ -201,7 +221,8 @@ write_memory(unsigned short addr, unsigned char data)
 	}
 	else if ((addr >= 0x2000) && (addr <= 0x3FFF)) // Set low 5 bits of rom bank
 	{
-		mbc->rom_bank_number |= data;
+		mbc->rom_bank_number += (unsigned char) (data & 0x1Fu);
+
 		switch (mbc->rom_bank_number)
 		{
 			case 0x0: // Bank 0 is fixed
@@ -221,16 +242,16 @@ write_memory(unsigned short addr, unsigned char data)
 		}
 		return;
 	}
-	else if ((addr >= 0x4000) && (addr <= 0x5FFF)) // Set ram bank or upper 2 bits rom
+	else if ((addr > 0x3FFF) && (addr < 0x6000)) // Set ram bank or upper 2 bits rom
 	{
 		if (mbc->ram_rom_select) // RAM mode
 		{
-			mbc->ram_rom_bank_number = data;
+			mbc->ram_bank_number = (unsigned char) (data & 0x3u);
 		}
 		else // ROM mode
 		{
-			unsigned char mask = data << 0x5u;
-			mbc->rom_bank_number |= mask;
+			mbc->rom_bank_number += (unsigned char)(data & 0x60u);
+
 			switch (mbc->rom_bank_number)
 			{
 				case 0x0:
@@ -250,7 +271,16 @@ write_memory(unsigned short addr, unsigned char data)
 			}
 		}
 	}
-	else if ((addr >= 0xE000) && (addr <= 0xFDFF)) // ECHO
+	else if ((addr > 0x5FFF) && (addr < 0x8000)) // Select RAM/ROM mode
+	{
+		mbc->ram_rom_select = (unsigned char) (data & 0x1u);
+
+		if (mbc->ram_rom_select)
+		{
+			mbc->ram_bank_number = 0;
+		}
+	}
+	else if ((addr > 0xDFFF) && (addr < 0xFE00)) // ECHO
 	{
 		memory[addr] = data;
 		memory[addr - 0x2000] = data;
@@ -258,6 +288,19 @@ write_memory(unsigned short addr, unsigned char data)
 	else if ((addr >= 0xFEA0) && (addr <= 0xFEFF)) // Unusable because reasons
 	{
 		printf("ERROR: Cannot write %x to %x...Restricted memory\n", data, addr);
+	}
+	// TODO this is here for testing
+	else if ((addr >= 0xFF00) && (addr <= 0xFF7F))
+	{
+		if ((addr == 0xFF02) && (data == 0x81))
+		{
+			printf("%c",memory[0xFF01]);
+			fflush(stdout);
+		}
+		else
+		{
+			memory[addr] = data;
+		}
 	}
 	else // Unrestricted memory write access
 	{

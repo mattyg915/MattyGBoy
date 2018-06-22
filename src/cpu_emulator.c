@@ -249,7 +249,7 @@ decode ()
 			return;
 			// ADC instructions
 		case 0xCE:
-		case 0x88 ... 0x8D:
+		case 0x88 ... 0x8F:
 			adc();
 			return;
 			// AND instructions
@@ -412,6 +412,33 @@ decode ()
 			return;
 		case 0x76:
 			halt();
+			return;
+		case 0xF3:
+			di();
+			return;
+		case 0xFB:
+			ei();
+			return;
+		case 0x10:
+			stop();
+			return;
+		case 0xF1:
+		case 0xC1:
+		case 0xD1:
+		case 0xE1:
+			pop();
+			return;
+		case 0xC5:
+		case 0xD5:
+		case 0xE5:
+		case 0xF5:
+			push();
+			return;
+		case 0x3F:
+			ccf();
+			return;
+		case 0x37:
+			scf();
 			return;
 			// TODO: keep going!
 		default:
