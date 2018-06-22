@@ -18,7 +18,6 @@
 #ifndef HELPERFUNCTIONS
 #define HELPERFUNCTIONS
 unsigned short combine_bytes(unsigned char byte1, unsigned char byte2);
-void split_between_registers(unsigned short value, 
-		unsigned char *reg1, unsigned char *reg2);
+void split_bytes(unsigned short value, unsigned char *addr1, unsigned char *addr2);
 void dump_registers();
 #endif

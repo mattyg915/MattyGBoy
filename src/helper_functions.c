@@ -80,22 +80,24 @@ combine_bytes(unsigned char byte1, unsigned char byte2)
 }       /* -----  end of function combine_registers  ----- */
 
 /* ===  FUNCTION  ======================================================================
- *         Name:  split_between_registers
- *  Description:  Takes a 16-bit value and splits it between two 8-bit registers
+ *         Name:  split_bytes
+ *  Description:  Takes a 16-bit value and splits it between two 8-bit locations
+ *  		  When using a location in virtual memory, addr1 should be the higher-
+ *  		  numbered memory address, as GB is little-endian
  *   Parameters:  value is the 16-bit value to split
- *                reg1 is a pointer to the register where the higher-order bits should
+ *                addr1 is a pointer to the location where the higher-order bits should
  *                be placed
- *                reg2 is a pointer to the register where the lower-order bits should
+ *                addr2 is a pointer to the location where the lower-order bits should
  *                be placed
  * =====================================================================================
  */
         void
-split_between_registers(unsigned short value,
-                unsigned char *reg1, unsigned char *reg2)
+split_bytes(unsigned short value,
+                unsigned char *addr1, unsigned char *addr2)
 {
         // Cast as a char to just grab the lower-order bits
-        *reg2 = (unsigned char)value;
+        *addr2 = (unsigned char)value;
         // Shift the higher bits into the lower position then cast
         value >>= 8;
-        *reg1 = (unsigned char)value;
-}       /* -----  end of function split_between_registers  ----- */
+        *addr1 = (unsigned char)value;
+}       /* -----  end of function split_bytes  ----- */

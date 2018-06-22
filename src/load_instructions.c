@@ -34,7 +34,6 @@ basic_ld ()
 	// Pointers to locations to which to load data and the value to load
 	unsigned char load_value;
 	unsigned char *load_to;
-	unsigned char *val_ptr; // Used to get value from memory
 
 	unsigned char left_operand = (unsigned char) ((opcode - 0x40) / 8);
 	unsigned char right_operand = (unsigned char) ((opcode - 0x40) % 8);
@@ -60,8 +59,7 @@ basic_ld ()
 				load_value = regs->L;
 				break;
 			case 0x6:
-				val_ptr = read_memory(reg_hl);
-				load_value = *val_ptr;
+				load_value = read_memory(reg_hl);
 				break;
 			case 0x7:
 				load_value = regs->A;
@@ -119,9 +117,8 @@ basic_ld ()
 load_one_byte_imm ()
 {
 	// Immediate to load and place to load it to
-	unsigned char *imm_ptr = read_memory((unsigned short) (ptrs->PC + 1));
+	unsigned char imm = read_memory(ptrs->PC);
 	ptrs->PC++;
-	unsigned char imm = *imm_ptr;
 	unsigned char *load_to;
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 	int left_operand = opcode / 8;
@@ -158,6 +155,7 @@ load_one_byte_imm ()
 			printf("ERROR: Unable to determine load location\n");
 			break;
 	}
+
 	*load_to = imm;
 }		/* -----  end of function load_one_byte_imm  ----- */
 
@@ -172,26 +170,29 @@ load_one_byte_imm ()
 	void
 load_from_to_mem ()
 {
-	unsigned short *mem_addr = read_memory((unsigned short) (ptrs->PC + 1));
-	unsigned short addr;
-	unsigned char *val_ptr;
+
+	unsigned short mem_lo = read_memory(ptrs->PC);
+	unsigned short mem_hi = read_memory((unsigned short) (ptrs->PC + 1));
+	unsigned short addr = combine_bytes(mem_lo, mem_hi);
+
+	unsigned char val;
 
 	switch (opcode)
 	{
 		case 0x0A:
 			addr = combine_bytes(regs->B, regs->C);
-			val_ptr = read_memory(addr);
-			regs->A = *val_ptr;
+			val = read_memory(addr);
+			regs->A = val;
 			return;
 		case 0x1A:
 			addr = combine_bytes(regs->D, regs->E);
-			val_ptr = read_memory(addr);
-			regs->A = *val_ptr;
+			val = read_memory(addr);
+			regs->A = val;
 			return;
 		case 0xFA:
 			ptrs->PC += 2;
-			val_ptr = read_memory(*mem_addr);
-			regs->A = *val_ptr;
+			val = read_memory(addr);
+			regs->A = val;
 			return;
 		case 0x02:
 			addr = combine_bytes(regs->B, regs->C);
@@ -203,7 +204,7 @@ load_from_to_mem ()
 			return;
 		case 0xEA:
 			ptrs->PC += 2;
-			write_memory(*mem_addr, regs->A);
+			write_memory(addr, regs->A);
 			return;
 		default:
 			break;
@@ -221,34 +222,31 @@ load_from_to_mem ()
 load_hl ()
 {
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
-	unsigned char *val_ptr;
 
 	switch (opcode)
 	{
 		case 0x22:
 			write_memory(reg_hl, regs->A);
 			reg_hl++;
-			split_between_registers(reg_hl, &regs->H, &regs->L);
+			split_bytes(reg_hl, &regs->H, &regs->L);
 			return;
 		case 0x2A:
-			val_ptr = read_memory(reg_hl);
-			regs->A = *val_ptr;
+			regs->A = read_memory(reg_hl);
 			reg_hl++;
-            split_between_registers(reg_hl, &regs->H, &regs->L);
+            		split_bytes(reg_hl, &regs->H, &regs->L);
 			return;
 		case 0x32:
 			write_memory(reg_hl, regs->A);
 			reg_hl--;
-            split_between_registers(reg_hl, &regs->H, &regs->L);
+            		split_bytes(reg_hl, &regs->H, &regs->L);
 			return;
 		case 0x3A:
-			val_ptr = read_memory(reg_hl);
-            regs->A = *val_ptr;
+            		regs->A = read_memory(reg_hl);
 			reg_hl--;
-            split_between_registers(reg_hl, &regs->H, &regs->L);
+            		split_bytes(reg_hl, &regs->H, &regs->L);
 			return;
-        default:
-            break;
+        	default:
+            		break;
     }
 }		/* -----  end of function load_hl  ----- */
 
@@ -262,31 +260,35 @@ load_hl ()
 	void
 sixteen_bit_load ()
 {
-	unsigned short *imm = read_memory((unsigned short) (ptrs->PC + 1));
-	unsigned short *val_ptr;
+	unsigned short imm_lo = read_memory(ptrs->PC);
+	ptrs->PC++;
+        unsigned short imm_hi = read_memory(ptrs->PC);
+	ptrs->PC++;
+        unsigned short imm = combine_bytes(imm_lo, imm_hi);
+
+	unsigned char addr_lo, addr_hi; // Used for 0x08
 	switch (opcode)
 	{
 		case 0x01:
-			split_between_registers(*imm, &regs->B, &regs->C);
+			split_bytes(imm, &regs->B, &regs->C);
 			break;
 		case 0x08:
-			val_ptr = read_memory(*imm);
-			ptrs->SP = *val_ptr;
+			addr_lo = imm;
+			addr_hi = imm++;
+			split_bytes(ptrs->SP, addr_hi, addr_lo);
 			break;
 		case 0x11:
-			split_between_registers(*imm, &regs->D, &regs->E);
+			split_bytes(imm, &regs->D, &regs->E);
 			break;
 		case 0x21:
-			split_between_registers(*imm, &regs->H, &regs->L);
+			split_bytes(imm, &regs->H, &regs->L);
 			break;
 		case 0x31:
-			ptrs->SP = *imm;
+			ptrs->SP = imm;
 			break;
         default:
             break;
     }
-
-	ptrs->PC += 2;
 }		/* -----  end of function sixteen_bit_load  ----- */
 
 /* 
@@ -298,28 +300,32 @@ sixteen_bit_load ()
 	void
 read_write_io ()
 {
-	unsigned char *imm_ptr = read_memory((unsigned short) (ptrs->PC + 1));
+
 	unsigned char imm;
+	unsigned short addr;
+
 	switch (opcode)
 	{
 		case 0xF0:
+			imm = read_memory(ptrs->PC);
 			ptrs->PC++;
-			*imm_ptr += 0xFF00;
-			regs->A = *imm_ptr;
+			imm += 0xFF00;
+			regs->A = imm;
 			return;
 		case 0xE0:
+			imm = read_memory(ptrs->PC);
 			ptrs->PC++;
-            *imm_ptr += 0xFF00;
-			write_memory(*imm_ptr, regs->A);
+            		imm += 0xFF00;
+			write_memory(imm, regs->A);
 			return;
 		case 0xF2:
-			imm = (unsigned char) (regs->C + 0xFF00);
-			imm_ptr = read_memory(imm);
-			regs->A = *imm_ptr;
+			addr = regs->C + 0xFF00;
+			imm = read_memory(addr);
+			regs->A = imm;
 			return;
 		case 0xE2:
-			imm = (unsigned char) (regs->C + 0xFF00);
-			write_memory(imm, regs->A);
+			addr = regs->C + 0xFF00;
+			write_memory(addr, regs->A);
 			return;
         default:
             break;

@@ -156,50 +156,53 @@ init_mbc()
 /*
  * ===  FUNCTION  ======================================================================
  *         Name:  read_memory
- *  Description:  Returns a void pointer to the start of the requested memory
+ *  Description:  Returns a 1-byte value located at the specified memory address
+ *  		  while taking into account rom and ram banks
+ *   Parameters:  addr is a 16-bit memory address
  * =====================================================================================
  */
-void*
+	unsigned char
 read_memory(unsigned short addr)
 {
-	void *mem;
+	unsigned char data;
 
 	if (addr < 0x4000) // Read from onboard ROM
 	{
-		mem = memory + addr;
+		data = memory[addr];
 	}
 	else if (banking_mode == 1) // MBC1
 	{
 		if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
 		{
-			mem = cartridge + addr + (mbc->rom_bank_number * 0x4000);
+			data = cartridge[addr + (mbc->rom_bank_number * 0x4000)];
 		}
 		else if ((addr > 0x9FFF) && (addr < 0xC000) && mbc->ram_enable)
 		// Read from RAM banks
 		{
-			mem = ext_ram_bank + addr + (mbc->ram_bank_number * 0x2000);
+			data = ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
 		}
 		else
 		{
-			mem = memory + addr;
+			data = memory[addr];
 		}
 	}
 	else if (banking_mode == 2) // MBC2
 	{
 		if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
 		{
-			mem = cartridge + addr + (mbc->rom_bank_number * 0x4000);
+			data = cartridge[addr + (mbc->rom_bank_number * 0x4000)];
 		}
 		else
 		{
-			mem = memory + addr;
+			data = memory[addr];
 		}
 	}
 	else // No memory banking
 	{
-		mem = memory + addr;
+		data = memory[addr];
 	}
-	return mem;
+
+	return data;
 }		/* -----  end of function read_memory  ----- */
 
 /*
