@@ -111,6 +111,8 @@ load_instructions.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/load_instructions.h
 global_declarations.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/global_declarations.h
+memory.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/memory.h
 
 /Users/MattyG/Documents/Programming/MattyGBoy/src/logical_instructions.c
 stdlib.h
@@ -151,6 +153,16 @@ cpu_emulator.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/cpu_emulator.h
 helper_functions.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/helper_functions.h
+
+/Users/MattyG/Documents/Programming/MattyGBoy/src/memory.c
+stdlib.h
+-
+stdio.h
+-
+memory.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/memory.h
+global_declarations.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/global_declarations.h
 
 /Users/MattyG/Documents/Programming/MattyGBoy/src/register_structures.c
 stdlib.h

@@ -111,6 +111,9 @@
 		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/math_instructions.h">
 			<Option target="MattyGBoy"/>
 		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/memory.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
 		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/register_structures.h">
 			<Option target="MattyGBoy"/>
 		</Unit>
@@ -139,6 +142,9 @@
 			<Option target="MattyGBoy"/>
 		</Unit>
 		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/mattygboy.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/memory.c">
 			<Option target="MattyGBoy"/>
 		</Unit>
 		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/register_structures.c">

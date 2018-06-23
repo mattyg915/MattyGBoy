@@ -28,8 +28,10 @@ typedef struct MBC_Registers
 
 MBC_Registers* init_mbc();
 unsigned char* init_memory();
+unsigned char* load_test_cartridge();
 void write_memory(unsigned short addr, unsigned char data);
-void* read_memory(unsigned short addr);
+unsigned char read_memory(unsigned short addr);
+unsigned char* read_memory_ptr(unsigned short addr);
 unsigned char* load_cartridge(char *file);
 
 #endif

@@ -43,7 +43,7 @@ eight_bit_update_flags (int value1, int value2)
 {
 	int result;
 
-	if (!flags->Z) // Checks that last op was addition
+	if (!flags->N) // Checks that last op was addition
 	{
 		result = value1 + value2;
 		/*
@@ -122,7 +122,7 @@ sixteen_bit_update_flags (int value1, int value2)
 {
 	int result;
 
-        if (!flags->Z) // If last op was addition
+        if (!flags->N) // If last op was addition
         {
                 result = value1 + value2;
 
@@ -192,9 +192,8 @@ sixteen_bit_update_flags (int value1, int value2)
         static void
 fetch ()
 {
-    unsigned char *opcode_ptr = read_memory(ptrs->PC);
+    opcode = read_memory(ptrs->PC);
     ptrs->PC++;
-    opcode = *opcode_ptr;
 }               /* -----  end of function fetch  ----- */
 
 /* 
@@ -351,6 +350,7 @@ decode ()
 		case 0xCC:
 			call();
 			return;
+	    case 0xC8:
 		case 0xC9:
 		case 0xD8:
 		case 0xD0:
@@ -374,6 +374,10 @@ decode ()
 		case 0x40 ... 0x75:
 		case 0x77 ... 0x7F:
 			basic_ld();
+			return;
+		case 0xF8:
+		case 0xF9:
+			ld_hl_sp();
 			return;
 		case 0x22:
 		case 0x2A:

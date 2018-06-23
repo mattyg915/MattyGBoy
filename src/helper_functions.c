@@ -36,7 +36,7 @@
 delay (unsigned int mseconds)
 {
 	clock_t goal = mseconds + clock();
-    	while (goal > clock());
+	while (goal > clock());
 }		/* -----  end of function delay  ----- */
 
 /*
@@ -72,11 +72,12 @@ dump_registers()
         unsigned short
 combine_bytes(unsigned char byte1, unsigned char byte2)
 {       
-        unsigned short result = (unsigned short)byte1;
-        result <<= 8;
-        result += byte2;
-        
-        return result;
+    unsigned short result = 0;
+    result += byte1;
+    result <<= 8;
+    result += byte2;
+
+    return result;
 }       /* -----  end of function combine_registers  ----- */
 
 /* ===  FUNCTION  ======================================================================
@@ -95,9 +96,9 @@ combine_bytes(unsigned char byte1, unsigned char byte2)
 split_bytes(unsigned short value,
                 unsigned char *addr1, unsigned char *addr2)
 {
-        // Cast as a char to just grab the lower-order bits
-        *addr2 = (unsigned char)value;
-        // Shift the higher bits into the lower position then cast
-        value >>= 8;
-        *addr1 = (unsigned char)value;
+    // Cast as a char to just grab the lower-order bits
+    *addr2 = (unsigned char)value;
+    // Shift the higher bits into the lower position then cast
+    value >>= 8;
+    *addr1 = (unsigned char)value;
 }       /* -----  end of function split_bytes  ----- */

@@ -18,6 +18,7 @@
 #include <stdio.h>
 #include "load_instructions.h"
 #include "global_declarations.h"
+#include "memory.h"
 
 
 /* 
@@ -171,8 +172,8 @@ load_one_byte_imm ()
 load_from_to_mem ()
 {
 
-	unsigned short mem_lo = read_memory(ptrs->PC);
-	unsigned short mem_hi = read_memory((unsigned short) (ptrs->PC + 1));
+	unsigned char mem_lo = read_memory(ptrs->PC);
+	unsigned char mem_hi = read_memory((unsigned short) (ptrs->PC + 1));
 	unsigned short addr = combine_bytes(mem_lo, mem_hi);
 
 	unsigned char val;
@@ -250,7 +251,31 @@ load_hl ()
     }
 }		/* -----  end of function load_hl  ----- */
 
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  ld_hl_sp
+ *  Description:  Handles loads between HL and SP
+ * =====================================================================================
+ */
+    void
+ld_hl_sp ()
+{
+    unsigned char offset;
 
+    switch (opcode)
+    {
+        case 0xF8:
+            offset = read_memory(ptrs->PC);
+            ptrs->PC++;
+            split_bytes(ptrs->SP + offset, &regs->H, &regs->L);
+            return;
+        case 0xF9:
+            ptrs->SP = combine_bytes(regs->H, regs->L);
+            return;
+        default:
+            return;
+    }
+}
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  sixteen_bit_load
@@ -260,22 +285,24 @@ load_hl ()
 	void
 sixteen_bit_load ()
 {
-	unsigned short imm_lo = read_memory(ptrs->PC);
+	unsigned char imm_lo = read_memory(ptrs->PC);
 	ptrs->PC++;
-        unsigned short imm_hi = read_memory(ptrs->PC);
+	unsigned char imm_hi = read_memory(ptrs->PC);
 	ptrs->PC++;
-        unsigned short imm = combine_bytes(imm_lo, imm_hi);
+	unsigned short imm = combine_bytes(imm_lo, imm_hi);
 
-	unsigned char addr_lo, addr_hi; // Used for 0x08
+	unsigned char sp_lo, sp_hi;
+
 	switch (opcode)
 	{
 		case 0x01:
 			split_bytes(imm, &regs->B, &regs->C);
 			break;
-		case 0x08:
-			addr_lo = imm;
-			addr_hi = imm++;
-			split_bytes(ptrs->SP, addr_hi, addr_lo);
+		case 0x08: // This one is obnoxious
+			sp_lo = (unsigned char) ptrs->SP;
+			sp_hi = (unsigned char ) (ptrs->SP >> 0x8u);
+			write_memory(imm_hi, sp_hi);
+			write_memory(imm_lo, sp_lo);
 			break;
 		case 0x11:
 			split_bytes(imm, &regs->D, &regs->E);
@@ -319,12 +346,12 @@ read_write_io ()
 			write_memory(imm, regs->A);
 			return;
 		case 0xF2:
-			addr = regs->C + 0xFF00;
+			addr = (unsigned short) (regs->C + 0xFF00);
 			imm = read_memory(addr);
 			regs->A = imm;
 			return;
 		case 0xE2:
-			addr = regs->C + 0xFF00;
+			addr = (unsigned short) (regs->C + 0xFF00);
 			write_memory(addr, regs->A);
 			return;
         default:

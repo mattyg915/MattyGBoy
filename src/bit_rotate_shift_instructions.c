@@ -31,14 +31,14 @@
         void
 rlc (unsigned char *reg)
 {
-        // Clears N and H flags
-        flags->N = 0; flags->H = 0;
-        
-	// Each bit of A shifts left one with bit 7 shifting 
-        // into C AND bit 0
-        flags->C = (unsigned char) (*reg & 0x80u);
-        *reg <<= 1;
-        *reg |= flags->C;
+	// Clears N and H flags
+	flags->N = 0; flags->H = 0;
+
+	// Each bit of A shifts left one with bit 7 shifting
+	// into C AND bit 0
+	flags->C = (unsigned char) (*reg & 0x80u);
+	*reg <<= 1;
+	*reg |= flags->C;
 	flags->Z = (unsigned char) (*reg == 0 ? 1 : 0);
 }               /* -----  end of function rlc  ----- */
 
@@ -52,14 +52,14 @@ rlc (unsigned char *reg)
         void
 rl (unsigned char *reg)
 {
-        // Clears N and H flags
-        flags->N = 0; flags->H = 0;
-        // Each bit of register shifts left one with bit 0 shifting
-        // into C and c going into bit 7
-        unsigned char initial_c = flags->C;
-        flags->C = (unsigned char) (*reg & 0x80u);
-        *reg <<= 1;
-        *reg |= initial_c;
+	// Clears N and H flags
+	flags->N = 0; flags->H = 0;
+	// Each bit of register shifts left one with bit 0 shifting
+	// into C and c going into bit 7
+	unsigned char initial_c = flags->C;
+	flags->C = (unsigned char) (*reg & 0x80u);
+	*reg <<= 1;
+	*reg |= initial_c;
 	flags->Z = (unsigned char) ((*reg == 0) ? 1 : 0);
 }               /* -----  end of function rl  ----- */
 
@@ -73,15 +73,15 @@ rl (unsigned char *reg)
         void
 rr (unsigned char *reg)
 {
-        // Clears N and H flags
-        flags->N = 0; flags->H = 0;
-        
+	// Clears N and H flags
+	flags->N = 0; flags->H = 0;
+
 	// Each bit of register shifts right one with bit 0 shifting
-        // into C and C goes into bit 7
+	// into C and C goes into bit 7
 	unsigned char initial_c = flags->C;
-        flags->C = (unsigned char) (*reg & 0x1u);
-        *reg >>= 1;
-        *reg |= (initial_c << 0x7u);
+	flags->C = (unsigned char) (*reg & 0x1u);
+	*reg >>= 1;
+	*reg |= (initial_c << 0x7u);
 	flags->Z = (unsigned char) ((*reg == 0) ? 1 : 0);
 }               /* -----  end of function rr  ----- */
 
@@ -96,13 +96,13 @@ rr (unsigned char *reg)
 rrc (unsigned char *reg)
 {
 	// Clears N and H flags
-        flags->N = 0; flags->H = 0;
-	
+	flags->N = 0; flags->H = 0;
+
 	// Each bit of register shifts right one with bit 0 shifting
-        // into C AND bit 7
-        flags->C = (unsigned char) (*reg & 0x1u);
-        *reg >>= 1;
-        *reg |= (flags->C << 0x7u);
+	// into C AND bit 7
+	flags->C = (unsigned char) (*reg & 0x1u);
+	*reg >>= 1;
+	*reg |= (flags->C << 0x7u);
 	flags->Z = (unsigned char) ((*reg == 0) ? 1 : 0);
 }		/* -----  end of function rrc  ----- */
 
@@ -284,14 +284,13 @@ bit_rotate_shift ()
 			break;
 		case 0x06:
 		case 0x0E:
-			argument = read_memory(reg_hl);
+			argument = read_memory_ptr(reg_hl);
 			break;
 		case 0x07:
 		case 0x0F:
 			argument = &regs->A;
 			break;
         default:
-            printf("ERROR: Unable to process opcode %x\n", opcode);
             return;
 	}
 
@@ -331,7 +330,6 @@ bit_rotate_shift ()
 			set(argument);
 			return;
 		default:
-			printf("ERROR: Unable to process opcode %x\n", opcode);
 			return;
 	}
 }		/* -----  end of function bit_rotate_shift  ----- */

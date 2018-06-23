@@ -73,6 +73,12 @@ CMakeFiles/MattyGBoy.dir/src/mattygboy.c.o: ../include/memory.h
 CMakeFiles/MattyGBoy.dir/src/mattygboy.c.o: ../include/register_structures.h
 CMakeFiles/MattyGBoy.dir/src/mattygboy.c.o: ../src/mattygboy.c
 
+CMakeFiles/MattyGBoy.dir/src/memory.c.o: ../include/global_declarations.h
+CMakeFiles/MattyGBoy.dir/src/memory.c.o: ../include/helper_functions.h
+CMakeFiles/MattyGBoy.dir/src/memory.c.o: ../include/memory.h
+CMakeFiles/MattyGBoy.dir/src/memory.c.o: ../include/register_structures.h
+CMakeFiles/MattyGBoy.dir/src/memory.c.o: ../src/memory.c
+
 CMakeFiles/MattyGBoy.dir/src/register_structures.c.o: ../include/register_structures.h
 CMakeFiles/MattyGBoy.dir/src/register_structures.c.o: ../src/register_structures.c
 

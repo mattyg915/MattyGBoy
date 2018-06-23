@@ -33,15 +33,13 @@ and ()
     // Right operand is dependant on opcode, left is always register A
 
     unsigned char operand = 0;
-    unsigned char *op_ptr;
     unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
     switch (opcode)
     {
         case 0xE6:
+            operand = read_memory(ptrs->PC);
             ptrs->PC++;
-            op_ptr = read_memory(ptrs->PC);
-            operand = *op_ptr;
             break;
         case 0xA0:
             operand = regs->B;
@@ -62,11 +60,12 @@ and ()
             operand = regs->L;
             break;
         case 0xA6:
-            op_ptr = read_memory(reg_hl);
-            operand = *op_ptr;
+            operand = read_memory(reg_hl);
             break;
         case 0xA7:
             operand = regs->A;
+            break;
+        default:
             break;
     }
 
@@ -92,41 +91,40 @@ or ()
 {
         // Right operand is dependant on opcode, left is always register A
         unsigned char operand = 0;
-        unsigned char *op_ptr;
         unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
         switch (opcode)
         {
-                case 0xF6:
-                        ptrs->PC++;
-                        op_ptr = read_memory(ptrs->PC);
-                        operand = *op_ptr;
-                        break;
-                case 0xB0:
-                        operand = regs->B;
-                        break;
-                case 0xB1:
-                        operand = regs->C;
-                        break;
-                case 0xB2:
-                        operand = regs->D;
-                        break;
-                case 0xB3:
-                        operand = regs->E;
-                        break;
-                case 0xB4:
-                        operand = regs->H;
-                        break;
-                case 0xB5:
-                        operand = regs->L;
-                        break;
-                case 0xB6:
-                        op_ptr = read_memory(reg_hl);
-                        operand = *op_ptr;
-                        break;
-                case 0xB7:
-                        operand = regs->A;
-                        break;
+            case 0xF6:
+                operand = read_memory(ptrs->PC);
+                ptrs->PC++;
+                break;
+            case 0xB0:
+                operand = regs->B;
+                break;
+            case 0xB1:
+                operand = regs->C;
+                break;
+            case 0xB2:
+                operand = regs->D;
+                break;
+            case 0xB3:
+                operand = regs->E;
+                break;
+            case 0xB4:
+                operand = regs->H;
+                break;
+            case 0xB5:
+                operand = regs->L;
+                break;
+            case 0xB6:
+                operand = read_memory(reg_hl);
+                break;
+            case 0xB7:
+                operand = regs->A;
+                break;
+            default:
+                break;
         }
 
         // OR instruction clears half-carry, carry, and subtract flags
@@ -138,8 +136,6 @@ or ()
         {
                 flags->Z = 1;
         }
-
-        return;
 }               /* -----  end of function or  ----- */
 
 /*
@@ -153,41 +149,40 @@ xor ()
 {
         // Right operand is dependant on opcode, left is always register A
         unsigned char operand = 0;
-        unsigned char *op_ptr;
         unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
         switch (opcode)
         {
-                case 0xEE:
-                        ptrs->PC++;
-                        op_ptr = read_memory(ptrs->PC);
-                        operand = *op_ptr;
-                        break;
-                case 0xA8:
-                        operand = regs->B;
-                        break;
-                case 0xA9:
-                        operand = regs->C;
-                        break;
-                case 0xAA:
-                        operand = regs->D;
-                        break;
-                case 0xAB:
-                        operand = regs->E;
-                        break;
-                case 0xAC:
-                        operand = regs->H;
-                        break;
-                case 0xAD:
-                        operand = regs->L;
-                        break;
-                case 0xAE:
-                        op_ptr = read_memory(reg_hl);
-                        operand = *op_ptr;
-                        break;
-                case 0xAF:
-                        operand = regs->A;
-                        break;
+            case 0xEE:
+                operand = read_memory(ptrs->PC);
+                ptrs->PC++;
+                break;
+            case 0xA8:
+                operand = regs->B;
+                break;
+            case 0xA9:
+                operand = regs->C;
+                break;
+            case 0xAA:
+                operand = regs->D;
+                break;
+            case 0xAB:
+                operand = regs->E;
+                break;
+            case 0xAC:
+                operand = regs->H;
+                break;
+            case 0xAD:
+                operand = regs->L;
+                break;
+            case 0xAE:
+                operand = read_memory(reg_hl);
+                break;
+            case 0xAF:
+                operand = regs->A;
+                break;
+            default:
+                break;
         }
 
         // XOR instruction clears half-carry, carry, and subtract flags
@@ -199,8 +194,6 @@ xor ()
         {
                 flags->Z = 1;
         }
-
-        return;
 }               /* -----  end of function xor  ----- */
 
 
@@ -215,7 +208,6 @@ cpl ()
 {
 	regs->A ^= 0xFF; // Just invert the bits to get 1's complement
 	flags->N = 1; flags->H = 1;
-	return;
 }		/* -----  end of function cpl  ----- */
 
 /*
@@ -238,13 +230,13 @@ daa ()
 	unsigned char correction = 0;
 
 	// If half carry set OR if least significant nibble of A > 9
-	if (flags->H || (!flags->N && (regs->A & 0xF) > 0x9))
+	if (flags->H || (!flags->N && (regs->A & 0xFu) > 0x9u))
 	{
 		correction += 0x6;
 	}
 
 	// If carry set OR most significant nibble of A >9
-	if(flags->C || (!flags->N && (regs->A & 0xF0) > 0x9))
+	if(flags->C || (!flags->N && (regs->A & 0xF0u) > 0x9u))
 	{
 		correction += 0x60;
 		flags->C = 1; // Carry flag gets set if correct upper nibble
@@ -261,6 +253,4 @@ daa ()
 	{
 		regs->A += correction;
 	}
-
-	return;
 }		/* -----  end of function daa  ----- */

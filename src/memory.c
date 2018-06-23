@@ -28,10 +28,10 @@ extern unsigned char *cartridge;
 
 // Track ROM banking
 static unsigned char banking_mode;
-static MBC_Registers *mbc;
+static MBC_Registers *mbc = NULL;
 
 // Track RAM banking
-static unsigned char *ext_ram_bank; // Single array to virtualize all RAM banks
+static unsigned char *ext_ram_bank = NULL; // Single array to virtualize all RAM banks
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -67,7 +67,7 @@ init_memory()
 	new_memory[0xFF49] = 0xFF;
 	
 	// Read first 0x4000 bytes of cartridge into ROM
-	for (int i = 0x0; i < 0x4000; i++)
+	for (int i = 0x0; i < 0x8000; i++)
 	{
 		new_memory[i] = cartridge[i];
 	}
@@ -122,6 +122,76 @@ load_cartridge(char *file)
 
 	return new_cartridge;
 }               /* -----  end of function load_cartridge  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  load_test_cartridge
+ *  Description:  Loads a testing file as the game cartridge
+ * =====================================================================================
+ */
+	unsigned char*
+load_test_cartridge()
+{
+	unsigned char *new_cartridge = malloc(0x200000);
+
+	for (int i = 0x0; i < 0x100; i++)
+    {
+        new_cartridge[i] = 0x0;
+    }
+    new_cartridge[0x100] = 0x00;
+	new_cartridge[0x101] = 0xC3;
+	new_cartridge[0x102] = 0x50;
+	new_cartridge[0x103] = 0x01;
+	new_cartridge[0x150] = 0x00;
+	new_cartridge[0x151] = 0x26;
+	new_cartridge[0x152] = 0x70;
+	new_cartridge[0x153] = 0x2E;
+    new_cartridge[0x154] = 0x75;
+    new_cartridge[0x155] = 0x7E;
+    new_cartridge[0x156] = 0xCD;
+    new_cartridge[0x157] = 0x50;
+    new_cartridge[0x158] = 0x65;
+    new_cartridge[0x6550] = 0xC9;
+    new_cartridge[0x159] = 0x3E;
+    new_cartridge[0x15A] = 0xFF;
+    new_cartridge[0x15B] = 0xC6;
+    new_cartridge[0x15C] = 0x01;
+    new_cartridge[0x15D] = 0x76;
+	new_cartridge[0x7075] = 0x77;
+
+	// Parse fields of the header to determine rom/ram banking used
+	switch (new_cartridge[0x147]) // Which mbc should be used
+	{
+		case 0x0:
+			banking_mode = 0; // ROM only
+			break;
+		case 0x1 ... 0x3: // MBC1
+			banking_mode = 1;
+			mbc = init_mbc();
+			break;
+		case 0x5 ... 0x6:
+			banking_mode = 2;
+			mbc = init_mbc();
+			break;
+		default: // Other banking not handled yet
+			banking_mode = 0;
+			break;
+	}
+
+	switch (new_cartridge[0x149])
+	{
+		case 0x1:
+			ext_ram_bank = malloc(0x800);
+		case 0x2:
+			ext_ram_bank = malloc(0x2000);
+		case 0x3:
+			ext_ram_bank = malloc(0x8000);
+		default:
+			break;
+	}
+
+	return new_cartridge;
+}               /* -----  end of function load_test_cartridge  ----- */
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -204,6 +274,58 @@ read_memory(unsigned short addr)
 
 	return data;
 }		/* -----  end of function read_memory  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  read_memory_ptr
+ *  Description:  Returns a pointer to the specified memory address while taking
+ *                into account rom and ram banks
+ *   Parameters:  addr is a 16-bit memory address
+ * =====================================================================================
+ */
+unsigned char*
+read_memory_ptr(unsigned short addr)
+{
+    unsigned char *mem;
+
+    if (addr < 0x4000) // Read from onboard ROM
+    {
+        mem = &memory[addr];
+    }
+    else if (banking_mode == 1) // MBC1
+    {
+        if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
+        {
+            mem = &cartridge[addr + (mbc->rom_bank_number * 0x4000)];
+        }
+        else if ((addr > 0x9FFF) && (addr < 0xC000) && mbc->ram_enable)
+        // Read from RAM banks
+        {
+            mem = &ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
+        }
+        else
+        {
+            mem = &memory[addr];
+        }
+    }
+    else if (banking_mode == 2) // MBC2
+    {
+        if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
+        {
+            mem = &cartridge[addr + (mbc->rom_bank_number * 0x4000)];
+        }
+        else
+        {
+            mem = &memory[addr];
+        }
+    }
+    else // No memory banking
+    {
+        mem = &memory[addr];
+    }
+
+    return mem;
+}		/* -----  end of function read_memory_ptr  ----- */
 
 /*
  * ===  FUNCTION  ======================================================================

@@ -22,9 +22,6 @@
 #include "cpu_emulator.h"
 #include "helper_functions.h"
 
-// TODO: optimize the conditional jumps so that we only have the PC moving on one line
-// TODO: fix call and possibly others because you need the 'else' part that just moves PC
-
 /*
  * ===  FUNCTION  ======================================================================
  *         Name:  cp
@@ -37,42 +34,42 @@ cp ()
 	flags->N = 1; // CP sets the N flag
 
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
-	unsigned char *operand;
+	unsigned char operand;
 
 	switch (opcode) {
 		case 0xFE:
-			operand = read_memory(ptrs->PC);
+		    operand = read_memory(ptrs->PC);
 			ptrs->PC++;
 			break;
 		case 0xBE:
 			operand = read_memory(reg_hl);
 			break;
 		case 0xBF:
-			operand = &regs->A;
+			operand = regs->A;
 			break;
 		case 0xB8:
-			operand = &regs->B;
+			operand = regs->B;
 			break;
 		case 0xB9:
-			operand = &regs->C;
+			operand = regs->C;
 			break;
 		case 0xBA:
-			operand = &regs->D;
+			operand = regs->D;
 			break;
 		case 0xBB:
-			operand = &regs->E;
+			operand = regs->E;
 			break;
 		case 0xBC:
-			operand = &regs->H;
+			operand = regs->H;
 			break;
 		case 0xBD:
-			operand = &regs->L;
+			operand = regs->L;
 			break;
 		default:
 			return;
 	}
 	// A's state is unchanged, only the flags are affected
-	eight_bit_update_flags(regs->A, *operand);
+	eight_bit_update_flags(regs->A, operand);
 }		/* -----  end of function cp  ----- */
 
 /*
@@ -85,42 +82,45 @@ cp ()
 jp ()
 {
 	// Grab 16-bit immediate for the target
-	unsigned short *target = read_memory((ptrs->PC + 0x1));
-	ptrs->PC += 2;
+	unsigned char target_lo = read_memory(ptrs->PC);
+	ptrs->PC++;
+	unsigned char target_hi = read_memory(ptrs->PC);
+	ptrs->PC++;
+	unsigned short target = combine_bytes(target_hi, target_lo);
 
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
 	switch (opcode)
 	{
 		case 0xC3:
-			ptrs->PC = *target;
+			ptrs->PC = target;
 			return;
 		case 0xE9:
 			target = read_memory(reg_hl);
-			ptrs->PC = *target;
+			ptrs->PC = target;
 			return;
 		case 0xDA:
 			if (flags->C)
 			{
-				ptrs->PC += *target;
+				ptrs->PC += target;
 			}
 			return;
 		case 0xD2:
 			if (!flags->C)
 			{
-				ptrs->PC += *target;
+				ptrs->PC += target;
 			}
 			return;
 		case 0xC2:
 			if (!flags->Z)
 			{
-				ptrs->PC += *target;
+				ptrs->PC += target;
 			}
 			return;
 		case 0xCA:
 			if (flags->Z)
 			{
-				ptrs->PC += *target;
+				ptrs->PC += target;
 			}
 			return;
 		default:
@@ -138,36 +138,36 @@ jp ()
 jr ()
 {
 	// All ops use a 1-byte immediate
-	unsigned char *offset = read_memory((unsigned short) (ptrs->PC + 1));
+	unsigned char offset = read_memory(ptrs->PC);
 	ptrs->PC++;
 
 	switch (opcode)
 	{
 		case 0x18:
-			ptrs->PC += *offset;
+			ptrs->PC += offset;
 			return;
 		case 0x38:
 			if (flags->C)
 			{
-				ptrs->PC += *offset;
+				ptrs->PC += offset;
 			}
 			return;
 		case 0x30:
 			if (!flags->C)
 			{
-				ptrs->PC += *offset;
+				ptrs->PC += offset;
 			}
 			return;
 		case 0x20:
 			if (!flags->Z)
 			{
-				ptrs->PC += *offset;
+				ptrs->PC += offset;
 			}
 			return;
 		case 0x28:
 			if (flags->Z)
 			{
-				ptrs->PC += *offset;
+				ptrs->PC += offset;
 			}
 			return;
 		default:
@@ -184,13 +184,16 @@ jr ()
         void
 call ()
 {
-	unsigned short *target = read_memory((unsigned short) (ptrs->PC + 0x1));
+    // Grab 16-bit immediate for the target
+    unsigned char target_lo = read_memory(ptrs->PC);
+    ptrs->PC++;
+    unsigned char target_hi = read_memory(ptrs->PC);
+    ptrs->PC++;
+    unsigned short target = combine_bytes(target_hi, target_lo);
 
 	// Grab both nibbles of PC to store on the stack
-	unsigned char pc_high = (unsigned char)(ptrs->PC >> 0x8u);
-	unsigned char pc_low = (unsigned char) (ptrs->PC & 0xFu);
-
-	ptrs->PC += 2;
+	unsigned char pc_high = (unsigned char)(ptrs->PC >> 0x08u);
+	unsigned char pc_low = (unsigned char) (ptrs->PC & 0xFFu);
 
 	switch (opcode)
 	{
@@ -201,7 +204,7 @@ call ()
 			ptrs->SP--;
 			write_memory(ptrs->SP, pc_low);
 
- 			ptrs->PC = *target;
+ 			ptrs->PC = target;
 			return;
 		case 0xDC:
 			if (flags->C)
@@ -211,8 +214,7 @@ call ()
 				ptrs->SP--;
 				write_memory(ptrs->SP, pc_low);
 
-	 			ptrs->PC = *target;
-				ptrs->SP -= 2;
+	 			ptrs->PC = target;
 			}
 			return;
 		case 0xD4:
@@ -223,8 +225,7 @@ call ()
 				ptrs->SP--;
 				write_memory(ptrs->SP, pc_low);
 
-	 			ptrs->PC = *target;
-				ptrs->SP -= 2;
+	 			ptrs->PC = target;
 			}
 			return;
 		case 0xC4:
@@ -235,8 +236,7 @@ call ()
 				ptrs->SP--;
 				write_memory(ptrs->SP, pc_low);
 
- 				ptrs->PC = *target;
-				ptrs->SP -= 2;
+ 				ptrs->PC = target;
 			}
 			return;
 		case 0xCC:
@@ -247,8 +247,7 @@ call ()
 				ptrs->SP--;
 				write_memory(ptrs->SP, pc_low);
 
- 				ptrs->PC = *target;
-				ptrs->SP -= 2;
+ 				ptrs->PC = target;
 			}
 			return;
 		default:
@@ -265,39 +264,39 @@ call ()
         void
 ret ()
 {
-	unsigned short *return_address = read_memory((unsigned short) (ptrs->SP - 0x1));
+    // Grab return address off the stack
+    unsigned char return_hi = read_memory(ptrs->SP);
+    ptrs->SP++;
+    unsigned char return_lo = read_memory(ptrs->SP);
+    ptrs->SP++;
+    unsigned short return_address = combine_bytes(return_lo, return_hi);
 	switch (opcode)
 	{
 		case 0xC9:
-			ptrs->PC = *return_address;
- 			ptrs->SP += 2;
+			ptrs->PC = return_address;
 			return;
 		case 0xD8:
 			if (flags->C)
 			{
-				ptrs->PC = *return_address;
- 				ptrs->SP += 2;
+				ptrs->PC = return_address;
 			}
 			return;
 		case 0xD0:
 			if (!flags->C)
 			{
-				ptrs->PC = *return_address;
- 				ptrs->SP += 2;
+				ptrs->PC = return_address;
 			}
 			return;
 		case 0xC0:
 			if (!flags->Z)
 			{
-				ptrs->PC = *return_address;
- 				ptrs->SP += 2;
+				ptrs->PC = return_address;
 			}
 			return;
 		case 0xC8:
 			if (flags->Z)
 			{
-				ptrs->PC = *return_address;
- 				ptrs->SP += 2;
+				ptrs->PC = return_address;
 			}
 			return;
 		default:
@@ -314,9 +313,15 @@ ret ()
         void
 reti ()
 {
-	unsigned short *return_address = read_memory((unsigned short) (ptrs->SP - 0x1));
-	// Unconditional return
-	ptrs->PC = *return_address;
+    // Get return address off the stack
+    unsigned char return_hi = read_memory(ptrs->SP);
+    ptrs->SP++;
+    unsigned char return_lo = read_memory(ptrs->SP);
+    ptrs->SP++;
+    unsigned short return_address = combine_bytes(return_lo, return_hi);
+
+    // Unconditional return
+	ptrs->PC = return_address;
 	write_memory(0xFFFF, 0x1); // Enable interrupts
  	ptrs->SP += 2;
 }               /* -----  end of function reti  ----- */

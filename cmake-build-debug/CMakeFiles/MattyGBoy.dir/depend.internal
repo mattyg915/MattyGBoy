@@ -73,6 +73,12 @@ CMakeFiles/MattyGBoy.dir/src/mattygboy.c.o
  ../include/memory.h
  ../include/register_structures.h
  /Users/MattyG/Documents/Programming/MattyGBoy/src/mattygboy.c
+CMakeFiles/MattyGBoy.dir/src/memory.c.o
+ ../include/global_declarations.h
+ ../include/helper_functions.h
+ ../include/memory.h
+ ../include/register_structures.h
+ /Users/MattyG/Documents/Programming/MattyGBoy/src/memory.c
 CMakeFiles/MattyGBoy.dir/src/register_structures.c.o
  ../include/register_structures.h
  /Users/MattyG/Documents/Programming/MattyGBoy/src/register_structures.c

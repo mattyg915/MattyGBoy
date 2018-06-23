@@ -55,6 +55,7 @@ int main(int argc, char **argv)
 	flags = init_flags();
 
 	// TODO: for now just load rom via command line argument
+    //cartridge = load_test_cartridge(); // For Testing
 	cartridge = load_cartridge(argv[optind]);
 	memory = init_memory();
 

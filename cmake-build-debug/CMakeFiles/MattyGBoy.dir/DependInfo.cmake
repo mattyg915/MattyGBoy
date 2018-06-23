@@ -13,6 +13,7 @@ set(CMAKE_DEPENDS_CHECK_C
   "/Users/MattyG/Documents/Programming/MattyGBoy/src/logical_instructions.c" "/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/logical_instructions.c.o"
   "/Users/MattyG/Documents/Programming/MattyGBoy/src/math_instructions.c" "/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/math_instructions.c.o"
   "/Users/MattyG/Documents/Programming/MattyGBoy/src/mattygboy.c" "/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/mattygboy.c.o"
+  "/Users/MattyG/Documents/Programming/MattyGBoy/src/memory.c" "/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/memory.c.o"
   "/Users/MattyG/Documents/Programming/MattyGBoy/src/register_structures.c" "/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/register_structures.c.o"
   )
 set(CMAKE_C_COMPILER_ID "AppleClang")

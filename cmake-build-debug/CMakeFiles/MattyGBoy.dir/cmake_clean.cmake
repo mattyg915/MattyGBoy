@@ -8,6 +8,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/MattyGBoy.dir/src/logical_instructions.c.o"
   "CMakeFiles/MattyGBoy.dir/src/math_instructions.c.o"
   "CMakeFiles/MattyGBoy.dir/src/mattygboy.c.o"
+  "CMakeFiles/MattyGBoy.dir/src/memory.c.o"
   "CMakeFiles/MattyGBoy.dir/src/register_structures.c.o"
   "MattyGBoy.pdb"
   "MattyGBoy"

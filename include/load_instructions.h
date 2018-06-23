@@ -23,4 +23,5 @@ void load_one_byte_imm();
 void read_write_io();
 void load_hl();
 void sixteen_bit_load();
+void ld_hl_sp();
 #endif

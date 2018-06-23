@@ -366,6 +366,33 @@ src/mattygboy.c.s:
 	$(MAKE) -f CMakeFiles/MattyGBoy.dir/build.make CMakeFiles/MattyGBoy.dir/src/mattygboy.c.s
 .PHONY : src/mattygboy.c.s
 
+src/memory.o: src/memory.c.o
+
+.PHONY : src/memory.o
+
+# target to build an object file
+src/memory.c.o:
+	$(MAKE) -f CMakeFiles/MattyGBoy.dir/build.make CMakeFiles/MattyGBoy.dir/src/memory.c.o
+.PHONY : src/memory.c.o
+
+src/memory.i: src/memory.c.i
+
+.PHONY : src/memory.i
+
+# target to preprocess a source file
+src/memory.c.i:
+	$(MAKE) -f CMakeFiles/MattyGBoy.dir/build.make CMakeFiles/MattyGBoy.dir/src/memory.c.i
+.PHONY : src/memory.c.i
+
+src/memory.s: src/memory.c.s
+
+.PHONY : src/memory.s
+
+# target to generate assembly for a file
+src/memory.c.s:
+	$(MAKE) -f CMakeFiles/MattyGBoy.dir/build.make CMakeFiles/MattyGBoy.dir/src/memory.c.s
+.PHONY : src/memory.c.s
+
 src/register_structures.o: src/register_structures.c.o
 
 .PHONY : src/register_structures.o
@@ -429,6 +456,9 @@ help:
 	@echo "... src/mattygboy.o"
 	@echo "... src/mattygboy.i"
 	@echo "... src/mattygboy.s"
+	@echo "... src/memory.o"
+	@echo "... src/memory.i"
+	@echo "... src/memory.s"
 	@echo "... src/register_structures.o"
 	@echo "... src/register_structures.i"
 	@echo "... src/register_structures.s"
