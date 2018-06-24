@@ -55,17 +55,17 @@ int main(int argc, char **argv)
 	flags = init_flags();
 
 	// TODO: for now just load rom via command line argument
-    //cartridge = load_test_cartridge(); // For Testing
-	cartridge = load_cartridge(argv[optind]);
+    cartridge = load_test_cartridge(); // For Testing
+	//cartridge = load_cartridge(argv[optind]);
 	memory = init_memory();
 
 	// TODO:Main program loop, fetch/decode/execute
 	// TODO just set up for testing for the moment
-	while (1)
+	while (opcode != 0x76)
 	{
 		cpu_execution();
-		//printf("opcode: %x\n", opcode);
-		//dump_registers();
+		printf("opcode: %x\n", opcode);
+		dump_registers();
 	}
 
 	free(regs); free(ptrs); free(flags);

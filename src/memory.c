@@ -153,10 +153,15 @@ load_test_cartridge()
     new_cartridge[0x158] = 0x65;
     new_cartridge[0x6550] = 0xC9;
     new_cartridge[0x159] = 0x3E;
-    new_cartridge[0x15A] = 0xFF;
+    new_cartridge[0x15A] = 0xF;
     new_cartridge[0x15B] = 0xC6;
     new_cartridge[0x15C] = 0x01;
-    new_cartridge[0x15D] = 0x76;
+    new_cartridge[0x15D] = 0xF5;
+    new_cartridge[0x15E] = 0x79;
+    new_cartridge[0x15F] = 0xD6;
+    new_cartridge[0x160] = 0x13;
+    new_cartridge[0x161] = 0xF1;
+    new_cartridge[0x162] = 0x76;
 	new_cartridge[0x7075] = 0x77;
 
 	// Parse fields of the header to determine rom/ram banking used
