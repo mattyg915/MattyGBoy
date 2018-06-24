@@ -63,7 +63,7 @@ dump_registers()
  *         Name:  combine_bytes
  *  Description:  Takes two 8-bit values and returns them as a single 16-bit value
  *   Parameters:  byte1 is an unsigned char that should occupy the 8 most 
- *   		  significant bits of the new value
+ *   		      significant bits of the new value
  *                byte2 is an unsigned char that should occupy the lower-order 8 
  *                bits of the new value
  *       Return:  an unsigned short that is the concatenation of the passed values

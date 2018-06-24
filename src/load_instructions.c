@@ -289,14 +289,14 @@ sixteen_bit_load ()
 	ptrs->PC++;
 	unsigned char imm_hi = read_memory(ptrs->PC);
 	ptrs->PC++;
-	unsigned short imm = combine_bytes(imm_lo, imm_hi);
 
 	unsigned char sp_lo, sp_hi;
 
 	switch (opcode)
 	{
 		case 0x01:
-			split_bytes(imm, &regs->B, &regs->C);
+		    regs->B = imm_hi;
+		    regs->C = imm_lo;
 			break;
 		case 0x08: // This one is obnoxious
 			sp_lo = (unsigned char) ptrs->SP;
@@ -305,13 +305,15 @@ sixteen_bit_load ()
 			write_memory(imm_lo, sp_lo);
 			break;
 		case 0x11:
-			split_bytes(imm, &regs->D, &regs->E);
+		    regs->D = imm_hi;
+		    regs->E = imm_lo;
 			break;
 		case 0x21:
-			split_bytes(imm, &regs->H, &regs->L);
+		    regs->H = imm_hi;
+		    regs->L = imm_lo;
 			break;
 		case 0x31:
-			ptrs->SP = imm;
+			ptrs->SP = combine_bytes(imm_hi, imm_lo);
 			break;
         default:
             break;

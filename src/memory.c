@@ -249,12 +249,21 @@ read_memory(unsigned short addr)
 	{
 		if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
 		{
+		    addr -= 0x4000;
 			data = cartridge[addr + (mbc->rom_bank_number * 0x4000)];
 		}
-		else if ((addr > 0x9FFF) && (addr < 0xC000) && mbc->ram_enable)
+		else if ((addr > 0x9FFF) && (addr < 0xC000))
 		// Read from RAM banks
 		{
-			data = ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
+            if (mbc->ram_enable)
+            {
+                addr -= 0xA000;
+                data = ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
+            }
+            else
+            {
+                data = 0;
+            }
 		}
 		else
 		{
@@ -301,12 +310,21 @@ read_memory_ptr(unsigned short addr)
     {
         if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
         {
+            addr -= 0x4000;
             mem = &cartridge[addr + (mbc->rom_bank_number * 0x4000)];
         }
-        else if ((addr > 0x9FFF) && (addr < 0xC000) && mbc->ram_enable)
+        else if ((addr > 0x9FFF) && (addr < 0xC000))
         // Read from RAM banks
         {
-            mem = &ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
+            if (mbc->ram_enable)
+            {
+                addr -= 0xA000;
+                mem = &ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
+            }
+            else
+            {
+                mem = NULL;
+            }
         }
         else
         {
@@ -410,6 +428,14 @@ write_memory(unsigned short addr, unsigned char data)
 			mbc->ram_bank_number = 0;
 		}
 	}
+	else if ((addr > 0x9FFF) && (addr < 0xC000))
+    {
+        if (mbc->ram_enable)
+        {
+            addr -= 0xA000;
+            ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)] = data;
+        }
+    }
 	else if ((addr > 0xDFFF) && (addr < 0xFE00)) // ECHO
 	{
 		memory[addr] = data;
