@@ -102,25 +102,25 @@ jp ()
 		case 0xDA:
 			if (flags->C)
 			{
-				ptrs->PC += target;
+				ptrs->PC = target;
 			}
 			return;
 		case 0xD2:
 			if (!flags->C)
 			{
-				ptrs->PC += target;
+				ptrs->PC = target;
 			}
 			return;
 		case 0xC2:
 			if (!flags->Z)
 			{
-				ptrs->PC += target;
+				ptrs->PC = target;
 			}
 			return;
 		case 0xCA:
 			if (flags->Z)
 			{
-				ptrs->PC += target;
+				ptrs->PC = target;
 			}
 			return;
 		default:
@@ -138,7 +138,7 @@ jp ()
 jr ()
 {
 	// All ops use a 1-byte immediate
-	unsigned char offset = read_memory(ptrs->PC);
+	char offset = read_memory(ptrs->PC);
 	ptrs->PC++;
 
 	switch (opcode)
@@ -191,7 +191,7 @@ call ()
     ptrs->PC++;
     unsigned short target = combine_bytes(target_hi, target_lo);
 
-	// Grab both nibbles of PC to store on the stack
+	// Grab both bytes of PC to store on the stack
 	unsigned char pc_high = (unsigned char)(ptrs->PC >> 0x08u);
 	unsigned char pc_low = (unsigned char) (ptrs->PC & 0xFFu);
 
@@ -366,6 +366,15 @@ rst ()
 		default:
 			return;
 	}
+
+    // Grab both bytes of PC to store on the stack
+    unsigned char pc_high = (unsigned char)(ptrs->PC >> 0x08u);
+    unsigned char pc_low = (unsigned char) (ptrs->PC & 0xFFu);
+
+    ptrs->SP--;
+    write_memory(ptrs->SP, pc_high);
+    ptrs->SP--;
+    write_memory(ptrs->SP, pc_low);
 
 	ptrs->PC = target;
 }               /* -----  end of function rst  ----- */

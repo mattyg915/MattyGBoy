@@ -41,11 +41,13 @@ unsigned char opcode;
 	void
 eight_bit_update_flags (int value1, int value2)
 {
-	int result;
+	int carry_test; // An int is needed for the algorithm to check for carry
+	unsigned char zero_test; // Need 1 byte data to check zero because of overflow
 
 	if (!flags->N) // Checks that last op was addition
 	{
-		result = value1 + value2;
+		carry_test = value1 + value2;
+		zero_test = (unsigned char) value1 + (unsigned char) value2;
 		/*
 		 * Credit to StackOverflow user Tommy for the half-carry algorithm
 		 * https://stackoverflow.com/questions/8868396/gbz80-what-constitutes
@@ -61,7 +63,7 @@ eight_bit_update_flags (int value1, int value2)
 		}
 		
 		// Carry Flag - addition
-		if (result > 0xFF)
+		if (carry_test > 0xFF)
 		{
 			flags->C = 1;
 		}
@@ -73,7 +75,8 @@ eight_bit_update_flags (int value1, int value2)
 	// Otherwise it was a subtraction
 	else
 	{
-		result = value1 - value2;
+		carry_test = value1 - value2;
+        zero_test = (unsigned char) value1 - (unsigned char) value2;
 
 		// Half Carry Flag - subtraction
 		if ((((value1 & 0xF) - (value2 & 0xF)) & 0x10) < 0) //NOLINT
@@ -85,7 +88,7 @@ eight_bit_update_flags (int value1, int value2)
 			flags->H = 0;
 		}
 		// Carry Flag - subtraction
-		if (result < 0)
+		if (carry_test < 0)
 		{
 			flags->C = 1;
 		}
@@ -96,7 +99,7 @@ eight_bit_update_flags (int value1, int value2)
 	}
 
 	// Zero Flag
-        if (!result)
+        if (!zero_test)
         {
                 flags->Z = 1;
         }
@@ -120,59 +123,62 @@ eight_bit_update_flags (int value1, int value2)
         void
 sixteen_bit_update_flags (int value1, int value2)
 {
-	int result;
+	int carry_test;
+	unsigned short zero_test;
 
         if (!flags->N) // If last op was addition
         {
-                result = value1 + value2;
+            carry_test = value1 + value2;
+            zero_test = (unsigned short) value1 + (unsigned short) value2;
 
-                // Half-Carry - addition
-                if ((((value1 & 0x0FFF) + (value2 & 0x0FFF)) & 0x1000) == 0x1000) //NOLINT
-				{
-                        flags->H = 1;
-                }
-                else
-                {
-                        flags->H = 0;
-                }
+            // Half-Carry - addition
+            if ((((value1 & 0x0FFF) + (value2 & 0x0FFF)) & 0x1000) == 0x1000) //NOLINT
+            {
+                    flags->H = 1;
+            }
+            else
+            {
+                    flags->H = 0;
+            }
 
-                // Carry Flag - addition
-                if (result > 0xFFFF)
-                {
-                        flags->C = 1;
-                }
-                else
-                {
-                        flags->C = 0;
-                }
+            // Carry Flag - addition
+            if (carry_test > 0xFFFF)
+            {
+                    flags->C = 1;
+            }
+            else
+            {
+                    flags->C = 0;
+            }
         }
 	// Otherwise subtraction
         else
         {
-                result = value1 - value2;
+            carry_test = value1 - value2;
+            zero_test = (unsigned short) value1 - (unsigned short) value2;
 
-                // Half Carry Flag - subtraction
-                if ((((value1 & 0x0FFF) - (value2 & 0x0FFF)) & 0x1000) < 0) // NOLINT
-                {
-                        flags->H = 1;
-                }
-                else
-                {
-                        flags->H = 0;
-                }
-                // Carry Flag - subtraction
-                if (result < 0)
-                {
-                        flags->C = 1;
-                }
-                else
-                {
-                        flags->C = 0;
-                }
+            // Half Carry Flag - subtraction
+            if ((((value1 & 0x0FFF) - (value2 & 0x0FFF)) & 0x1000) < 0) // NOLINT
+            {
+                    flags->H = 1;
+            }
+            else
+            {
+                    flags->H = 0;
+            }
+            // Carry Flag - subtraction
+            if (carry_test < 0)
+            {
+                    flags->C = 1;
+            }
+            else
+            {
+                    flags->C = 0;
+            }
         }
 
         // Zero Flag
-        if (!result)
+        if (!zero_test)
         {
                 flags->Z = 1;
         }

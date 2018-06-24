@@ -65,12 +65,6 @@ init_memory()
 	new_memory[0xFF47] = 0xFC;
 	new_memory[0xFF48] = 0xFF;
 	new_memory[0xFF49] = 0xFF;
-	
-	// Read first 0x4000 bytes of cartridge into ROM
-	for (int i = 0x0; i < 0x8000; i++)
-	{
-		new_memory[i] = cartridge[i];
-	}
 
 	return new_memory;
 }		/* -----  end of function init_memory  ----- */
@@ -241,11 +235,7 @@ read_memory(unsigned short addr)
 {
 	unsigned char data;
 
-	if (addr < 0x4000) // Read from onboard ROM
-	{
-		data = memory[addr];
-	}
-	else if (banking_mode == 1) // MBC1
+	if (banking_mode == 1) // MBC1
 	{
 		if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
 		{
@@ -262,12 +252,12 @@ read_memory(unsigned short addr)
             }
             else
             {
-                data = 0;
+                data = 0xFF;
             }
 		}
 		else
 		{
-			data = memory[addr];
+			data = cartridge[addr];
 		}
 	}
 	else if (banking_mode == 2) // MBC2
@@ -278,12 +268,19 @@ read_memory(unsigned short addr)
 		}
 		else
 		{
-			data = memory[addr];
+			data = cartridge[addr];
 		}
 	}
 	else // No memory banking
 	{
-		data = memory[addr];
+        if (addr < 0x8000)
+        {
+            data = cartridge[addr];
+        }
+        else
+        {
+            data = memory[addr];
+        }
 	}
 
 	return data;
@@ -297,16 +294,12 @@ read_memory(unsigned short addr)
  *   Parameters:  addr is a 16-bit memory address
  * =====================================================================================
  */
-unsigned char*
+    unsigned char*
 read_memory_ptr(unsigned short addr)
 {
     unsigned char *mem;
 
-    if (addr < 0x4000) // Read from onboard ROM
-    {
-        mem = &memory[addr];
-    }
-    else if (banking_mode == 1) // MBC1
+    if (banking_mode == 1) // MBC1
     {
         if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
         {
@@ -323,7 +316,8 @@ read_memory_ptr(unsigned short addr)
             }
             else
             {
-                mem = NULL;
+                unsigned char error_val = 0xFF;
+                mem = &error_val;
             }
         }
         else
@@ -344,7 +338,14 @@ read_memory_ptr(unsigned short addr)
     }
     else // No memory banking
     {
-        mem = &memory[addr];
+        if (addr < 0x8000)
+        {
+            mem = &cartridge[addr];
+        }
+        else
+        {
+            mem = &memory[addr];
+        }
     }
 
     return mem;
@@ -396,27 +397,15 @@ write_memory(unsigned short addr, unsigned char data)
 		{
 			mbc->ram_bank_number = (unsigned char) (data & 0x3u);
 		}
-		else // ROM mode
+		else // ROM mode, set bits 5 and 6 of rom bank
 		{
-			mbc->rom_bank_number += (unsigned char)(data & 0x60u);
-
-			switch (mbc->rom_bank_number)
-			{
-				case 0x0:
-					mbc->rom_bank_number = 0x1;
-				break;
-				case 0x20:
-					mbc->rom_bank_number = 0x21;
-				break;
-				case 0x40:
-					mbc->rom_bank_number = 0x41;
-				break;
-				case 0x61:
-					mbc->rom_bank_number = 0x61;
-				break;
-				default:
-					break;
-			}
+			mbc->rom_bank_number &= 0x6E0u;
+			data &= 0x1F;
+			mbc->rom_bank_number |= data;
+			if (mbc->rom_bank_number == 0)
+            {
+                mbc->rom_bank_number = 1;
+            }
 		}
 	}
 	else if ((addr > 0x5FFF) && (addr < 0x8000)) // Select RAM/ROM mode
@@ -441,12 +430,12 @@ write_memory(unsigned short addr, unsigned char data)
 		memory[addr] = data;
 		memory[addr - 0x2000] = data;
 	}
-	else if ((addr >= 0xFEA0) && (addr <= 0xFEFF)) // Unusable because reasons
+	else if ((addr >= 0xFEA0) && (addr < 0xFF00)) // Unusable because reasons
 	{
-		printf("ERROR: Cannot write %x to %x...Restricted memory\n", data, addr);
+		return;
 	}
 	// TODO this is here for testing
-	else if ((addr >= 0xFF00) && (addr <= 0xFF7F))
+	else if ((addr >= 0xFF00) && (addr < 0xFF80))
 	{
 	    printf("io access %x: %x\n",addr, data);
 		if ((addr == 0xFF02) && (data == 0x81))
@@ -454,10 +443,7 @@ write_memory(unsigned short addr, unsigned char data)
 			printf("%c", (char)memory[0xFF01]);
 			fflush(stdout);
 		}
-		else
-		{
-			memory[addr] = data;
-		}
+        memory[addr] = data;
 	}
 	else // Unrestricted memory write access
 	{

@@ -52,7 +52,7 @@ pop ()
             return;
         case 0xF1:
             reg_f = read_memory(ptrs->SP);
-            // Need to reassemble since I store F flags discretely
+            // Need to reassemble since storing F flags discretely
             flags->Z = reg_f >> 0x7u;
             flags->N = reg_f >> 0x6u;
             flags->N &= 0x1u;
@@ -113,7 +113,7 @@ push ()
 			ptrs->SP--;
 			write_memory(ptrs->SP, regs->A);
 			ptrs->SP--;
-			// I don't have F as a full register so need to get the flags and assemble
+			// F flags are stored discretely so need to get them and assemble
 			f_reg += (flags->Z << 0x7u);
 			f_reg += (flags->N << 0x6u);
 			f_reg += (flags->H << 0x5u);

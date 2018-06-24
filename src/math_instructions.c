@@ -33,16 +33,15 @@ eight_bit_add ()
 	// Clear the N flag
 	flags->N = 0;
 
-	/* Grab the next byte in case an immediate value is needed
-	 * but don't increment PC unless it's actually used */
-	unsigned char value = read_memory(ptrs->PC);
+	// Hold the value to be added to A
+	unsigned char value;
 
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
 	switch (opcode)
 	{
-		// Immediate value cases
 		case 0xC6:
+			value = read_memory(ptrs->PC);
 			ptrs->PC++;
 			break;
 		/* Oddball case. SP updated instead of A, so do all needed
@@ -50,10 +49,12 @@ eight_bit_add ()
 		 * N flag if negative
 		 */
 		case 0xE8:
+		    value = read_memory(ptrs->PC);
 			if ((char)value < 0)
 			{
 				flags->N = 1;
 			}
+			// SP requires a 16-bit update
 			sixteen_bit_update_flags(ptrs->SP, (char)value);
 			ptrs->SP += (char)value;
 			ptrs->PC++;
@@ -84,6 +85,7 @@ eight_bit_add ()
 			value = read_memory(reg_hl);
 			break;
 		default:
+		    value = 0; // Error case
 			break;
 	}
 	

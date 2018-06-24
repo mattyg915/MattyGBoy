@@ -344,7 +344,7 @@ read_write_io ()
 		case 0xE0:
 			imm = read_memory(ptrs->PC);
 			ptrs->PC++;
-            		imm += 0xFF00;
+            imm += 0xFF00;
 			write_memory(imm, regs->A);
 			return;
 		case 0xF2:
