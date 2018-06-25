@@ -174,7 +174,7 @@ load_from_to_mem ()
 
 	unsigned char mem_lo = read_memory(ptrs->PC);
 	unsigned char mem_hi = read_memory((unsigned short) (ptrs->PC + 1));
-	unsigned short addr = combine_bytes(mem_lo, mem_hi);
+	unsigned short addr = combine_bytes(mem_hi, mem_lo);
 
 	unsigned char val;
 
@@ -234,17 +234,17 @@ load_hl ()
 		case 0x2A:
 			regs->A = read_memory(reg_hl);
 			reg_hl++;
-            		split_bytes(reg_hl, &regs->H, &regs->L);
+			split_bytes(reg_hl, &regs->H, &regs->L);
 			return;
 		case 0x32:
 			write_memory(reg_hl, regs->A);
 			reg_hl--;
-            		split_bytes(reg_hl, &regs->H, &regs->L);
+			split_bytes(reg_hl, &regs->H, &regs->L);
 			return;
 		case 0x3A:
-            		regs->A = read_memory(reg_hl);
+			regs->A = read_memory(reg_hl);
 			reg_hl--;
-            		split_bytes(reg_hl, &regs->H, &regs->L);
+			split_bytes(reg_hl, &regs->H, &regs->L);
 			return;
         	default:
             		break;
@@ -260,7 +260,7 @@ load_hl ()
     void
 ld_hl_sp ()
 {
-    unsigned char offset;
+    char offset;
 
     switch (opcode)
     {
@@ -300,7 +300,7 @@ sixteen_bit_load ()
 			break;
 		case 0x08: // This one is obnoxious
 			sp_lo = (unsigned char) ptrs->SP;
-			sp_hi = (unsigned char ) (ptrs->SP >> 0x8u);
+			sp_hi = (unsigned char) (ptrs->SP >> 0x8u);
 			write_memory(imm_hi, sp_hi);
 			write_memory(imm_lo, sp_lo);
 			break;

@@ -237,40 +237,48 @@ read_memory(unsigned short addr)
 
 	if (banking_mode == 1) // MBC1
 	{
-		if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
-		{
-		    addr -= 0x4000;
-			data = cartridge[addr + (mbc->rom_bank_number * 0x4000)];
-		}
-		else if ((addr > 0x9FFF) && (addr < 0xC000))
-		// Read from RAM banks
-		{
+        if (addr < 0x4000)
+        {
+            data = cartridge[addr];
+        }
+        else if ((addr >= 0x4000) && (addr < 0x8000)) // Read from ROM banks
+        {
+        addr -= 0x4000;
+        data = cartridge[addr + (mbc->rom_bank_number * 0x4000)];
+        }
+        else if ((addr >= 0xA000) && (addr < 0xC000))
+      // Read from RAM banks
+        {
             if (mbc->ram_enable)
             {
                 addr -= 0xA000;
-                data = ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
+              data = ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
             }
             else
             {
-                data = 0xFF;
+              data = 0xFF;
             }
-		}
-		else
-		{
-			data = cartridge[addr];
-		}
+        }
+        else
+        {
+            data = memory[addr];
+        }
 	}
 	else if (banking_mode == 2) // MBC2
-	{
-		if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
-		{
-			data = cartridge[addr + (mbc->rom_bank_number * 0x4000)];
-		}
-		else
-		{
-			data = cartridge[addr];
-		}
-	}
+	    {
+			if (addr < 0x4000)
+            {
+                data = cartridge[addr];
+            }
+			else if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
+		    {
+			    data = cartridge[addr + (mbc->rom_bank_number * 0x4000)];
+		    }
+			else
+		    {
+			    data = memory[addr];
+		    }
+	    }
 	else // No memory banking
 	{
         if (addr < 0x8000)
@@ -316,8 +324,7 @@ read_memory_ptr(unsigned short addr)
             }
             else
             {
-                unsigned char error_val = 0xFF;
-                mem = &error_val;
+                mem = NULL;
             }
         }
         else

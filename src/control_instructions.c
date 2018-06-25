@@ -323,7 +323,6 @@ reti ()
     // Unconditional return
 	ptrs->PC = return_address;
 	write_memory(0xFFFF, 0x1); // Enable interrupts
- 	ptrs->SP += 2;
 }               /* -----  end of function reti  ----- */
 
 /*
