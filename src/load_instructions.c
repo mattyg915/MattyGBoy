@@ -182,18 +182,15 @@ load_from_to_mem ()
 	{
 		case 0x0A:
 			addr = combine_bytes(regs->B, regs->C);
-			val = read_memory(addr);
-			regs->A = val;
+			regs->A = read_memory(addr);
 			return;
 		case 0x1A:
 			addr = combine_bytes(regs->D, regs->E);
-			val = read_memory(addr);
-			regs->A = val;
+			regs->A = read_memory(addr);
 			return;
 		case 0xFA:
 			ptrs->PC += 2;
-			val = read_memory(addr);
-			regs->A = val;
+			regs->A = read_memory(addr);
 			return;
 		case 0x02:
 			addr = combine_bytes(regs->B, regs->C);
@@ -301,8 +298,10 @@ sixteen_bit_load ()
 		case 0x08: // This one is obnoxious
 			sp_lo = (unsigned char) ptrs->SP;
 			sp_hi = (unsigned char) (ptrs->SP >> 0x8u);
-			write_memory(imm_hi, sp_hi);
-			write_memory(imm_lo, sp_lo);
+			unsigned short addr = combine_bytes(imm_hi, imm_lo);
+			write_memory(addr, sp_lo);
+			addr++;
+			write_memory(addr, sp_hi);
 			break;
 		case 0x11:
 		    regs->D = imm_hi;
@@ -338,19 +337,18 @@ read_write_io ()
 		case 0xF0:
 			imm = read_memory(ptrs->PC);
 			ptrs->PC++;
-			imm += 0xFF00;
-			regs->A = imm;
+			addr = (unsigned short) (imm + 0xFF00);
+			regs->A = read_memory(addr);
 			return;
 		case 0xE0:
 			imm = read_memory(ptrs->PC);
 			ptrs->PC++;
-            imm += 0xFF00;
-			write_memory(imm, regs->A);
+            addr = (unsigned short) (imm + 0xFF00);
+			write_memory(addr, regs->A);
 			return;
 		case 0xF2:
 			addr = (unsigned short) (regs->C + 0xFF00);
-			imm = read_memory(addr);
-			regs->A = imm;
+			regs->A = read_memory(addr);
 			return;
 		case 0xE2:
 			addr = (unsigned short) (regs->C + 0xFF00);

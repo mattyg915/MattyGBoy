@@ -265,11 +265,11 @@ call ()
 ret ()
 {
     // Grab return address off the stack
-    unsigned char return_hi = read_memory(ptrs->SP);
-    ptrs->SP++;
     unsigned char return_lo = read_memory(ptrs->SP);
     ptrs->SP++;
-    unsigned short return_address = combine_bytes(return_lo, return_hi);
+    unsigned char return_hi = read_memory(ptrs->SP);
+    ptrs->SP++;
+    unsigned short return_address = combine_bytes(return_hi, return_lo);
 	switch (opcode)
 	{
 		case 0xC9:
@@ -314,11 +314,11 @@ ret ()
 reti ()
 {
     // Get return address off the stack
-    unsigned char return_hi = read_memory(ptrs->SP);
-    ptrs->SP++;
     unsigned char return_lo = read_memory(ptrs->SP);
     ptrs->SP++;
-    unsigned short return_address = combine_bytes(return_lo, return_hi);
+    unsigned char return_hi = read_memory(ptrs->SP);
+    ptrs->SP++;
+    unsigned short return_address = combine_bytes(return_hi, return_lo);
 
     // Unconditional return
 	ptrs->PC = return_address;

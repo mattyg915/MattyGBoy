@@ -65,9 +65,9 @@ int main(int argc, char **argv)
 	while (1)
 	{
 		cpu_execution();
-		printf("opcode: %x\n", opcode);
-		dump_registers();
-        //i++;
+		//printf("opcode: %x\n", opcode);
+		//dump_registers();
+        i++;
 	}
 
 	free(regs); free(ptrs); free(flags);
