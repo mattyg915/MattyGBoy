@@ -67,7 +67,7 @@ init_pointers()
 		return NULL;
 	}
 	// Program counter starts at 0x100, stack at 0xFFFE
-	ptrs_ptr->PC = 0x0000;
+	ptrs_ptr->PC = 0x0100;
 	ptrs_ptr->SP = 0xFFFE;
 
 	return ptrs_ptr;

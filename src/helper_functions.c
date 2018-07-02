@@ -48,10 +48,14 @@ delay (unsigned int mseconds)
 	void
 dump_registers()
 {
-	printf("Registers: A: %x B: %x C: %x D: %x E: %x"
-			" H: %x L: %x\n", regs->A, regs->B,
-			regs->C, regs->D, regs->E, regs->H, 
-			regs->L);
+	unsigned short AF = regs->A << 0x8u;
+	AF += (flags->Z << 0x7u); AF += (flags->N << 0x6u);
+	AF += (flags->H << 0x5u); AF += (flags->C << 0x4u);
+	unsigned short BC = combine_bytes(regs->B, regs->C);
+	unsigned short DE = combine_bytes(regs->D, regs->E);
+	unsigned short HL = combine_bytes(regs->H, regs->L);
+
+	printf("Registers:\nAF: %x\nBC: %x\nDE: %x\nHL: %x\n", AF, BC, DE, HL);
 	printf("Stack pointer: %x Program Counter: %x\n",
 			ptrs->SP, ptrs->PC);
 	printf("Flags: Z: %x N: %x H: %x C: %x\n\n",

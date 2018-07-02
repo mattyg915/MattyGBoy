@@ -63,10 +63,10 @@ int main(int argc, char **argv)
 	// TODO:Main program loop, fetch/decode/execute
 	// TODO just set up for testing for the moment
     i = 0;
-	while (i < 50)
+	while (i < 25000)
 	{
 		cpu_execution();
-        printf("opcode: %x\n", opcode);
+		printf("opcode: %x\n", opcode);
         dump_registers();
         i++;
 	}
