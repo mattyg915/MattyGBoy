@@ -38,7 +38,7 @@ rlc (unsigned char *reg)
 	// into C AND bit 0
 	flags->C = (unsigned char) (*reg & 0x80u);
 	*reg <<= 1;
-	*reg |= flags->C;
+	*reg |= flags->C; // Bit 0 is 0, since it's been filled in for the shift
 	flags->Z = (unsigned char) (*reg == 0 ? 1 : 0);
 }               /* -----  end of function rlc  ----- */
 
@@ -55,7 +55,7 @@ rl (unsigned char *reg)
 	// Clears N and H flags
 	flags->N = 0; flags->H = 0;
 	// Each bit of register shifts left one with bit 0 shifting
-	// into C and c going into bit 7
+	// into C and C going into bit 7
 	unsigned char initial_c = flags->C;
 	flags->C = (unsigned char) (*reg & 0x80u);
 	*reg <<= 1;

@@ -460,11 +460,11 @@ eight_bit_dec ()
             initial_state = 0;
             break;
     }
-	
-	// Restore C flag, this instruction doesn't set or clear it
-    flags->C = c_flag;
 
     eight_bit_update_flags(initial_state, 1);
+
+    // Restore C flag, this instruction doesn't set or clear it
+    flags->C = c_flag;
 }		/* -----  end of function eight_bit_dec  ----- */
 
 

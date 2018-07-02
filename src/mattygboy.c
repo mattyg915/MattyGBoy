@@ -29,6 +29,7 @@ unsigned char *cartridge;
 Registers *regs;
 Pointers *ptrs;
 CPU_Flags *flags;
+int i;
 
 int main(int argc, char **argv) 
 {
@@ -61,12 +62,12 @@ int main(int argc, char **argv)
 
 	// TODO:Main program loop, fetch/decode/execute
 	// TODO just set up for testing for the moment
-    int i = 0;
-	while (1)
+    i = 0;
+	while (i < 50)
 	{
 		cpu_execution();
-		//printf("opcode: %x\n", opcode);
-		//dump_registers();
+        printf("opcode: %x\n", opcode);
+        dump_registers();
         i++;
 	}
 

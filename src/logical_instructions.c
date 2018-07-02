@@ -76,7 +76,11 @@ and ()
     regs->A &= operand;
     if (!regs->A)
     {
-            flags->Z |= 1;
+        flags->Z = 1;
+    }
+    else
+    {
+        flags->Z = 0;
     }
 }               /* -----  end of function and  ----- */
 
@@ -134,7 +138,11 @@ or ()
         regs->A |= operand;
         if (!regs->A)
         {
-                flags->Z = 1;
+            flags->Z = 1;
+        }
+        else
+        {
+            flags->Z = 0;
         }
 }               /* -----  end of function or  ----- */
 
@@ -192,7 +200,11 @@ xor ()
         regs->A ^= operand;
         if (!regs->A)
         {
-                flags->Z = 1;
+            flags->Z = 1;
+        }
+        else
+        {
+            flags->Z = 0;
         }
 }               /* -----  end of function xor  ----- */
 

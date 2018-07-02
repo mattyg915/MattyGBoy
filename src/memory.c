@@ -247,21 +247,19 @@ read_memory(unsigned short addr)
         data = cartridge[addr + (mbc->rom_bank_number * 0x4000)];
         }
         else if ((addr >= 0xA000) && (addr < 0xC000))
-      // Read from RAM banks
+        // Read from RAM banks
         {
-            if (mbc->ram_enable)
-            {
-                addr -= 0xA000;
-              data = ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
-            }
-            else
-            {
-              data = 0xFF;
-            }
+            addr -= 0xA000;
+            data = ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
         }
         else
         {
             data = memory[addr];
+
+            if (addr > 0xFF00)
+            {
+                //printf("writing data at %x to %x and i is %d\n", addr, data, i);
+            }
         }
 	}
 	else if (banking_mode == 2) // MBC2
@@ -317,15 +315,8 @@ read_memory_ptr(unsigned short addr)
         else if ((addr > 0x9FFF) && (addr < 0xC000))
         // Read from RAM banks
         {
-            if (mbc->ram_enable)
-            {
-                addr -= 0xA000;
-                mem = &ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
-            }
-            else
-            {
-                mem = NULL;
-            }
+            addr -= 0xA000;
+            mem = &ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
         }
         else
         {
@@ -372,7 +363,7 @@ write_memory(unsigned short addr, unsigned char data)
 	if (addr <= 0x1FFF) // RAM enable
 	{
 		// Enable RAM if lower nibble of data == 0xA
-		mbc->ram_enable = (unsigned char) ((data & 0x0Fu) == 0xA ? 1 : 0);
+		mbc->ram_enable = (unsigned char) ((data & 0xFu) == 0xA ? 1 : 0);
 		return;
 	}
 	else if ((addr >= 0x2000) && (addr <= 0x3FFF)) // Set low 5 bits of rom bank
@@ -444,10 +435,11 @@ write_memory(unsigned short addr, unsigned char data)
 	// TODO this is here for testing
 	else if ((addr >= 0xFF00) && (addr < 0xFF80))
 	{
-	    //printf("io access %x: %x\n",addr, data);
+	    printf("io access addr is %x data is %x and i is %d\n", addr, data, i);
 		if ((addr == 0xFF02) && (data == 0x81))
 		{
 			printf("%c", memory[0xFF01]);
+			fflush(stdout);
 		}
         memory[addr] = data;
 	}

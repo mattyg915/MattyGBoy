@@ -176,8 +176,6 @@ load_from_to_mem ()
 	unsigned char mem_hi = read_memory((unsigned short) (ptrs->PC + 1));
 	unsigned short addr = combine_bytes(mem_hi, mem_lo);
 
-	unsigned char val;
-
 	switch (opcode)
 	{
 		case 0x0A:
@@ -338,6 +336,7 @@ read_write_io ()
 			imm = read_memory(ptrs->PC);
 			ptrs->PC++;
 			addr = (unsigned short) (imm + 0xFF00);
+			printf("fo addr is %x\n", addr);
 			regs->A = read_memory(addr);
 			return;
 		case 0xE0:
