@@ -20,6 +20,7 @@
 #include "bit_rotate_shift_instructions.h"
 #include "global_declarations.h"
 #include "helper_functions.h"
+#include "cpu_emulator.h"
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -250,7 +251,7 @@ set (unsigned char *reg)
 bit_rotate_shift ()
 {
 	// For ones where memory[HL] is needed
-        unsigned short reg_hl = combine_bytes(regs->H, regs->L);
+    unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 	
 	// The affected registers/memory depend on the 4 lsb of the opcode
 	unsigned char *argument;
@@ -261,34 +262,42 @@ bit_rotate_shift ()
 		case 0x00:
 		case 0x08:
 			argument = &regs->B;
+            add_cycles(0x8);
 			break;
 		case 0x01:
 		case 0x09:
 			argument = &regs->C;
+            add_cycles(0x8);
 			break;
 		case 0x02:
 		case 0x0A:
 			argument = &regs->D;
+            add_cycles(0x8);
 			break;
 		case 0x03:
 		case 0x0B:
 			argument = &regs->E;
+            add_cycles(0x8);
 			break;
 		case 0x04:
 		case 0x0C:
 			argument = &regs->H;
+            add_cycles(0x8);
 			break;
 		case 0x05:
 		case 0x0D:
 			argument = &regs->L;
+            add_cycles(0x8);
 			break;
 		case 0x06:
 		case 0x0E:
 			argument = read_memory_ptr(reg_hl);
+            add_cycles(0x10);
 			break;
 		case 0x07:
 		case 0x0F:
 			argument = &regs->A;
+            add_cycles(0x8);
 			break;
         default:
             return;

@@ -40,37 +40,46 @@ and ()
         case 0xE6:
             operand = read_memory(ptrs->PC);
             ptrs->PC++;
+            add_cycles(0x8);
             break;
         case 0xA0:
             operand = regs->B;
+            add_cycles(0x4);
             break;
         case 0xA1:
             operand = regs->C;
+            add_cycles(0x4);
             break;
         case 0xA2:
             operand = regs->D;
+            add_cycles(0x4);
             break;
         case 0xA3:
             operand = regs->E;
+            add_cycles(0x4);
             break;
         case 0xA4:
             operand = regs->H;
+            add_cycles(0x4);
             break;
         case 0xA5:
             operand = regs->L;
+            add_cycles(0x4);
             break;
         case 0xA6:
             operand = read_memory(reg_hl);
+            add_cycles(0x8);
             break;
         case 0xA7:
             operand = regs->A;
+            add_cycles(0x4);
             break;
         default:
             break;
     }
 
     // AND instruction clears subtract and carry, but sets half-carry flags
-    flags->H = 1; flags->C = 0; flags->N = 0;
+    flags->H = 0x1; flags->C = 0x0; flags->N = 0x0;
 
     // Register A & with operand, if yields 0 set zero flag
     regs->A &= operand;
@@ -102,30 +111,39 @@ or ()
             case 0xF6:
                 operand = read_memory(ptrs->PC);
                 ptrs->PC++;
+                add_cycles(0x8);
                 break;
             case 0xB0:
                 operand = regs->B;
+                add_cycles(0x4);
                 break;
             case 0xB1:
                 operand = regs->C;
+                add_cycles(0x4);
                 break;
             case 0xB2:
                 operand = regs->D;
+                add_cycles(0x4);
                 break;
             case 0xB3:
                 operand = regs->E;
+                add_cycles(0x4);
                 break;
             case 0xB4:
                 operand = regs->H;
+                add_cycles(0x4);
                 break;
             case 0xB5:
                 operand = regs->L;
+                add_cycles(0x4);
                 break;
             case 0xB6:
                 operand = read_memory(reg_hl);
+                add_cycles(0x8);
                 break;
             case 0xB7:
                 operand = regs->A;
+                add_cycles(0x4);
                 break;
             default:
                 break;
@@ -164,30 +182,39 @@ xor ()
             case 0xEE:
                 operand = read_memory(ptrs->PC);
                 ptrs->PC++;
+                add_cycles(0x8);
                 break;
             case 0xA8:
                 operand = regs->B;
+                add_cycles(0x4);
                 break;
             case 0xA9:
                 operand = regs->C;
+                add_cycles(0x4);
                 break;
             case 0xAA:
                 operand = regs->D;
+                add_cycles(0x4);
                 break;
             case 0xAB:
                 operand = regs->E;
+                add_cycles(0x4);
                 break;
             case 0xAC:
                 operand = regs->H;
+                add_cycles(0x4);
                 break;
             case 0xAD:
                 operand = regs->L;
+                add_cycles(0x4);
                 break;
             case 0xAE:
                 operand = read_memory(reg_hl);
+                add_cycles(0x8);
                 break;
             case 0xAF:
                 operand = regs->A;
+                add_cycles(0x4);
                 break;
             default:
                 break;
@@ -220,6 +247,7 @@ cpl ()
 {
 	regs->A ^= 0xFF; // Just invert the bits to get 1's complement
 	flags->N = 1; flags->H = 1;
+    add_cycles(0x4);
 }		/* -----  end of function cpl  ----- */
 
 /*
@@ -238,6 +266,8 @@ daa ()
 {
 	/* Lots of inspiration for this function's code taken from Eric Haskins at
 	 * https://ehaskins.com/2018-01-30%20Z80%20DAA/ */
+
+    add_cycles(0x4);
 
 	unsigned char correction = 0;
 

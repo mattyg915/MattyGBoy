@@ -17,6 +17,7 @@
  */
 #include <stdio.h>
 #include "load_instructions.h"
+#include "cpu_emulator.h"
 #include "global_declarations.h"
 #include "memory.h"
 
@@ -43,31 +44,39 @@ basic_ld ()
         {
 			case 0x0:
 				load_value = regs->B;
+				add_cycles(0x2);
 				break;
 			case 0x1:
 				load_value = regs->C;
+				add_cycles(0x2);
 				break;
 			case 0x2:
 				load_value = regs->D;
+				add_cycles(0x2);
 				break;
 			case 0x3:
 				load_value = regs->E;
+				add_cycles(0x2);
 				break;
 			case 0x4:
 				load_value = regs->H;
+				add_cycles(0x2);
 				break;
 			case 0x5:
 				load_value = regs->L;
+				add_cycles(0x2);
 				break;
 			case 0x6:
 				load_value = read_memory(reg_hl);
+				add_cycles(0x6);
 				break;
 			case 0x7:
 				load_value = regs->A;
+				add_cycles(0x2);
 				break;
 			default:
 				printf("ERROR: Unable to determine value to load\n");
-				load_value = 0;
+				load_value = 0x0;
 				break;
 		}
 
@@ -75,31 +84,39 @@ basic_ld ()
 	{
 		case 0x0:
 			load_to = &regs->B;
+			add_cycles(0x2);
 			break;
 		case 0x1:
 			load_to = &regs->C;
+			add_cycles(0x2);
 			break;
 		case 0x2:
 			load_to = &regs->D;
+			add_cycles(0x2);
 			break;
 		case 0x3:
 			load_to = &regs->E;
+			add_cycles(0x2);
 			break;
 		case 0x4:
 			load_to = &regs->H;
+			add_cycles(0x2);
 			break;
 		case 0x5:
 			load_to = &regs->L;
+			add_cycles(0x2);
 			break;
 		case 0x6:
 			// Write to memory
 			write_memory(reg_hl, load_value);
+			add_cycles(0x6);
 			return;
 		case 0x7:
 			load_to = &regs->A;
+			add_cycles(0x2);
 			break;
 		default:
-			load_to = 0;
+			load_to = 0x0;
 			printf("ERROR: Unable to determine load location\n");
 			break;
 	}
@@ -128,28 +145,36 @@ load_one_byte_imm ()
 	{
 		case 0x0:
 			load_to = &regs->B;
+			add_cycles(0x8);
 			break;
 		case 0x1:
 			load_to = &regs->C;
+			add_cycles(0x8);
 			break;
 		case 0x2:
 			load_to = &regs->D;
+			add_cycles(0x8);
 			break;
 		case 0x3:
 			load_to = &regs->E;
+			add_cycles(0x8);
 			break;
 		case 0x4:
 			load_to = &regs->H;
+			add_cycles(0x8);
 			break;
 		case 0x5:
 			load_to = &regs->L;
+			add_cycles(0x8);
 			break;
 		case 0x6:
 			// Write to memory
 			write_memory(reg_hl, imm);
+			add_cycles(0xC);
 			return;
 		case 0x7:
 			load_to = &regs->A;
+			add_cycles(0x8);
 			break;
 		default:
 			load_to = NULL;
@@ -165,7 +190,7 @@ load_one_byte_imm ()
  * ===  FUNCTION  ======================================================================
  *         Name:  load_from_to_mem
  *  Description:  Handles instructions to load value from memory at specified address
- *  		  into A and vice versa
+ *  		  	  into A and vice versa
  * =====================================================================================
  */
 	void
@@ -181,26 +206,32 @@ load_from_to_mem ()
 		case 0x0A:
 			addr = combine_bytes(regs->B, regs->C);
 			regs->A = read_memory(addr);
+			add_cycles(0x8);
 			return;
 		case 0x1A:
 			addr = combine_bytes(regs->D, regs->E);
 			regs->A = read_memory(addr);
+			add_cycles(0x8);
 			return;
 		case 0xFA:
-			ptrs->PC += 2;
+			ptrs->PC += 0x2;
 			regs->A = read_memory(addr);
+			add_cycles(0x10);
 			return;
 		case 0x02:
 			addr = combine_bytes(regs->B, regs->C);
 			write_memory(addr, regs->A);
+			add_cycles(0x8);
 			return;
 		case 0x12:
 			addr = combine_bytes(regs->D, regs->E);
 			write_memory(addr, regs->A);
+			add_cycles(0x8);
 			return;
 		case 0xEA:
-			ptrs->PC += 2;
+			ptrs->PC += 0x2;
 			write_memory(addr, regs->A);
+			add_cycles(0x10);
 			return;
 		default:
 			break;
@@ -225,21 +256,25 @@ load_hl ()
 			write_memory(reg_hl, regs->A);
 			reg_hl++;
 			split_bytes(reg_hl, &regs->H, &regs->L);
+			add_cycles(0x8);
 			return;
 		case 0x2A:
 			regs->A = read_memory(reg_hl);
 			reg_hl++;
 			split_bytes(reg_hl, &regs->H, &regs->L);
+			add_cycles(0x8);
 			return;
 		case 0x32:
 			write_memory(reg_hl, regs->A);
 			reg_hl--;
 			split_bytes(reg_hl, &regs->H, &regs->L);
+			add_cycles(0x8);
 			return;
 		case 0x3A:
 			regs->A = read_memory(reg_hl);
 			reg_hl--;
 			split_bytes(reg_hl, &regs->H, &regs->L);
+			add_cycles(0x8);
 			return;
         	default:
             		break;
@@ -263,9 +298,11 @@ ld_hl_sp ()
             offset = read_memory(ptrs->PC);
             ptrs->PC++;
             split_bytes(ptrs->SP + offset, &regs->H, &regs->L);
+            add_cycles(0xC);
             return;
         case 0xF9:
             ptrs->SP = combine_bytes(regs->H, regs->L);
+            add_cycles(0x8);
             return;
         default:
             return;
@@ -292,6 +329,7 @@ sixteen_bit_load ()
 		case 0x01:
 		    regs->B = imm_hi;
 		    regs->C = imm_lo;
+		    add_cycles(0xC);
 			break;
 		case 0x08: // This one is obnoxious
 			sp_lo = (unsigned char) ptrs->SP;
@@ -300,17 +338,21 @@ sixteen_bit_load ()
 			write_memory(addr, sp_lo);
 			addr++;
 			write_memory(addr, sp_hi);
+			add_cycles(0x14);
 			break;
 		case 0x11:
 		    regs->D = imm_hi;
 		    regs->E = imm_lo;
+		    add_cycles(0xC);
 			break;
 		case 0x21:
 		    regs->H = imm_hi;
 		    regs->L = imm_lo;
+		    add_cycles(0xC);
 			break;
 		case 0x31:
 			ptrs->SP = combine_bytes(imm_hi, imm_lo);
+			add_cycles(0xC);
 			break;
         default:
             break;
@@ -337,20 +379,24 @@ read_write_io ()
 			ptrs->PC++;
 			addr = (unsigned short) (imm + 0xFF00);
 			regs->A = read_memory(addr);
+			add_cycles(0xC);
 			return;
 		case 0xE0:
 			imm = read_memory(ptrs->PC);
 			ptrs->PC++;
             addr = (unsigned short) (imm + 0xFF00);
 			write_memory(addr, regs->A);
+			add_cycles(0xC);
 			return;
 		case 0xF2:
 			addr = (unsigned short) (regs->C + 0xFF00);
 			regs->A = read_memory(addr);
+			add_cycles(0x8);
 			return;
 		case 0xE2:
 			addr = (unsigned short) (regs->C + 0xFF00);
 			write_memory(addr, regs->A);
+			add_cycles(0x8);
 			return;
         default:
             break;
