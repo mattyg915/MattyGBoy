@@ -45,6 +45,8 @@ global_declarations.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/global_declarations.h
 helper_functions.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/helper_functions.h
+cpu_emulator.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/cpu_emulator.h
 
 /Users/MattyG/Documents/Programming/MattyGBoy/src/control_instructions.c
 stdio.h
@@ -109,6 +111,8 @@ stdio.h
 -
 load_instructions.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/load_instructions.h
+cpu_emulator.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/cpu_emulator.h
 global_declarations.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/global_declarations.h
 memory.h
@@ -128,6 +132,8 @@ helper_functions.h
 
 /Users/MattyG/Documents/Programming/MattyGBoy/src/math_instructions.c
 stdlib.h
+-
+stdio.h
 -
 math_instructions.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/math_instructions.h

@@ -29,6 +29,7 @@
 	void
 pop ()
 {
+    add_cycles(0xC);
     unsigned char reg_f;
     switch (opcode)
     {
@@ -81,6 +82,7 @@ ccf ()
     flags->H = 0x0;
     flags->N = 0x0;
     flags->C ^= 0x1u;
+    add_cycles(0x4);
 }		/* -----  end of function ccf  ----- */
 
 /*
@@ -95,6 +97,7 @@ scf ()
     flags->C = 0x1;
     flags->N = 0x0;
     flags->H = 0x0;
+    add_cycles(0x4);
 }		/* -----  end of function scf  ----- */
 
 /* 
@@ -107,6 +110,7 @@ scf ()
 push ()
 {
 	unsigned char f_reg = 0;
+	add_cycles(0x10);
 	switch (opcode)
 	{
 		case 0xF5:
@@ -152,7 +156,7 @@ push ()
 	void
 halt ()
 {
-
+    add_cycles(0x4);
 }		/* -----  end of function halt  ----- */
 
 /* 
@@ -165,6 +169,7 @@ halt ()
 ei ()
 {
 	write_memory(0xFFFF, 0x1);
+	add_cycles(0x4);
 }		/* -----  end of function ei  ----- */
 
 /* 
@@ -177,6 +182,7 @@ ei ()
 di ()
 {
 	write_memory(0xFFFF, 0x1);
+	add_cycles(0x4);
 }		/* -----  end of function di  ----- */
 
 /* 
@@ -188,5 +194,5 @@ di ()
 	void
 stop ()
 {
-
+	add_cycles(0x4);
 }		/* -----  end of function stop  ----- */

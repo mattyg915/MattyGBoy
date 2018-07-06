@@ -87,29 +87,45 @@ load_cartridge(char *file)
 	switch (new_cartridge[0x147]) // Which mbc should be used
 	{
 		case 0x0:
-			banking_mode = 0; // ROM only
+			banking_mode = 0x0; // ROM only
 			break;
 		case 0x1 ... 0x3: // MBC1
-			banking_mode = 1;
+			banking_mode = 0x1;
 			mbc = init_mbc();
 			break;
 		case 0x5 ... 0x6:
-			banking_mode = 2;
+			banking_mode = 0x2;
 			mbc = init_mbc();
 			break;
 		default: // Other banking not handled yet
-			banking_mode = 0;
+			banking_mode = 0x0;
 			break;
 	}
 
 	switch (new_cartridge[0x149])
 	{
+		case 0x0:
+		    break;
 		case 0x1:
-			ext_ram_bank = malloc(0x800);
+			mbc->ram_bank_size = 0x800;
+			ext_ram_bank = malloc(0x1000);
+			break;
 		case 0x2:
+		    mbc->ram_bank_size = 0x800;
 			ext_ram_bank = malloc(0x2000);
+			break;
 		case 0x3:
+		    mbc->ram_bank_size = 0x2000;
 			ext_ram_bank = malloc(0x8000);
+			break;
+	    case 0x4:
+	        mbc->ram_bank_size = 0x2000;
+	        ext_ram_bank = malloc(0x20000);
+	        break;
+	    case 0x5:
+	        mbc->ram_bank_size = 0x2000;
+	        ext_ram_bank = malloc(0x10000);
+	        break;
 		default:
 			break;
 	}
@@ -207,6 +223,7 @@ init_mbc()
 	{
 		mbc_ptr->ram_enable = 0x0;
 		mbc_ptr->rom_bank_number = 0x1;
+		mbc_ptr->ram_bank_size = 0x0;
 		mbc_ptr->ram_bank_number = 0x0;
 		mbc_ptr->ram_rom_select = 0x0;
 	}
@@ -215,6 +232,7 @@ init_mbc()
 	{
 		mbc_ptr->ram_enable = 0x0;
 		mbc_ptr->rom_bank_number = 0x1;
+		mbc_ptr->ram_bank_size = 0x0;
 		mbc_ptr->ram_bank_number = 0xFF;
 		mbc_ptr->ram_rom_select = 0xFF;
 	}
@@ -249,8 +267,15 @@ read_memory(unsigned short addr)
         else if ((addr >= 0xA000) && (addr < 0xC000))
         // Read from RAM banks
         {
-            addr -= 0xA000;
-            data = ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
+            if (!mbc->ram_enable)
+            {
+                return 0xFF;
+            }
+            else
+            {
+                addr -= 0xA000;
+                data = ext_ram_bank[addr + (mbc->ram_bank_number * mbc->ram_bank_size)];
+            }
         }
         else
         {
@@ -315,8 +340,17 @@ read_memory_ptr(unsigned short addr)
         else if ((addr > 0x9FFF) && (addr < 0xC000))
         // Read from RAM banks
         {
-            addr -= 0xA000;
-            mem = &ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)];
+            {
+                if (!mbc->ram_enable)
+                {
+                    return 0xFF;
+                }
+                else
+                {
+                    addr -= 0xA000;
+                    mem = &ext_ram_bank[addr + (mbc->ram_bank_number * mbc->ram_bank_size)];
+                }
+            }
         }
         else
         {
@@ -435,7 +469,6 @@ write_memory(unsigned short addr, unsigned char data)
 	// TODO this is here for testing
 	else if ((addr >= 0xFF00) && (addr < 0xFF80))
 	{
-	    printf("io access addr is %x data is %x and i is %d\n", addr, data, i);
 		if ((addr == 0xFF02) && (data == 0x81))
 		{
 			printf("%c", memory[0xFF01]);

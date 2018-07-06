@@ -3,6 +3,7 @@
 
 CMakeFiles/MattyGBoy.dir/src/bit_rotate_shift_instructions.c.o
  ../include/bit_rotate_shift_instructions.h
+ ../include/cpu_emulator.h
  ../include/global_declarations.h
  ../include/helper_functions.h
  ../include/memory.h
@@ -44,6 +45,7 @@ CMakeFiles/MattyGBoy.dir/src/helper_functions.c.o
  ../include/register_structures.h
  /Users/MattyG/Documents/Programming/MattyGBoy/src/helper_functions.c
 CMakeFiles/MattyGBoy.dir/src/load_instructions.c.o
+ ../include/cpu_emulator.h
  ../include/global_declarations.h
  ../include/helper_functions.h
  ../include/load_instructions.h

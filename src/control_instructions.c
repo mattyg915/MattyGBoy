@@ -3,8 +3,8 @@
  *
  *       Filename:  control_instructions.c
  *
- *    Description:  Constains functions needed for CPU instructions dealing with 
- *    		    program flow control, e.g. comparisons and jumps
+ *    Description:  Contains functions needed for CPU instructions dealing with
+ *    		        program flow control, e.g. comparisons and jumps
  *
  *        Version:  1.0
  *        Created:  06/05/2018 09:45:04
@@ -28,7 +28,7 @@
  *  Description:  Handles opcodes translating to CP instructions
  * =====================================================================================
  */
-        void
+    void
 cp ()
 {
 	flags->N = 1; // CP sets the N flag
@@ -40,30 +40,39 @@ cp ()
 		case 0xFE:
 		    operand = read_memory(ptrs->PC);
 			ptrs->PC++;
+			add_cycles(0x8);
 			break;
 		case 0xBE:
 			operand = read_memory(reg_hl);
+            add_cycles(0x8);
 			break;
 		case 0xBF:
 			operand = regs->A;
+            add_cycles(0x4);
 			break;
 		case 0xB8:
 			operand = regs->B;
+            add_cycles(0x4);
 			break;
 		case 0xB9:
 			operand = regs->C;
+            add_cycles(0x4);
 			break;
 		case 0xBA:
 			operand = regs->D;
+            add_cycles(0x4);
 			break;
 		case 0xBB:
 			operand = regs->E;
+            add_cycles(0x4);
 			break;
 		case 0xBC:
 			operand = regs->H;
+            add_cycles(0x4);
 			break;
 		case 0xBD:
 			operand = regs->L;
+            add_cycles(0x4);
 			break;
 		default:
 			return;
@@ -78,7 +87,7 @@ cp ()
  *  Description:  Handles opcodes translating to JP instructions
  * =====================================================================================
  */
-        void
+    void
 jp ()
 {
 	// Grab 16-bit immediate for the target
@@ -94,34 +103,56 @@ jp ()
 	{
 		case 0xC3:
 			ptrs->PC = target;
+            add_cycles(0x10);
 			return;
 		case 0xE9:
-			target = read_memory(reg_hl);
+			target = reg_hl;
 			ptrs->PC = target;
+            add_cycles(0x4);
 			return;
 		case 0xDA:
 			if (flags->C)
 			{
 				ptrs->PC = target;
+				add_cycles(0x10);
 			}
+			else
+            {
+                add_cycles(0xC);
+            }
 			return;
 		case 0xD2:
-			if (!flags->C)
+            if (!flags->C)
 			{
 				ptrs->PC = target;
+				add_cycles(0x10);
 			}
+            else
+            {
+                add_cycles(0xC);
+            }
 			return;
 		case 0xC2:
-			if (!flags->Z)
+            if (!flags->Z)
 			{
 				ptrs->PC = target;
+				add_cycles(0x10);
 			}
+            else
+            {
+                add_cycles(0xC);
+            }
 			return;
 		case 0xCA:
-			if (flags->Z)
+            if (flags->Z)
 			{
 				ptrs->PC = target;
+				add_cycles(0x10);
 			}
+            else
+            {
+                add_cycles(0xC);
+            }
 			return;
 		default:
 			return;
@@ -145,30 +176,51 @@ jr ()
 	{
 		case 0x18:
 			ptrs->PC += offset;
+			add_cycles(0xC);
 			return;
 		case 0x38:
-			if (flags->C)
+            if (flags->C)
 			{
 				ptrs->PC += offset;
+				add_cycles(0xC);
 			}
+            else
+            {
+                add_cycles(0x8);
+            }
 			return;
 		case 0x30:
-			if (!flags->C)
+            if (!flags->C)
 			{
 				ptrs->PC += offset;
+				add_cycles(0xC);
 			}
+            else
+            {
+                add_cycles(0x8);
+            }
 			return;
 		case 0x20:
-			if (!flags->Z)
+            if (!flags->Z)
 			{
 				ptrs->PC += offset;
+				add_cycles(0xC);
 			}
+            else
+            {
+                add_cycles(0x8);
+            }
 			return;
 		case 0x28:
-			if (flags->Z)
+            if (flags->Z)
 			{
 				ptrs->PC += offset;
+				add_cycles(0xC);
 			}
+            else
+            {
+                add_cycles(0x8);
+            }
 			return;
 		default:
 			break;
@@ -205,9 +257,10 @@ call ()
 			write_memory(ptrs->SP, pc_low);
 
  			ptrs->PC = target;
+ 			add_cycles(0x18);
 			return;
 		case 0xDC:
-			if (flags->C)
+            if (flags->C)
 			{
 				ptrs->SP--;
 				write_memory(ptrs->SP, pc_high);
@@ -215,10 +268,15 @@ call ()
 				write_memory(ptrs->SP, pc_low);
 
 	 			ptrs->PC = target;
+	 			add_cycles(0x18);
 			}
+            else
+            {
+                add_cycles(0xC);
+            }
 			return;
 		case 0xD4:
-			if (!flags->C)
+            if (!flags->C)
 			{
 				ptrs->SP--;
 				write_memory(ptrs->SP, pc_high);
@@ -226,10 +284,15 @@ call ()
 				write_memory(ptrs->SP, pc_low);
 
 	 			ptrs->PC = target;
+	 			add_cycles(0x18);
 			}
+            else
+            {
+                add_cycles(0xC);
+            }
 			return;
 		case 0xC4:
-			if (!flags->Z)
+            if (!flags->Z)
 			{
 				ptrs->SP--;
 				write_memory(ptrs->SP, pc_high);
@@ -237,10 +300,15 @@ call ()
 				write_memory(ptrs->SP, pc_low);
 
  				ptrs->PC = target;
+ 				add_cycles(0x18);
 			}
+            else
+            {
+                add_cycles(0xC);
+            }
 			return;
 		case 0xCC:
-			if (flags->Z)
+            if (flags->Z)
 			{
 				ptrs->SP--;
 				write_memory(ptrs->SP, pc_high);
@@ -248,7 +316,12 @@ call ()
 				write_memory(ptrs->SP, pc_low);
 
  				ptrs->PC = target;
+ 				add_cycles(0x18);
 			}
+            else
+            {
+                add_cycles(0xC);
+            }
 			return;
 		default:
 			return;
@@ -274,30 +347,51 @@ ret ()
 	{
 		case 0xC9:
 			ptrs->PC = return_address;
+			add_cycles(0x10);
 			return;
 		case 0xD8:
-			if (flags->C)
+            if (flags->C)
 			{
 				ptrs->PC = return_address;
+				add_cycles(0x14);
 			}
+            else
+            {
+                add_cycles(0x8);
+            }
 			return;
 		case 0xD0:
-			if (!flags->C)
+            if (!flags->C)
 			{
 				ptrs->PC = return_address;
+				add_cycles(0x14);
 			}
+            else
+            {
+                add_cycles(0x8);
+            }
 			return;
 		case 0xC0:
-			if (!flags->Z)
+            if (!flags->Z)
 			{
 				ptrs->PC = return_address;
+				add_cycles(0x14);
 			}
+            else
+            {
+                add_cycles(0x8);
+            }
 			return;
 		case 0xC8:
-			if (flags->Z)
+            if (flags->Z)
 			{
 				ptrs->PC = return_address;
+				add_cycles(0x14);
 			}
+            else
+            {
+                add_cycles(0x8);
+            }
 			return;
 		default:
 			return;
@@ -323,6 +417,7 @@ reti ()
     // Unconditional return
 	ptrs->PC = return_address;
 	write_memory(0xFFFF, 0x1); // Enable interrupts
+    add_cycles(0x10);
 }               /* -----  end of function reti  ----- */
 
 /*
@@ -376,4 +471,5 @@ rst ()
     write_memory(ptrs->SP, pc_low);
 
 	ptrs->PC = target;
+	add_cycles(0x10);
 }               /* -----  end of function rst  ----- */

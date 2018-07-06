@@ -21,6 +21,7 @@
 typedef struct MBC_Registers
 {
 	unsigned char ram_enable; // Must be !0 in order to read/write external RAM
+	unsigned int ram_bank_size; // This may be necessary in the future for CGB
 	unsigned char rom_bank_number;
 	unsigned char ram_bank_number;
 	unsigned char ram_rom_select; // Set to 1 if ROM mode, 0 for RAM

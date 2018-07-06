@@ -218,8 +218,8 @@ fetch ()
  *   Parameters:  cycles is the number of cycles to add
  * =====================================================================================
  */
-    static void
-add_cycles (int cycles)
+    void
+add_cycles (unsigned int cycles)
 {
     clock_cycles += cycles;
 }               /* -----  end of function fetch  ----- */
@@ -237,6 +237,7 @@ decode ()
 {
 	switch (opcode) {
 		case 0x00: // NOP
+            add_cycles(0x4);
 			return;
 			// Rotate A instructions
 		case 0x0F:

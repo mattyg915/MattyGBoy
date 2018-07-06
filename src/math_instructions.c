@@ -16,6 +16,7 @@
  * =====================================================================================
  */
 #include <stdlib.h>
+#include <stdio.h>
 #include "math_instructions.h"
 #include "global_declarations.h"
 #include "cpu_emulator.h"
@@ -43,6 +44,7 @@ eight_bit_add ()
 		case 0xC6:
 			value = read_memory(ptrs->PC);
 			ptrs->PC++;
+            add_cycles(0x8);
 			break;
 		/* Oddball case. SP updated instead of A, so do all needed
 		 * actions and return. Value is also signed, so check and set
@@ -50,39 +52,46 @@ eight_bit_add ()
 		 */
 		case 0xE8:
 		    value = read_memory(ptrs->PC);
-			if ((char)value < 0)
-			{
-				flags->N = 1;
-			}
+			flags->N = 0;
 			// SP requires a 16-bit update
 			sixteen_bit_update_flags(ptrs->SP, (char)value);
+			flags->Z = 0;
 			ptrs->SP += (char)value;
 			ptrs->PC++;
+            add_cycles(0x10);
 			return;
 		// 8-bit register cases
 		case 0x80:
 			value = regs->B;
+			add_cycles(0x4);
 			break;
 		case 0x81:
 			value = regs->C;
+            add_cycles(0x4);
 			break;
 		case 0x82:
 			value = regs->D;
+            add_cycles(0x4);
 			break;
 		case 0x83:
 			value = regs->E;
+            add_cycles(0x4);
 			break;
 		case 0x84:
 			value = regs->H;
+            add_cycles(0x4);
 			break;
 		case 0x85:
 			value = regs->L;
+            add_cycles(0x4);
 			break;
 		case 0x87:
 			value = regs->A;
+            add_cycles(0x4);
 			break;
 		case 0x86:
 			value = read_memory(reg_hl);
+            add_cycles(0x8);
 			break;
 		default:
 		    value = 0; // Error case
@@ -104,7 +113,8 @@ sixteen_bit_add ()
 {
 	// Clear N
 	flags->N = 0;
-
+	// Preserve Z
+	unsigned char initial_z = flags->Z;
 	// Left operand always HL
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 	unsigned short value;
@@ -113,15 +123,19 @@ sixteen_bit_add ()
 	{
 		case 0x09:
 			value = combine_bytes(regs->B, regs->C);
+			add_cycles(0x8);
 			break;
 		case 0x19:
 			value = combine_bytes(regs->D, regs->E);
+			add_cycles(0x8);
 			break;
 		case 0x29:
 			value = reg_hl;
+			add_cycles(0x8);
 			break;
 		case 0x39:
 			value = ptrs->SP;
+			add_cycles(0x8);
 			break;
 		default:
 			value = 0;
@@ -129,6 +143,7 @@ sixteen_bit_add ()
 	}
 
 	sixteen_bit_update_flags(reg_hl, value);
+	flags->Z = initial_z;
 	split_bytes((reg_hl + value), &(regs->H), &(regs->L));
 }		/* -----  end of function sixteen_bit_add  ----- */
 	
@@ -156,30 +171,39 @@ adc ()
 		case 0xCE:
 			sum += read_memory(ptrs->PC);
 			ptrs->PC++;
+			add_cycles(0x8);
 			break;
 		case 0x8E:
 			sum += read_memory(reg_hl);
+			add_cycles(0x8);
 			break;
 		case 0x8F:
 			sum += regs->A;
+			add_cycles(0x4);
 			break;
 		case 0x88:
 			sum += regs->B;
+			add_cycles(0x4);
 			break;
 		case 0x89:
 			sum += regs->C;
+			add_cycles(0x4);
 			break;
 		case 0x8A:
 			sum += regs->D;
+			add_cycles(0x4);
 			break;
 		case 0x8B:
 			sum += regs->E;
+			add_cycles(0x4);
 			break;
 		case 0x8C:
 			sum += regs->H;
+			add_cycles(0x4);
 			break;
 		case 0x8D:
 			sum += regs->L;
+			add_cycles(0x4);
 			break;
 		default:
 			break;
@@ -212,30 +236,39 @@ sub ()
 		case 0xD6:
 			subtrahend = read_memory(ptrs->PC);
             ptrs->PC++;
+            add_cycles(0x8);
 			break;
 		case 0x90:
 			subtrahend = regs->B;
+			add_cycles(0x4);
 			break;
 		case 0x91:
 			subtrahend = regs->C;
+			add_cycles(0x4);
 			break;
 		case 0x92:
 			subtrahend = regs->D;
+			add_cycles(0x4);
 			break;
 		case 0x93:
 			subtrahend = regs->E;
+			add_cycles(0x4);
 			break;
 		case 0x94:
 			subtrahend = regs->H;
+			add_cycles(0x4);
 			break;
 		case 0x95:
 			subtrahend = regs->L;
+			add_cycles(0x4);
 			break;
 		case 0x96:
 			subtrahend = read_memory(reg_hl);
+			add_cycles(0x8);
 			break;
 		case 0x97:
 			subtrahend = regs->A;
+			add_cycles(0x4);
 			break;
 		default:
 			subtrahend = 0;
@@ -270,30 +303,39 @@ sbc ()
         case 0xDE:
             subtrahend += read_memory(ptrs->PC);
             ptrs->PC++;
+            add_cycles(0x8);
             break;
         case 0x9E:
             subtrahend += read_memory(reg_hl);
+			add_cycles(0x8);
             break;
         case 0x9F:
             subtrahend += regs->A;
+			add_cycles(0x4);
             break;
         case 0x98:
             subtrahend += regs->B;
+			add_cycles(0x4);
             break;
         case 0x99:
             subtrahend += regs->C;
+			add_cycles(0x4);
             break;
         case 0x9A:
             subtrahend += regs->D;
+			add_cycles(0x4);
             break;
         case 0x9B:
             subtrahend += regs->E;
+			add_cycles(0x4);
             break;
         case 0x9C:
             subtrahend += regs->H;
+			add_cycles(0x4);
             break;
         case 0x9D:
             subtrahend += regs->L;
+			add_cycles(0x4);
             break;
         default:
             break;
@@ -327,33 +369,41 @@ eight_bit_inc ()
 		case 0x34:
 			initial_state = read_memory(reg_hl);
 			write_memory(reg_hl, (unsigned char) (initial_state + 1));
+			add_cycles(0xC);
 			break;
 		case 0x3C:
 			initial_state = regs->A;
+			add_cycles(0x4);
 			regs->A++;
 			break;
 		case 0x04:
 			initial_state = regs->B;
+			add_cycles(0x4);
 			regs->B++;
 			break;
 		case 0x0C:
 			initial_state = regs->C;
+			add_cycles(0x4);
 			regs->C++;
 			break;
 		case 0x14:
 			initial_state = regs->D;
+			add_cycles(0x4);
 			regs->D++;
 			break;
 		case 0x1C:
 			initial_state = regs->E;
+			add_cycles(0x4);
 			regs->E++;
 			break;
 		case 0x24:
 			initial_state = regs->H;
+			add_cycles(0x4);
 			regs->H++;
 			break;
 		case 0x2C:
 			initial_state = regs->L;
+			add_cycles(0x4);
 			regs->L++;
 			break;
 		default:
@@ -385,16 +435,19 @@ sixteen_bit_inc ()
 			value = combine_bytes(regs->B, regs->C);
 			value++;
 			split_bytes(value, &regs->B, &regs->C);
+			add_cycles(0x8);
 			break;
 		case 0x13:
 			value = combine_bytes(regs->D, regs->E);
 			value++;
 			split_bytes(value, &regs->D, &regs->E);
+			add_cycles(0x8);
 			break;
 		case 0x23:
 			value = combine_bytes(regs->L, regs->L);
 			value++;
 			split_bytes(value, &regs->H, &regs->L);
+			add_cycles(0x8);
 			break;
 		case 0x33:
 			ptrs->SP++;
@@ -427,34 +480,42 @@ eight_bit_dec ()
         case 0x35:
             initial_state = read_memory(reg_hl);
             write_memory(reg_hl, (unsigned char) (initial_state - 1));
+			add_cycles(0xC);
             break;
         case 0x3D:
             initial_state = regs->A;
             regs->A--;
+			add_cycles(0x4);
             break;
         case 0x05:
             initial_state = regs->B;
             regs->B--;
+			add_cycles(0x4);
             break;
         case 0x0D:
             initial_state = regs->C;
             regs->C--;
+			add_cycles(0x4);
             break;
         case 0x15:
             initial_state = regs->D;
             regs->D--;
+			add_cycles(0x4);
             break;
         case 0x1D:
             initial_state = regs->E;
             regs->E--;
+			add_cycles(0x4);
             break;
         case 0x25:
             initial_state = regs->H;
             regs->H--;
+			add_cycles(0x4);
             break;
         case 0x2D:
             initial_state = regs->L;
             regs->L--;
+			add_cycles(0x4);
             break;
         default:
             initial_state = 0;
@@ -485,16 +546,19 @@ sixteen_bit_dec ()
 				value = combine_bytes(regs->B, regs->C);
 				value--;
 				split_bytes(value, &regs->B, &regs->C);
+				add_cycles(0x8);
 				break;
 			case 0x1B:
 				value = combine_bytes(regs->D, regs->E);
 				value--;
 				split_bytes(value, &regs->D, &regs->E);
+				add_cycles(0x8);
 				break;
 			case 0x2B:
 				value = combine_bytes(regs->L, regs->L);
 				value--;
 				split_bytes(value, &regs->H, &regs->L);
+				add_cycles(0x8);
 				break;
 			case 0x3B:
 				ptrs->SP--;
