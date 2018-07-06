@@ -269,7 +269,7 @@ read_memory(unsigned short addr)
         {
             if (!mbc->ram_enable)
             {
-                return 0xFF;
+                return error_value;
             }
             else
             {
@@ -343,7 +343,7 @@ read_memory_ptr(unsigned short addr)
             {
                 if (!mbc->ram_enable)
                 {
-                    return 0xFF;
+                    return &error_value;
                 }
                 else
                 {

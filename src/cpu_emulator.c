@@ -27,6 +27,7 @@
 
 unsigned char opcode;
 unsigned int clock_cycles;
+static unsigned short divider_counter = 0;
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -235,6 +236,7 @@ add_cycles (unsigned int cycles)
 	static void
 decode ()
 {
+	unsigned short cycles;
 	switch (opcode) {
 		case 0x00: // NOP
             add_cycles(0x4);
@@ -494,6 +496,7 @@ decode ()
         void
 cpu_execution ()
 {
-	fetch();
+    unsigned 
+    fetch();
     decode();
 }		/* -----  end of function cpu_execution  ----- */
