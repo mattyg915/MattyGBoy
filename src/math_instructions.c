@@ -26,11 +26,14 @@
  * ===  FUNCTION  ======================================================================
  *         Name:  eight_bit_add
  *  Description:  Handles opcodes translating to 8-bit ADD instructions
+ *       Return:  The number of clock cycles used for this opcode
  * =====================================================================================
  */
-	void
+	unsigned char
 eight_bit_add ()
 {
+	unsigned char cycles = 0;
+
 	// Clear the N flag
 	flags->N = 0;
 
@@ -44,7 +47,7 @@ eight_bit_add ()
 		case 0xC6:
 			value = read_memory(ptrs->PC);
 			ptrs->PC++;
-            add_cycles(0x8);
+            cycles = 0x8;
 			break;
 		/* Oddball case. SP updated instead of A, so do all needed
 		 * actions and return. Value is also signed, so check and set
@@ -58,40 +61,40 @@ eight_bit_add ()
 			flags->Z = 0;
 			ptrs->SP += (char)value;
 			ptrs->PC++;
-            add_cycles(0x10);
-			return;
+            cycles = 0x10;
+			return cycles;
 		// 8-bit register cases
 		case 0x80:
 			value = regs->B;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		case 0x81:
 			value = regs->C;
-            add_cycles(0x4);
+            cycles = 0x4;
 			break;
 		case 0x82:
 			value = regs->D;
-            add_cycles(0x4);
+            cycles = 0x4;
 			break;
 		case 0x83:
 			value = regs->E;
-            add_cycles(0x4);
+            cycles = 0x4;
 			break;
 		case 0x84:
 			value = regs->H;
-            add_cycles(0x4);
+            cycles = 0x4;
 			break;
 		case 0x85:
 			value = regs->L;
-            add_cycles(0x4);
+            cycles = 0x4;
 			break;
 		case 0x87:
 			value = regs->A;
-            add_cycles(0x4);
+            cycles = 0x4;
 			break;
 		case 0x86:
 			value = read_memory(reg_hl);
-            add_cycles(0x8);
+            cycles = 0x8;
 			break;
 		default:
 		    value = 0; // Error case
@@ -100,15 +103,17 @@ eight_bit_add ()
 	
 	eight_bit_update_flags(regs->A, value);
 	regs->A += value;
+	return cycles;
 }		/* -----  end of function add  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  sixteen_bit_add
  *  Description:  Handles opcodes translating to 16-bit ADD instructions
+ *       Return:  The number of clock cycles used for this opcode
  * =====================================================================================
  */
-        void
+        unsigned char
 sixteen_bit_add ()
 {
 	// Clear N
@@ -118,24 +123,25 @@ sixteen_bit_add ()
 	// Left operand always HL
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 	unsigned short value;
+	unsigned char cycles = 0;
 
 	switch (opcode)
 	{
 		case 0x09:
 			value = combine_bytes(regs->B, regs->C);
-			add_cycles(0x8);
+			cycles = 0x8;
 			break;
 		case 0x19:
 			value = combine_bytes(regs->D, regs->E);
-			add_cycles(0x8);
+			cycles = 0x8;
 			break;
 		case 0x29:
 			value = reg_hl;
-			add_cycles(0x8);
+			cycles = 0x8;
 			break;
 		case 0x39:
 			value = ptrs->SP;
-			add_cycles(0x8);
+			cycles = 0x8;
 			break;
 		default:
 			value = 0;
@@ -145,6 +151,7 @@ sixteen_bit_add ()
 	sixteen_bit_update_flags(reg_hl, value);
 	flags->Z = initial_z;
 	split_bytes((reg_hl + value), &(regs->H), &(regs->L));
+	return cycles;
 }		/* -----  end of function sixteen_bit_add  ----- */
 	
 
@@ -152,17 +159,18 @@ sixteen_bit_add ()
  * ===  FUNCTION  ======================================================================
  *         Name:  adc
  *  Description:  Handles opcodes translating to ADC instructions
+ *       Return:  The number of clock cycles used for this opcode
  * =====================================================================================
  */
-        void
+        unsigned char
 adc ()
 {
     // Clear the N flag
     flags->N = 0;
 
+    unsigned char cycles = 0;
 	unsigned char sum = 0; // Total the operand and the carry flag
     sum += flags->C;
-
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 
 	// All operations update A, so just need to get sum
@@ -171,39 +179,39 @@ adc ()
 		case 0xCE:
 			sum += read_memory(ptrs->PC);
 			ptrs->PC++;
-			add_cycles(0x8);
+			cycles = 0x8;
 			break;
 		case 0x8E:
 			sum += read_memory(reg_hl);
-			add_cycles(0x8);
+			cycles = 0x8;
 			break;
 		case 0x8F:
 			sum += regs->A;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		case 0x88:
 			sum += regs->B;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		case 0x89:
 			sum += regs->C;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		case 0x8A:
 			sum += regs->D;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		case 0x8B:
 			sum += regs->E;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		case 0x8C:
 			sum += regs->H;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		case 0x8D:
 			sum += regs->L;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		default:
 			break;
@@ -212,6 +220,7 @@ adc ()
 	// Update A and the flags
 	eight_bit_update_flags(regs->A, sum);
 	regs->A += sum;
+	return cycles;
 }               /* -----  end of function adc  ----- */
 
 
@@ -219,9 +228,10 @@ adc ()
  * ===  FUNCTION  ======================================================================
  *         Name:  sub
  *  Description:  Handles opcodes translating to SUB instructions
+ *       Return:  The number of clock cycles used for this opcode
  * =====================================================================================
  */
-	void
+	unsigned char
 sub ()
 {
 	// Set the N flag
@@ -230,45 +240,47 @@ sub ()
 	// Minuend is always register A
 	unsigned char subtrahend;
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
-
+	
+	unsigned char cycles = 0;
+	
 	switch (opcode)
 	{
 		case 0xD6:
 			subtrahend = read_memory(ptrs->PC);
             ptrs->PC++;
-            add_cycles(0x8);
+            cycles = 0x8;
 			break;
 		case 0x90:
 			subtrahend = regs->B;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		case 0x91:
 			subtrahend = regs->C;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		case 0x92:
 			subtrahend = regs->D;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		case 0x93:
 			subtrahend = regs->E;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		case 0x94:
 			subtrahend = regs->H;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		case 0x95:
 			subtrahend = regs->L;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		case 0x96:
 			subtrahend = read_memory(reg_hl);
-			add_cycles(0x8);
+			cycles = 0x8;
 			break;
 		case 0x97:
 			subtrahend = regs->A;
-			add_cycles(0x4);
+			cycles = 0x4;
 			break;
 		default:
 			subtrahend = 0;
@@ -278,6 +290,7 @@ sub ()
 	// Update A and the flags
 	eight_bit_update_flags(regs->A, subtrahend);
 	regs->A -= subtrahend;
+	return cycles;
 }		/* -----  end of function sub  ----- */
 
 
@@ -285,9 +298,10 @@ sub ()
  * ===  FUNCTION  ======================================================================
  *         Name:  sbc
  *  Description:  Handles opcodes translating to SBC instructions
+ *       Return:  The number of clock cycles used for this opcode
  * =====================================================================================
  */
-	void
+	unsigned char
 sbc ()
 {
 	// Set the N flag
@@ -296,6 +310,7 @@ sbc ()
     unsigned char subtrahend = 0; // Total the operand and the carry flag
     subtrahend += flags->C;
     unsigned short reg_hl = combine_bytes(regs->H, regs->L);
+    unsigned char cycles = 0;
 
     // All operations update A, so just need to get sum
     switch (opcode)
@@ -303,39 +318,39 @@ sbc ()
         case 0xDE:
             subtrahend += read_memory(ptrs->PC);
             ptrs->PC++;
-            add_cycles(0x8);
+            cycles = 0x8;
             break;
         case 0x9E:
             subtrahend += read_memory(reg_hl);
-			add_cycles(0x8);
+			cycles = 0x8;
             break;
         case 0x9F:
             subtrahend += regs->A;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         case 0x98:
             subtrahend += regs->B;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         case 0x99:
             subtrahend += regs->C;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         case 0x9A:
             subtrahend += regs->D;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         case 0x9B:
             subtrahend += regs->E;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         case 0x9C:
             subtrahend += regs->H;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         case 0x9D:
             subtrahend += regs->L;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         default:
             break;
@@ -344,6 +359,7 @@ sbc ()
     // Update A and the flags
     eight_bit_update_flags(regs->A, subtrahend);
     regs->A -= subtrahend;
+    return cycles;
 }		/* -----  end of function sbc  ----- */
 
 
