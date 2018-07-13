@@ -17,11 +17,11 @@
  */
 #ifndef LOADINSTRUCTIONS
 #define LOADINSTRUCTIONS
-void basic_ld();
-void load_from_to_mem();
-void load_one_byte_imm();
-void read_write_io();
-void load_hl();
-void sixteen_bit_load();
-void ld_hl_sp();
+unsigned char basic_ld();
+unsigned char load_from_to_mem();
+unsigned char load_one_byte_imm();
+unsigned char read_write_io();
+unsigned char load_hl();
+unsigned char sixteen_bit_load();
+unsigned char ld_hl_sp();
 #endif

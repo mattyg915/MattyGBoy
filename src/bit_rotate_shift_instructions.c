@@ -37,7 +37,7 @@ rlc (unsigned char *reg)
 
 	// Each bit of A shifts left one with bit 7 shifting
 	// into C AND bit 0
-	flags->C = (unsigned char) (*reg & 0x80u);
+	flags->C = *reg >> 0x7u;
 	*reg <<= 1;
 	*reg |= flags->C; // Bit 0 is 0, since it's been filled in for the shift
 	flags->Z = (unsigned char) (*reg == 0 ? 1 : 0);
@@ -58,7 +58,7 @@ rl (unsigned char *reg)
 	// Each bit of register shifts left one with bit 0 shifting
 	// into C and C going into bit 7
 	unsigned char initial_c = flags->C;
-	flags->C = (unsigned char) (*reg & 0x80u);
+	flags->C = *reg >> 0x7u;
 	*reg <<= 1;
 	*reg |= initial_c;
 	flags->Z = (unsigned char) ((*reg == 0) ? 1 : 0);
@@ -244,12 +244,14 @@ set (unsigned char *reg)
  * ===  FUNCTION  ======================================================================
  *         Name:  bit_rotate_shift
  *  Description:  Translates the much-abused CB opcode into its appropriate intsruction
- *  		  and calls executing function
+ *  		      and calls executing function
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-	void
+	unsigned char
 bit_rotate_shift ()
 {
+	unsigned char cycles;
 	// For ones where memory[HL] is needed
     unsigned short reg_hl = combine_bytes(regs->H, regs->L);
 	
@@ -262,83 +264,83 @@ bit_rotate_shift ()
 		case 0x00:
 		case 0x08:
 			argument = &regs->B;
-            add_cycles(0x8);
+            cycles = 0x8;
 			break;
 		case 0x01:
 		case 0x09:
 			argument = &regs->C;
-            add_cycles(0x8);
+            cycles = 0x8;
 			break;
 		case 0x02:
 		case 0x0A:
 			argument = &regs->D;
-            add_cycles(0x8);
+            cycles = 0x8;
 			break;
 		case 0x03:
 		case 0x0B:
 			argument = &regs->E;
-            add_cycles(0x8);
+            cycles = 0x8;
 			break;
 		case 0x04:
 		case 0x0C:
 			argument = &regs->H;
-            add_cycles(0x8);
+            cycles = 0x8;
 			break;
 		case 0x05:
 		case 0x0D:
 			argument = &regs->L;
-            add_cycles(0x8);
+            cycles = 0x8;
 			break;
 		case 0x06:
 		case 0x0E:
 			argument = read_memory_ptr(reg_hl);
-            add_cycles(0x10);
+            cycles = 0x10;
 			break;
 		case 0x07:
 		case 0x0F:
 			argument = &regs->A;
-            add_cycles(0x8);
+            cycles = 0x8;
 			break;
         default:
-            return;
+            return 0x0;
 	}
 
 	switch (opcode)
 	{
 		case 0x00 ... 0x07:
 			rlc(argument);
-			return;
+			return cycles;
 		case 0x08 ... 0x0F:
 			rrc(argument);
-			return;
+			return cycles;
 		case 0x10 ... 0x17:
 			rl(argument);
-			return;
+			return cycles;
 		case 0x18 ... 0x1F:
 			rr(argument);
-			return;
+			return cycles;
 		case 0x20 ... 0x27:
 			sla(argument);
-			return;
+			return cycles;
 		case 0x28 ... 0x2F:
 			sra(argument);
-			return;
+			return cycles;
 		case 0x30 ... 0x37:
 			swap(argument);
-			return;
+			return cycles;
 		case 0x38 ... 0x3F:
 			srl(argument);
-			return;
+			return cycles;
 		case 0x40 ... 0x7F:
 			bit(argument);
-			return;
+			return cycles;
 		case 0x80 ... 0xBF:
 			res(argument);
-			return;
+			return cycles;
 		case 0xC0 ... 0xFF:
 			set(argument);
-			return;
+			return cycles;
 		default:
-			return;
+			return 0x0 ;
 	}
 }		/* -----  end of function bit_rotate_shift  ----- */

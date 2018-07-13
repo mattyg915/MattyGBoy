@@ -27,12 +27,12 @@ typedef struct MBC_Registers
 	unsigned char ram_rom_select; // Set to 1 if ROM mode, 0 for RAM
 } MBC_Registers;
 
+void increment_divider();
+void increment_timer();
 MBC_Registers* init_mbc();
 unsigned char* init_memory();
-unsigned char* load_test_cartridge();
 void write_memory(unsigned short addr, unsigned char data);
 unsigned char read_memory(unsigned short addr);
 unsigned char* read_memory_ptr(unsigned short addr);
 unsigned char* load_cartridge(char *file);
-
 #endif

@@ -58,8 +58,8 @@ dump_registers()
 	printf("Registers:\nAF: %x\nBC: %x\nDE: %x\nHL: %x\n", AF, BC, DE, HL);
 	printf("Stack pointer: %x Program Counter: %x\n",
 			ptrs->SP, ptrs->PC);
-	printf("Flags: Z: %x N: %x H: %x C: %x\n\n",
-			flags->Z, flags->N, flags->H, flags->C);
+	printf("Flags: Z: %x N: %x H: %x C: %x IME: %x\n\n",
+			flags->Z, flags->N, flags->H, flags->C, flags->IME);
 }		/* -----  end of function dump_registers  ----- */
 
 /*

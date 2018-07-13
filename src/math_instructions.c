@@ -367,11 +367,13 @@ sbc ()
  * ===  FUNCTION  ======================================================================
  *         Name:  eight_bit_inc
  *  Description:  Handles opcodes translating to an 8-bit INC instruction
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-	void
+	unsigned char
 eight_bit_inc ()
 {
+	unsigned char cycles;
 	// Clear N flag
 	flags->N = 0;
 
@@ -385,45 +387,46 @@ eight_bit_inc ()
 		case 0x34:
 			initial_state = read_memory(reg_hl);
 			write_memory(reg_hl, (unsigned char) (initial_state + 1));
-			add_cycles(0xC);
+			cycles = 0xC;
 			break;
 		case 0x3C:
 			initial_state = regs->A;
-			add_cycles(0x4);
+			cycles = 0x4;
 			regs->A++;
 			break;
 		case 0x04:
 			initial_state = regs->B;
-			add_cycles(0x4);
+			cycles = 0x4;
 			regs->B++;
 			break;
 		case 0x0C:
 			initial_state = regs->C;
-			add_cycles(0x4);
+			cycles = 0x4;
 			regs->C++;
 			break;
 		case 0x14:
 			initial_state = regs->D;
-			add_cycles(0x4);
+			cycles = 0x4;
 			regs->D++;
 			break;
 		case 0x1C:
 			initial_state = regs->E;
-			add_cycles(0x4);
+			cycles = 0x4;
 			regs->E++;
 			break;
 		case 0x24:
 			initial_state = regs->H;
-			add_cycles(0x4);
+			cycles = 0x4;
 			regs->H++;
 			break;
 		case 0x2C:
 			initial_state = regs->L;
-			add_cycles(0x4);
+			cycles = 0x4;
 			regs->L++;
 			break;
 		default:
 			initial_state = 0;
+			cycles = 0x0;
 			break;
 	}
 
@@ -431,6 +434,7 @@ eight_bit_inc ()
 
 	// Restore C flag, this instruction doesn't set or clear it
 	flags->C = c_flag;
+	return cycles;
 }		/* -----  end of function eight_bit_inc  ----- */
 
 
@@ -438,12 +442,14 @@ eight_bit_inc ()
  * ===  FUNCTION  ======================================================================
  *         Name:  sixteen_bit_inc
  *  Description:  Handles opcodes translating to 16-bit INC instructions
- *  		  This instruction does not affect flags
+ *  		      This instruction does not affect flags
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-	void
+	unsigned char
 sixteen_bit_inc ()
 {
+    unsigned char cycles;
 	unsigned short value;
 	switch (opcode)
 	{
@@ -451,26 +457,30 @@ sixteen_bit_inc ()
 			value = combine_bytes(regs->B, regs->C);
 			value++;
 			split_bytes(value, &regs->B, &regs->C);
-			add_cycles(0x8);
+			cycles = 0x8;
 			break;
 		case 0x13:
 			value = combine_bytes(regs->D, regs->E);
 			value++;
 			split_bytes(value, &regs->D, &regs->E);
-			add_cycles(0x8);
+			cycles = 0x8;
 			break;
 		case 0x23:
-			value = combine_bytes(regs->L, regs->L);
+			value = combine_bytes(regs->H, regs->L);
 			value++;
 			split_bytes(value, &regs->H, &regs->L);
-			add_cycles(0x8);
+			cycles = 0x8;
 			break;
 		case 0x33:
 			ptrs->SP++;
+			cycles = 0x8;
 			break;
 		default:
+		    cycles = 0x0;
 			break;
 	}
+
+	return cycles;
 }		/* -----  end of function sixteen_bit_inc  ----- */
 
 
@@ -478,11 +488,14 @@ sixteen_bit_inc ()
  * ===  FUNCTION  ======================================================================
  *         Name:  eight_bit_dec
  *  Description:  Handles opcodes translating to 8-bit DEC instructions
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-	void
+	unsigned char
 eight_bit_dec ()
 {
+    unsigned char cycles;
+
     // Set N flag
     flags->N = 1;
 
@@ -496,45 +509,46 @@ eight_bit_dec ()
         case 0x35:
             initial_state = read_memory(reg_hl);
             write_memory(reg_hl, (unsigned char) (initial_state - 1));
-			add_cycles(0xC);
+			cycles = 0xC;
             break;
         case 0x3D:
             initial_state = regs->A;
             regs->A--;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         case 0x05:
             initial_state = regs->B;
             regs->B--;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         case 0x0D:
             initial_state = regs->C;
             regs->C--;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         case 0x15:
             initial_state = regs->D;
             regs->D--;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         case 0x1D:
             initial_state = regs->E;
             regs->E--;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         case 0x25:
             initial_state = regs->H;
             regs->H--;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         case 0x2D:
             initial_state = regs->L;
             regs->L--;
-			add_cycles(0x4);
+			cycles = 0x4;
             break;
         default:
-            initial_state = 0;
+            initial_state = 0x0;
+            cycles = 0x0;
             break;
     }
 
@@ -542,6 +556,7 @@ eight_bit_dec ()
 
     // Restore C flag, this instruction doesn't set or clear it
     flags->C = c_flag;
+    return cycles;
 }		/* -----  end of function eight_bit_dec  ----- */
 
 
@@ -549,12 +564,14 @@ eight_bit_dec ()
  * ===  FUNCTION  ======================================================================
  *         Name:  sixteen_bit_dec
  *  Description:  Handles opcodes translating to 16-bit DEC instructions
- *  		  This instruction does not affect flags
+ *  		      This instruction does not affect flags
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-	void
+	unsigned char
 sixteen_bit_dec ()
 {
+    unsigned char cycles;
 	unsigned short value;
         switch (opcode)
         {
@@ -562,24 +579,28 @@ sixteen_bit_dec ()
 				value = combine_bytes(regs->B, regs->C);
 				value--;
 				split_bytes(value, &regs->B, &regs->C);
-				add_cycles(0x8);
+				cycles = 0x8;
 				break;
 			case 0x1B:
 				value = combine_bytes(regs->D, regs->E);
 				value--;
 				split_bytes(value, &regs->D, &regs->E);
-				add_cycles(0x8);
+				cycles = 0x8;
 				break;
 			case 0x2B:
 				value = combine_bytes(regs->L, regs->L);
 				value--;
 				split_bytes(value, &regs->H, &regs->L);
-				add_cycles(0x8);
+				cycles = 0x8;
 				break;
 			case 0x3B:
 				ptrs->SP--;
+				cycles = 0x8;
 				break;
 			default:
+			    cycles = 0x0;
 				break;
 		}
+
+		return cycles;
 }		/* -----  end of function sixteen_bit_dec  ----- */

@@ -22,11 +22,10 @@
 #ifndef GLOBALDECLARATIONS
 #define GLOBALDECLARATIONS
 
-unsigned char error_value = 0xFF;
+extern unsigned char error_value;
 extern unsigned char opcode;
 extern Registers *regs; // Pointer to the general registers
 extern Pointers *ptrs; // Pointer to stack pointer and program counter
 extern CPU_Flags *flags; // Pointer to the cpu flags
-extern unsigned int clock_cycles;
 
 #endif

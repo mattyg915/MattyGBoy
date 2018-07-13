@@ -17,12 +17,12 @@
  */
 #ifndef CPUCONTROLINSTRUCTIONS
 #define CPUCONTROLINSTRUCTIONS
-void halt();
-void stop();
-void push();
-void pop();
-void ei();
-void di();
-void ccf();
-void scf();
+unsigned char halt();
+unsigned char stop();
+unsigned char push();
+unsigned char pop();
+unsigned char ei();
+unsigned char di();
+unsigned char ccf();
+unsigned char scf();
 #endif

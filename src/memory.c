@@ -66,6 +66,11 @@ init_memory()
 	new_memory[0xFF48] = 0xFF;
 	new_memory[0xFF49] = 0xFF;
 
+	// Load BIOS
+    FILE *bios_file = fopen("/Users/MattyG/Documents/Programming/BIOS.gb", "rb");
+    fread(new_memory, 0x1, 0xFF, bios_file);
+    fclose(bios_file);
+
 	return new_memory;
 }		/* -----  end of function init_memory  ----- */
 
@@ -135,81 +140,6 @@ load_cartridge(char *file)
 
 /*
  * ===  FUNCTION  ======================================================================
- *         Name:  load_test_cartridge
- *  Description:  Loads a testing file as the game cartridge
- * =====================================================================================
- */
-	unsigned char*
-load_test_cartridge()
-{
-	unsigned char *new_cartridge = malloc(0x200000);
-
-	for (int i = 0x0; i < 0x100; i++)
-    {
-        new_cartridge[i] = 0x0;
-    }
-    new_cartridge[0x100] = 0x00;
-	new_cartridge[0x101] = 0xC3;
-	new_cartridge[0x102] = 0x50;
-	new_cartridge[0x103] = 0x01;
-	new_cartridge[0x150] = 0x00;
-	new_cartridge[0x151] = 0x26;
-	new_cartridge[0x152] = 0x70;
-	new_cartridge[0x153] = 0x2E;
-    new_cartridge[0x154] = 0x75;
-    new_cartridge[0x155] = 0x7E;
-    new_cartridge[0x156] = 0xCD;
-    new_cartridge[0x157] = 0x50;
-    new_cartridge[0x158] = 0x65;
-    new_cartridge[0x6550] = 0xC9;
-    new_cartridge[0x159] = 0x3E;
-    new_cartridge[0x15A] = 0xF;
-    new_cartridge[0x15B] = 0xC6;
-    new_cartridge[0x15C] = 0x01;
-    new_cartridge[0x15D] = 0xF5;
-    new_cartridge[0x15E] = 0x79;
-    new_cartridge[0x15F] = 0xD6;
-    new_cartridge[0x160] = 0x13;
-    new_cartridge[0x161] = 0xF1;
-    new_cartridge[0x162] = 0x76;
-	new_cartridge[0x7075] = 0x77;
-
-	// Parse fields of the header to determine rom/ram banking used
-	switch (new_cartridge[0x147]) // Which mbc should be used
-	{
-		case 0x0:
-			banking_mode = 0; // ROM only
-			break;
-		case 0x1 ... 0x3: // MBC1
-			banking_mode = 1;
-			mbc = init_mbc();
-			break;
-		case 0x5 ... 0x6:
-			banking_mode = 2;
-			mbc = init_mbc();
-			break;
-		default: // Other banking not handled yet
-			banking_mode = 0;
-			break;
-	}
-
-	switch (new_cartridge[0x149])
-	{
-		case 0x1:
-			ext_ram_bank = malloc(0x800);
-		case 0x2:
-			ext_ram_bank = malloc(0x2000);
-		case 0x3:
-			ext_ram_bank = malloc(0x8000);
-		default:
-			break;
-	}
-
-	return new_cartridge;
-}               /* -----  end of function load_test_cartridge  ----- */
-
-/*
- * ===  FUNCTION  ======================================================================
  *         Name:  init_mbc
  *  Description:  Initializes struct containing needed registers when using an MBC chip
  *      Returns:  Pointer to a struct containing registers for MBC chip
@@ -255,7 +185,11 @@ read_memory(unsigned short addr)
 
 	if (banking_mode == 1) // MBC1
 	{
-        if (addr < 0x4000)
+        if (addr < 0x100)
+        {
+            data = memory[addr];
+        }
+        else if (addr < 0x4000)
         {
             data = cartridge[addr];
         }
@@ -273,6 +207,7 @@ read_memory(unsigned short addr)
             }
             else
             {
+                // Getting a segfault here
                 addr -= 0xA000;
                 data = ext_ram_bank[addr + (mbc->ram_bank_number * mbc->ram_bank_size)];
             }
@@ -280,31 +215,34 @@ read_memory(unsigned short addr)
         else
         {
             data = memory[addr];
-
-            if (addr > 0xFF00)
-            {
-                //printf("writing data at %x to %x and i is %d\n", addr, data, i);
-            }
         }
 	}
 	else if (banking_mode == 2) // MBC2
 	    {
-			if (addr < 0x4000)
+            if (addr < 0x100)
+            {
+                data = memory[addr];
+            }
+            else if (addr < 0x4000)
             {
                 data = cartridge[addr];
             }
-			else if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
-		    {
-			    data = cartridge[addr + (mbc->rom_bank_number * 0x4000)];
-		    }
-			else
-		    {
-			    data = memory[addr];
-		    }
+            else if ((addr > 0x3FFF) && (addr < 0x8000)) // Read from ROM banks
+            {
+                data = cartridge[addr + (mbc->rom_bank_number * 0x4000)];
+            }
+            else
+            {
+                data = memory[addr];
+            }
 	    }
 	else // No memory banking
 	{
-        if (addr < 0x8000)
+        if (addr < 0x100)
+        {
+            data = memory[addr];
+        }
+        else if (addr < 0x8000)
         {
             data = cartridge[addr];
         }
@@ -385,6 +323,35 @@ read_memory_ptr(unsigned short addr)
 
 /*
  * ===  FUNCTION  ======================================================================
+ *         Name:  increment_divider
+ *  Description:  Increments the divider register, mem address 0xFF04
+ * =====================================================================================
+ */
+void
+increment_divider()
+{
+	memory[0xFF04]++;
+}		/* -----  end of function increment_divider  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  increment_timer
+ *  Description:  Increments the divider register, mem address 0xFF04
+ * =====================================================================================
+ */
+void
+increment_timer()
+{
+	memory[0xFF05]++;
+	if (memory[0xFF05] == 0x0)
+	{
+		memory[0xFF05] = memory[0xFF06]; // Value resets to value in TMA reg at overflow
+		memory[0xFF0F] |= 0x2; // Request timer interrupt
+	}
+}		/* -----  end of function increment_timer  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
  *         Name:  write_memory
  *  Description:  Writes data to the appropriate location in virtual memory
  *   Parameters:  addr is the memory address to write to
@@ -434,9 +401,9 @@ write_memory(unsigned short addr, unsigned char data)
 			mbc->rom_bank_number &= 0x6E0u;
 			data &= 0x1F;
 			mbc->rom_bank_number |= data;
-			if (mbc->rom_bank_number == 0)
+			if (mbc->rom_bank_number == 0x0)
             {
-                mbc->rom_bank_number = 1;
+                mbc->rom_bank_number = 0x1;
             }
 		}
 	}
@@ -466,9 +433,13 @@ write_memory(unsigned short addr, unsigned char data)
 	{
 		return;
 	}
-	// TODO this is here for testing
 	else if ((addr >= 0xFF00) && (addr < 0xFF80))
 	{
+	    if (addr == 0xFF04)
+        {
+            // Writing any value to Divider Register sets it to 0
+            memory[0xFF04] = 0x0;
+        }
 		if ((addr == 0xFF02) && (data == 0x81))
 		{
 			printf("%c", memory[0xFF01]);

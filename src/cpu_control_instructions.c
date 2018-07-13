@@ -24,12 +24,12 @@
  * ===  FUNCTION  ======================================================================
  *         Name:  pop
  *  Description:  Handles instructions to pop data off of the stack
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-	void
+	unsigned char
 pop ()
 {
-    add_cycles(0xC);
     unsigned char reg_f;
     switch (opcode)
     {
@@ -38,19 +38,19 @@ pop ()
             ptrs->SP++;
             regs->B = read_memory(ptrs->SP);
             ptrs->SP++;
-            return;
+            return 0xC;
         case 0xD1:
             regs->E = read_memory(ptrs->SP);
             ptrs->SP++;
             regs->D = read_memory(ptrs->SP);
             ptrs->SP++;
-            return;
+            return 0xC;
         case 0xE1:
             regs->L = read_memory(ptrs->SP);
             ptrs->SP++;
             regs->H = read_memory(ptrs->SP);
             ptrs->SP++;
-            return;
+            return 0xC;
         case 0xF1:
             reg_f = read_memory(ptrs->SP);
             // Need to reassemble since storing F flags discretely
@@ -64,9 +64,9 @@ pop ()
             ptrs->SP++;
             regs->A = read_memory(ptrs->SP);
             ptrs->SP++;
-            return;
+            return 0xC;
         default:
-            return;
+            return 0x0;
     }
 }		/* -----  end of function pop  ----- */
 
@@ -74,43 +74,45 @@ pop ()
  * ===  FUNCTION  ======================================================================
  *         Name:  ccf
  *  Description:  Handles instructions to complement the carry flag
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-	void
+	unsigned char
 ccf ()
 {
     flags->H = 0x0;
     flags->N = 0x0;
     flags->C ^= 0x1u;
-    add_cycles(0x4);
+    return 0x4;
 }		/* -----  end of function ccf  ----- */
 
 /*
  * ===  FUNCTION  ======================================================================
  *         Name:  scf
  *  Description:  Handles instructions to set the carry flag
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-	void
+	unsigned char
 scf ()
 {
     flags->C = 0x1;
     flags->N = 0x0;
     flags->H = 0x0;
-    add_cycles(0x4);
+    return 0x4;
 }		/* -----  end of function scf  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  push
  *  Description:  Handles instructions to push data onto the stack
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-	void
+	unsigned char
 push ()
 {
 	unsigned char f_reg = 0;
-	add_cycles(0x10);
 	switch (opcode)
 	{
 		case 0xF5:
@@ -123,27 +125,27 @@ push ()
 			f_reg += (flags->H << 0x5u);
 			f_reg += (flags->C << 0x4u);
 			write_memory(ptrs->SP, f_reg);
-			return;
+			return 0x10;
 	    case 0xC5:
 	        ptrs->SP--;
 	        write_memory(ptrs->SP, regs->B);
 	        ptrs->SP--;
 	        write_memory(ptrs->SP, regs->C);
-	        return;
+	        return 0x10;
 	    case 0xD5:
             ptrs->SP--;
             write_memory(ptrs->SP, regs->D);
             ptrs->SP--;
             write_memory(ptrs->SP, regs->E);
-	        return;
+	        return 0x10;
 	    case 0xE5:
             ptrs->SP--;
             write_memory(ptrs->SP, regs->H);
             ptrs->SP--;
             write_memory(ptrs->SP, regs->L);
-	        return;
+	        return 0x10;
         default:
-            return;
+            return 0x10;
     }
 }		/* -----  end of function push  ----- */
 
@@ -151,48 +153,52 @@ push ()
  * ===  FUNCTION  ======================================================================
  *         Name:  halt
  *  Description:  Handles opcodes that direct the CPU to halt
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-	void
+	unsigned char
 halt ()
 {
-    add_cycles(0x4);
+    return 0x4;
 }		/* -----  end of function halt  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  ei
  *  Description:  Handles instructions to enable interrupts
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-	void
+	unsigned char
 ei ()
 {
-	write_memory(0xFFFF, 0x1);
-	add_cycles(0x4);
+	flags->IME = 0x1;
+    return 0x4;
 }		/* -----  end of function ei  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  di
  *  Description:  Handles instructions to disable interrupts
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-	void
+	unsigned char
 di ()
 {
-	write_memory(0xFFFF, 0x1);
-	add_cycles(0x4);
+	flags->IME = 0x0;
+	return 0x4;
 }		/* -----  end of function di  ----- */
 
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  stop
  *  Description:  Handles instructions to stop the CPU's execution
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-	void
+	unsigned char
 stop ()
 {
-	add_cycles(0x4);
+	return 0x4;
 }		/* -----  end of function stop  ----- */

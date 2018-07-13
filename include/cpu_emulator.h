@@ -17,9 +17,8 @@
 
 #ifndef CPUEMULATOR
 #define CPUEMULATOR
-void load_rom (char *rom);
+void boot();
 void eight_bit_update_flags(int value1, int value2);
 void sixteen_bit_update_flags(int value1, int value2);
 void cpu_execution();
-void add_cycles(unsigned int cycles);
 #endif

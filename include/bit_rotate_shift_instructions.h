@@ -29,5 +29,5 @@ void srl (unsigned char *reg);
 void bit (const unsigned char *reg);
 void res (unsigned char *reg);
 void set (unsigned char *reg);
-void bit_rotate_shift ();
+unsigned char bit_rotate_shift ();
 #endif

@@ -26,11 +26,13 @@
  * ===  FUNCTION  ======================================================================
  *         Name:  cp
  *  Description:  Handles opcodes translating to CP instructions
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-    void
+    unsigned char
 cp ()
 {
+    unsigned char cycles;
 	flags->N = 1; // CP sets the N flag
 
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
@@ -40,56 +42,63 @@ cp ()
 		case 0xFE:
 		    operand = read_memory(ptrs->PC);
 			ptrs->PC++;
-			add_cycles(0x8);
+			cycles = 0x8;
 			break;
 		case 0xBE:
 			operand = read_memory(reg_hl);
-            add_cycles(0x8);
+            cycles = 0x8;
 			break;
 		case 0xBF:
 			operand = regs->A;
-            add_cycles(0x4);
+            cycles = 0x4;
 			break;
 		case 0xB8:
 			operand = regs->B;
-            add_cycles(0x4);
+            cycles = 0x4;
 			break;
 		case 0xB9:
 			operand = regs->C;
-            add_cycles(0x4);
+            cycles = 0x4;
 			break;
 		case 0xBA:
 			operand = regs->D;
-            add_cycles(0x4);
+            cycles = 0x4;
 			break;
 		case 0xBB:
 			operand = regs->E;
-            add_cycles(0x4);
+            cycles = 0x4;
 			break;
 		case 0xBC:
 			operand = regs->H;
-            add_cycles(0x4);
+            cycles = 0x4;
 			break;
 		case 0xBD:
 			operand = regs->L;
-            add_cycles(0x4);
+            cycles = 0x4;
 			break;
 		default:
-			return;
+		    operand = 0x0;
+		    cycles = 0x0;
+			break;
 	}
+
 	// A's state is unchanged, only the flags are affected
 	eight_bit_update_flags(regs->A, operand);
+	return cycles;
 }		/* -----  end of function cp  ----- */
 
 /*
  * ===  FUNCTION  ======================================================================
  *         Name:  jp
  *  Description:  Handles opcodes translating to JP instructions
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-    void
+    unsigned char
 jp ()
 {
+    unsigned char cycles;
+
 	// Grab 16-bit immediate for the target
 	unsigned char target_lo = read_memory(ptrs->PC);
 	ptrs->PC++;
@@ -103,59 +112,59 @@ jp ()
 	{
 		case 0xC3:
 			ptrs->PC = target;
-            add_cycles(0x10);
-			return;
+            cycles = 0x10;
+			return cycles;
 		case 0xE9:
 			target = reg_hl;
 			ptrs->PC = target;
-            add_cycles(0x4);
-			return;
+            cycles = 0x4;
+			return cycles;
 		case 0xDA:
 			if (flags->C)
 			{
 				ptrs->PC = target;
-				add_cycles(0x10);
+				cycles = 0x10;
 			}
 			else
             {
-                add_cycles(0xC);
+                cycles = 0xC;
             }
-			return;
+			return cycles;
 		case 0xD2:
             if (!flags->C)
 			{
 				ptrs->PC = target;
-				add_cycles(0x10);
+				cycles = 0x10;
 			}
             else
             {
-                add_cycles(0xC);
+                cycles = 0xC;
             }
-			return;
+			return cycles;
 		case 0xC2:
             if (!flags->Z)
 			{
 				ptrs->PC = target;
-				add_cycles(0x10);
+				cycles = 0x10;
 			}
             else
             {
-                add_cycles(0xC);
+                cycles = 0xC;
             }
-			return;
+			return cycles;
 		case 0xCA:
             if (flags->Z)
 			{
 				ptrs->PC = target;
-				add_cycles(0x10);
+				cycles = 0x10;
 			}
             else
             {
-                add_cycles(0xC);
+                cycles = 0xC;
             }
-			return;
+			return cycles;
 		default:
-			return;
+			return 0x0;
 	}
 }		/* -----  end of function jp  ----- */
 
@@ -163,11 +172,13 @@ jp ()
  * ===  FUNCTION  ======================================================================
  *         Name:  jr
  *  Description:  Handles opcodes translating to JR instructions
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-        void
+        unsigned char
 jr ()
 {
+    unsigned char cycles;
 	// All ops use a 1-byte immediate
 	char offset = read_memory(ptrs->PC);
 	ptrs->PC++;
@@ -176,54 +187,54 @@ jr ()
 	{
 		case 0x18:
 			ptrs->PC += offset;
-			add_cycles(0xC);
-			return;
+			cycles = 0xC;
+			return cycles;
 		case 0x38:
             if (flags->C)
 			{
 				ptrs->PC += offset;
-				add_cycles(0xC);
+				cycles = 0xC;
 			}
             else
             {
-                add_cycles(0x8);
+                cycles = 0x8;
             }
-			return;
+			return cycles;
 		case 0x30:
             if (!flags->C)
 			{
 				ptrs->PC += offset;
-				add_cycles(0xC);
+				cycles = 0xC;
 			}
             else
             {
-                add_cycles(0x8);
+                cycles = 0x8;
             }
-			return;
+			return cycles;
 		case 0x20:
             if (!flags->Z)
 			{
 				ptrs->PC += offset;
-				add_cycles(0xC);
+				cycles = 0xC;
 			}
             else
             {
-                add_cycles(0x8);
+                cycles = 0x8;
             }
-			return;
+			return cycles;
 		case 0x28:
             if (flags->Z)
 			{
 				ptrs->PC += offset;
-				add_cycles(0xC);
+				cycles = 0xC;
 			}
             else
             {
-                add_cycles(0x8);
+                cycles = 0x8;
             }
-			return;
+			return cycles;
 		default:
-			break;
+			return 0x0;
 	}
 }               /* -----  end of function jr  ----- */
 
@@ -231,11 +242,14 @@ jr ()
  * ===  FUNCTION  ======================================================================
  *         Name:  call
  *  Description:  Handles opcodes translating to CALL instructions
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-        void
+        unsigned char
 call ()
 {
+    unsigned char cycles;
+
     // Grab 16-bit immediate for the target
     unsigned char target_lo = read_memory(ptrs->PC);
     ptrs->PC++;
@@ -257,8 +271,8 @@ call ()
 			write_memory(ptrs->SP, pc_low);
 
  			ptrs->PC = target;
- 			add_cycles(0x18);
-			return;
+ 			cycles = 0x18;
+			return cycles;
 		case 0xDC:
             if (flags->C)
 			{
@@ -268,13 +282,13 @@ call ()
 				write_memory(ptrs->SP, pc_low);
 
 	 			ptrs->PC = target;
-	 			add_cycles(0x18);
+	 			cycles = 0x18;
 			}
             else
             {
-                add_cycles(0xC);
+                cycles = 0xC;
             }
-			return;
+			return cycles;
 		case 0xD4:
             if (!flags->C)
 			{
@@ -284,13 +298,13 @@ call ()
 				write_memory(ptrs->SP, pc_low);
 
 	 			ptrs->PC = target;
-	 			add_cycles(0x18);
+	 			cycles = 0x18;
 			}
             else
             {
-                add_cycles(0xC);
+                cycles = 0xC;
             }
-			return;
+			return cycles;
 		case 0xC4:
             if (!flags->Z)
 			{
@@ -300,13 +314,13 @@ call ()
 				write_memory(ptrs->SP, pc_low);
 
  				ptrs->PC = target;
- 				add_cycles(0x18);
+ 				cycles = 0x18;
 			}
             else
             {
-                add_cycles(0xC);
+                cycles = 0xC;
             }
-			return;
+			return cycles;
 		case 0xCC:
             if (flags->Z)
 			{
@@ -316,15 +330,15 @@ call ()
 				write_memory(ptrs->SP, pc_low);
 
  				ptrs->PC = target;
- 				add_cycles(0x18);
+ 				cycles = 0x18;
 			}
             else
             {
-                add_cycles(0xC);
+                cycles = 0xC;
             }
-			return;
+			return cycles;
 		default:
-			return;
+			return 0x0;
 	}
 }               /* -----  end of function call  ----- */
 
@@ -332,11 +346,14 @@ call ()
  * ===  FUNCTION  ======================================================================
  *         Name:  ret
  *  Description:  Handles opcodes translating to RET instructions
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-        void
+        unsigned char
 ret ()
 {
+    unsigned char cycles;
+
     // Grab return address off the stack
     unsigned char return_lo = read_memory(ptrs->SP);
     ptrs->SP++;
@@ -347,54 +364,54 @@ ret ()
 	{
 		case 0xC9:
 			ptrs->PC = return_address;
-			add_cycles(0x10);
-			return;
+			cycles = 0x10;
+			return cycles;
 		case 0xD8:
             if (flags->C)
 			{
 				ptrs->PC = return_address;
-				add_cycles(0x14);
+				cycles = 0x14;
 			}
             else
             {
-                add_cycles(0x8);
+                cycles = 0x8;
             }
-			return;
+			return cycles;
 		case 0xD0:
             if (!flags->C)
 			{
 				ptrs->PC = return_address;
-				add_cycles(0x14);
+				cycles = 0x14;
 			}
             else
             {
-                add_cycles(0x8);
+                cycles = 0x8;
             }
-			return;
+			return cycles;
 		case 0xC0:
             if (!flags->Z)
 			{
 				ptrs->PC = return_address;
-				add_cycles(0x14);
+				cycles = 0x14;
 			}
             else
             {
-                add_cycles(0x8);
+                cycles = 0x8;
             }
-			return;
+			return cycles;
 		case 0xC8:
             if (flags->Z)
 			{
 				ptrs->PC = return_address;
-				add_cycles(0x14);
+				cycles = 0x14;
 			}
             else
             {
-                add_cycles(0x8);
+                cycles = 0x8;
             }
-			return;
+			return cycles;
 		default:
-			return;
+			return 0x0;
 	}
 }               /* -----  end of function ret  ----- */
 
@@ -402,11 +419,14 @@ ret ()
  * ===  FUNCTION  ======================================================================
  *         Name:  reti
  *  Description:  Handles opcodes translating to RETI instructions
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-        void
+        unsigned char
 reti ()
 {
+    unsigned char cycles;
+
     // Get return address off the stack
     unsigned char return_lo = read_memory(ptrs->SP);
     ptrs->SP++;
@@ -417,18 +437,23 @@ reti ()
     // Unconditional return
 	ptrs->PC = return_address;
 	write_memory(0xFFFF, 0x1); // Enable interrupts
-    add_cycles(0x10);
+
+    cycles = 0x10;
+    return cycles;
 }               /* -----  end of function reti  ----- */
 
 /*
  * ===  FUNCTION  ======================================================================
  *         Name:  rst
  *  Description:  Handles opcodes translating to RST instructions
+ *       Return:  The number of clock cycles to execute this instruction
  * =====================================================================================
  */
-        void
+        unsigned char
 rst ()
 {
+    unsigned char cycles;
+
 	unsigned char target = 0;
 
 	switch (opcode)
@@ -458,7 +483,7 @@ rst ()
 			target = 0x38;
 			break;
 		default:
-			return;
+			return 0x0;
 	}
 
     // Grab both bytes of PC to store on the stack
@@ -471,5 +496,6 @@ rst ()
     write_memory(ptrs->SP, pc_low);
 
 	ptrs->PC = target;
-	add_cycles(0x10);
+	cycles = 0x10;
+	return cycles;
 }               /* -----  end of function rst  ----- */

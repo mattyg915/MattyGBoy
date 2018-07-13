@@ -3,8 +3,8 @@
  *
  *       Filename:  register_structures.c
  *
- *    Description:  Constains definitions of functions used to initialize the
- *    		    structures that contain the registers
+ *    Description:  Contains definitions of functions used to initialize the
+ *    		        structures that contain the registers
  *
  *        Version:  1.0
  *        Created:  05/25/2018 20:05:04
@@ -40,13 +40,13 @@ init_registers()
 	}
 
 	// Initialize registers
-	reg_ptr->A = 0x01;
-	reg_ptr->B = 0x01;
-	reg_ptr->C = 0x13;
+	reg_ptr->A = 0x00;
+	reg_ptr->B = 0x00;
+	reg_ptr->C = 0x00;
 	reg_ptr->D = 0x00;
-	reg_ptr->E = 0xD8;
-	reg_ptr->H = 0x01;
-	reg_ptr->L = 0x4D;
+	reg_ptr->E = 0x00;
+	reg_ptr->H = 0x00;
+	reg_ptr->L = 0x00;
 
 	return reg_ptr;
 }		/* -----  end of function init_registers  ----- */
@@ -67,8 +67,8 @@ init_pointers()
 		return NULL;
 	}
 	// Program counter starts at 0x100, stack at 0xFFFE
-	ptrs_ptr->PC = 0x0100;
-	ptrs_ptr->SP = 0xFFFE;
+	ptrs_ptr->PC = 0x0000;
+	ptrs_ptr->SP = 0x0000;
 
 	return ptrs_ptr;
 }		/* -----  end of function init_pointers  ----- */
@@ -89,10 +89,11 @@ init_flags ()
 		return NULL;
 	}
 
-	flags_ptr->Z = 1;
-	flags_ptr->N = 0;
-	flags_ptr->H = 1;
-	flags_ptr->C = 1;
+	flags_ptr->Z = 0x0;
+	flags_ptr->N = 0x0;
+	flags_ptr->H = 0x0;
+	flags_ptr->C = 0x0;
+	flags_ptr->IME = 0x0;
 
 	return flags_ptr;
 }		/* -----  end of function init_flags  ----- */

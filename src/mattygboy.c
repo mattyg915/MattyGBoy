@@ -24,12 +24,12 @@
 
 #define EXIT_SUCCESS 0 // Quit without error condition
 
+unsigned char error_value = 0xFF;
 unsigned char *memory;
 unsigned char *cartridge;
 Registers *regs;
 Pointers *ptrs;
 CPU_Flags *flags;
-int i;
 
 int main(int argc, char **argv) 
 {
@@ -56,20 +56,20 @@ int main(int argc, char **argv)
 	flags = init_flags();
 
 	// TODO: for now just load rom via command line argument
-    //cartridge = load_test_cartridge(); // For Testing
 	cartridge = load_cartridge(argv[optind]);
 	memory = init_memory();
 
+
 	// TODO:Main program loop, fetch/decode/execute
 	// TODO just set up for testing for the moment
-    i = 0;
-	while (1) {
+    int i = 0;
+	while (i < 100000)
+	{
         cpu_execution();
-		//printf("opcode: %x\n", opcode);
-		//dump_registers();
         i++;
 	}
-
+    dump_registers();
+    //printf("divider is %x and timer is %x\n", memory[0xFF04], memory[0xFF05]);
 	free(regs); free(ptrs); free(flags);
 	return EXIT_SUCCESS;
 }

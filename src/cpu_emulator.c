@@ -26,7 +26,8 @@
 #include "cpu_control_instructions.h"
 
 unsigned char opcode;
-static unsigned short divider_counter = 0;
+static unsigned char divider_counter = 0x0;
+static unsigned int timer_counter = 0x0;
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -79,15 +80,11 @@ eight_bit_update_flags (int value1, int value2)
 		carry_test = value1 - value2;
         zero_test = (unsigned char) value1 - (unsigned char) value2;
 
-		// Half Carry Flag - subtraction
-        if ((value1 & 0xF0u) == 0x0u) // NOLINT
+		// Half Carry Flag - subtraction TODO something is still broken here
+        if (((value1 & 0xF) - (value2 & 0xF)) < 0) //NOLINT
         {
-            flags->H = 0;
+            flags->H = 1;
         }
-		else if ((((value1 & 0xF0) - (value2 & 0xF)) & 0xF) > 0) //NOLINT
-		{
-			flags->H = 1;
-		}
         else
 		{
 			flags->H = 0;
@@ -137,7 +134,7 @@ sixteen_bit_update_flags (int value1, int value2)
             zero_test = (unsigned short) value1 + (unsigned short) value2;
 
             // Half-Carry - addition
-            if ((((value1 & 0x0FFF) + (value2 & 0x0FFF)) & 0x1000) == 0x1000) //NOLINT
+            if ((((value1 & 0x00FF) + (value2 & 0x00FF)) & 0x1000) == 0x0100) //NOLINT
             {
                     flags->H = 1;
             }
@@ -163,11 +160,7 @@ sixteen_bit_update_flags (int value1, int value2)
             zero_test = (unsigned short) value1 - (unsigned short) value2;
 
             // Half Carry Flag - subtraction
-            if ((value1 & 0xF000u) == 0x0u) // NOLINT
-            {
-                flags->H = 0;
-            }
-            if ((((value1 & 0xF000) - (value2 & 0x0FFF)) & 0xFFF) > 0) // NOLINT
+            if (((value1 & 0xFF) - (value2 & 0xFF)) < 0) // NOLINT
             {
                     flags->H = 1;
             }
@@ -208,6 +201,7 @@ sixteen_bit_update_flags (int value1, int value2)
 fetch ()
 {
     opcode = read_memory(ptrs->PC);
+    printf("opcode is %x\n", opcode);
     ptrs->PC++;
 }               /* -----  end of function fetch  ----- */
 
@@ -475,16 +469,89 @@ decode ()
 
 /*
  * ===  FUNCTION  ======================================================================
+ *         Name:  update_timers
+ *  Description:  Handles updates to the timer registers
+ * =====================================================================================
+ */
+    static void
+update_timers(unsigned char cycles)
+{
+    for (int i = 0x0; i < cycles; i++)
+    {
+        // Update the divider register
+        divider_counter++;
+        if (divider_counter == 0x0) {
+            increment_divider();
+        }
+
+        // Update the timer register
+        timer_counter++;
+        unsigned char tac_reg = read_memory(0xFF07);
+		// Only increment timer if bit 3 of TAC set
+        unsigned char tima_enable = (unsigned char) (tac_reg & 0x4u);
+
+		// TIMA update frequency specified by 2 LSB in TAC
+		switch (tac_reg & 0x3u)
+		{
+			case 0x00:
+				if (timer_counter == 0x400) // 4096 Hz / 1024 clocks
+				{
+					if (tima_enable)
+					{
+						increment_timer();
+					}
+					timer_counter = 0x0;
+				}
+				break;
+			case 0x01:
+				if (timer_counter == 0x10) // 262144 Hz / 16 clocks
+				{
+					if (tima_enable)
+					{
+						increment_timer();
+					}
+					timer_counter = 0x0;
+				}
+				break;
+			case 0x02:
+				if (timer_counter == 0x40) // 65536 Hz / 64 clocks
+				{
+					if (tima_enable)
+					{
+						increment_timer();
+					}
+					timer_counter = 0x0;
+				}
+				break;
+			case 0x3:
+				if (timer_counter == 0x100) // 16384 Hz / 256 clocks
+				{
+					if (tima_enable)
+					{
+						increment_timer();
+					}
+					timer_counter = 0x0;
+				}
+				break;
+			default:
+				break;
+		}
+    }
+}        /* -----  end of function update timers  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
  *         Name:  cpu_execution
  *  Description:  Emulates the three primary functions of the CPU using associated
  *                functions: fetch an opcode, decode it, execute it's instruction
  * =====================================================================================
  */
-        void
+    void
 cpu_execution ()
 {
     unsigned char cycles;
     fetch();
     cycles = decode();
-    // TODO update the timers
+    dump_registers();
+    update_timers(cycles);
 }		/* -----  end of function cpu_execution  ----- */
