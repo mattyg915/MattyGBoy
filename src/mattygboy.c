@@ -63,12 +63,12 @@ int main(int argc, char **argv)
 	// TODO:Main program loop, fetch/decode/execute
 	// TODO just set up for testing for the moment
     int i = 0;
-	while (i < 100000)
+	while (1)
 	{
         cpu_execution();
         i++;
 	}
-    dump_registers();
+    //dump_registers();
     //printf("divider is %x and timer is %x\n", memory[0xFF04], memory[0xFF05]);
 	free(regs); free(ptrs); free(flags);
 	return EXIT_SUCCESS;

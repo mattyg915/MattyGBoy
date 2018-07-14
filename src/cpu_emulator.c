@@ -201,7 +201,7 @@ sixteen_bit_update_flags (int value1, int value2)
 fetch ()
 {
     opcode = read_memory(ptrs->PC);
-    printf("opcode is %x\n", opcode);
+    //printf("opcode is %x\n", opcode);
     ptrs->PC++;
 }               /* -----  end of function fetch  ----- */
 
@@ -552,6 +552,6 @@ cpu_execution ()
     unsigned char cycles;
     fetch();
     cycles = decode();
-    dump_registers();
+    //dump_registers();
     update_timers(cycles);
 }		/* -----  end of function cpu_execution  ----- */

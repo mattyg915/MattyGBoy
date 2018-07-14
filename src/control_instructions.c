@@ -352,8 +352,6 @@ call ()
         unsigned char
 ret ()
 {
-    unsigned char cycles;
-
     // Grab return address off the stack
     unsigned char return_lo = read_memory(ptrs->SP);
     ptrs->SP++;
@@ -364,52 +362,47 @@ ret ()
 	{
 		case 0xC9:
 			ptrs->PC = return_address;
-			cycles = 0x10;
-			return cycles;
+			return 0x10;
 		case 0xD8:
             if (flags->C)
 			{
 				ptrs->PC = return_address;
-				cycles = 0x14;
+				return 0x14;
 			}
             else
             {
-                cycles = 0x8;
+				return 0x8;
             }
-			return cycles;
 		case 0xD0:
             if (!flags->C)
 			{
 				ptrs->PC = return_address;
-				cycles = 0x14;
+				return 0x14;
 			}
             else
             {
-                cycles = 0x8;
+                return 0x8;
             }
-			return cycles;
 		case 0xC0:
             if (!flags->Z)
 			{
 				ptrs->PC = return_address;
-				cycles = 0x14;
+				return 0x14;
 			}
             else
             {
-                cycles = 0x8;
+				return 0x8;
             }
-			return cycles;
 		case 0xC8:
             if (flags->Z)
 			{
 				ptrs->PC = return_address;
-				cycles = 0x14;
+				return 0x14;
 			}
             else
             {
-                cycles = 0x8;
+				return 0x8;
             }
-			return cycles;
 		default:
 			return 0x0;
 	}
@@ -425,8 +418,6 @@ ret ()
         unsigned char
 reti ()
 {
-    unsigned char cycles;
-
     // Get return address off the stack
     unsigned char return_lo = read_memory(ptrs->SP);
     ptrs->SP++;
@@ -436,10 +427,9 @@ reti ()
 
     // Unconditional return
 	ptrs->PC = return_address;
-	write_memory(0xFFFF, 0x1); // Enable interrupts
+	flags->IME = 0x1; // Enable interrupts
 
-    cycles = 0x10;
-    return cycles;
+    return 0x10;
 }               /* -----  end of function reti  ----- */
 
 /*
@@ -452,8 +442,6 @@ reti ()
         unsigned char
 rst ()
 {
-    unsigned char cycles;
-
 	unsigned char target = 0;
 
 	switch (opcode)
@@ -496,6 +484,5 @@ rst ()
     write_memory(ptrs->SP, pc_low);
 
 	ptrs->PC = target;
-	cycles = 0x10;
-	return cycles;
+	return 0x10;
 }               /* -----  end of function rst  ----- */
