@@ -27,6 +27,7 @@ typedef struct MBC_Registers
 	unsigned char ram_rom_select; // Set to 1 if ROM mode, 0 for RAM
 } MBC_Registers;
 
+void increment_scanline();
 void increment_divider();
 void increment_timer();
 MBC_Registers* init_mbc();

@@ -17,7 +17,6 @@
 
 #ifndef CPUEMULATOR
 #define CPUEMULATOR
-void boot();
 void eight_bit_update_flags(int value1, int value2);
 void sixteen_bit_update_flags(int value1, int value2);
 void cpu_execution();

@@ -183,13 +183,14 @@ read_memory(unsigned short addr)
 {
 	unsigned char data;
 
+	if (boot && (addr < 0x100)) // Only use during boot process
+    {
+        return memory[addr];
+    }
+
 	if (banking_mode == 1) // MBC1
 	{
-        if (addr < 0x100)
-        {
-            data = memory[addr];
-        }
-        else if (addr < 0x4000)
+        if (addr < 0x4000)
         {
             data = cartridge[addr];
         }
@@ -219,11 +220,7 @@ read_memory(unsigned short addr)
 	}
 	else if (banking_mode == 2) // MBC2
 	    {
-            if (addr < 0x100)
-            {
-                data = memory[addr];
-            }
-            else if (addr < 0x4000)
+            if (addr < 0x4000)
             {
                 data = cartridge[addr];
             }
@@ -238,11 +235,7 @@ read_memory(unsigned short addr)
 	    }
 	else // No memory banking
 	{
-        if (addr < 0x100)
-        {
-            data = memory[addr];
-        }
-        else if (addr < 0x8000)
+        if (addr < 0x8000)
         {
             data = cartridge[addr];
         }
@@ -327,7 +320,7 @@ read_memory_ptr(unsigned short addr)
  *  Description:  Increments the divider register, mem address 0xFF04
  * =====================================================================================
  */
-void
+    void
 increment_divider()
 {
 	memory[0xFF04]++;
@@ -339,16 +332,36 @@ increment_divider()
  *  Description:  Increments the divider register, mem address 0xFF04
  * =====================================================================================
  */
-void
+    void
 increment_timer()
 {
 	memory[0xFF05]++;
 	if (memory[0xFF05] == 0x0)
 	{
-		memory[0xFF05] = memory[0xFF06]; // Value resets to value in TMA reg at overflow
-		memory[0xFF0F] |= 0x2; // Request timer interrupt
+        memory[0xFF05] = memory[0xFF06]; // Value resets to value in TMA reg at overflow
+        memory[0xFF0F] |= 0x4; // Request timer interrupt
 	}
 }		/* -----  end of function increment_timer  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  increment_scanline
+ *  Description:  Increments the y coordinate register, mem address 0xFF44
+ * =====================================================================================
+ */
+    void
+increment_scanline()
+{
+    memory[0xFF44]++;
+    if (memory[0xFF44] == 0x90) // V-Blank interrupt request
+    {
+        memory[0xFF0F] |= 0x1;
+    }
+    if (memory[0xFF44] > 0x99)
+    {
+        memory[0xFF44] = 0x0;
+    }
+}		/* -----  end of function increment_scanline  ----- */
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -361,62 +374,62 @@ increment_timer()
 	void
 write_memory(unsigned short addr, unsigned char data)
 {
-	if (addr <= 0x1FFF) // RAM enable
-	{
-		// Enable RAM if lower nibble of data == 0xA
-		mbc->ram_enable = (unsigned char) ((data & 0xFu) == 0xA ? 1 : 0);
-		return;
-	}
-	else if ((addr >= 0x2000) && (addr <= 0x3FFF)) // Set low 5 bits of rom bank
-	{
-		mbc->rom_bank_number += (unsigned char) (data & 0x1Fu);
+    if (addr <= 0x1FFF) // RAM enable
+    {
+        // Enable RAM if lower nibble of data == 0xA
+        mbc->ram_enable = (unsigned char) ((data & 0xFu) == 0xA ? 1 : 0);
+        return;
+    }
+    else if ((addr >= 0x2000) && (addr <= 0x3FFF)) // Set low 5 bits of rom bank
+    {
+        mbc->rom_bank_number += (unsigned char) (data & 0x1Fu);
 
-		switch (mbc->rom_bank_number)
-		{
-			case 0x0: // Bank 0 is fixed
-				mbc->rom_bank_number = 0x1;
-				break;
-			case 0x20: // Banks 20, 40, and 60 aren't used/don't exist
-				mbc->rom_bank_number = 0x21;
-				break;
-			case 0x40:
-				mbc->rom_bank_number = 0x41;
-				break;
-			case 0x61:
-				mbc->rom_bank_number = 0x61;
-				break;
-			default:
-				break;
-		}
-		return;
-	}
-	else if ((addr > 0x3FFF) && (addr < 0x6000)) // Set ram bank or upper 2 bits rom
-	{
-		if (mbc->ram_rom_select) // RAM mode
-		{
-			mbc->ram_bank_number = (unsigned char) (data & 0x3u);
-		}
-		else // ROM mode, set bits 5 and 6 of rom bank
-		{
-			mbc->rom_bank_number &= 0x6E0u;
-			data &= 0x1F;
-			mbc->rom_bank_number |= data;
-			if (mbc->rom_bank_number == 0x0)
+        switch (mbc->rom_bank_number)
+        {
+            case 0x0: // Bank 0 is fixed
+                mbc->rom_bank_number = 0x1;
+                break;
+            case 0x20: // Banks 20, 40, and 60 aren't used/don't exist
+                mbc->rom_bank_number = 0x21;
+                break;
+            case 0x40:
+                mbc->rom_bank_number = 0x41;
+                break;
+            case 0x61:
+                mbc->rom_bank_number = 0x61;
+                break;
+            default:
+                break;
+        }
+        return;
+    }
+    else if ((addr > 0x3FFF) && (addr < 0x6000)) // Set ram bank or upper 2 bits rom
+    {
+        if (mbc->ram_rom_select) // RAM mode
+        {
+            mbc->ram_bank_number = (unsigned char) (data & 0x3u);
+        }
+        else // ROM mode, set bits 5 and 6 of rom bank
+        {
+            mbc->rom_bank_number &= 0x6E0u;
+            data &= 0x1F;
+            mbc->rom_bank_number |= data;
+            if (mbc->rom_bank_number == 0x0)
             {
                 mbc->rom_bank_number = 0x1;
             }
-		}
-	}
-	else if ((addr > 0x5FFF) && (addr < 0x8000)) // Select RAM/ROM mode
-	{
-		mbc->ram_rom_select = (unsigned char) (data & 0x1u);
+        }
+    }
+    else if ((addr > 0x5FFF) && (addr < 0x8000)) // Select RAM/ROM mode
+    {
+        mbc->ram_rom_select = (unsigned char) (data & 0x1u);
 
-		if (mbc->ram_rom_select)
-		{
-			mbc->ram_bank_number = 0;
-		}
-	}
-	else if ((addr > 0x9FFF) && (addr < 0xC000))
+        if (mbc->ram_rom_select)
+        {
+            mbc->ram_bank_number = 0;
+        }
+    }
+    else if ((addr > 0x9FFF) && (addr < 0xC000)) // External RAM banks
     {
         if (mbc->ram_enable)
         {
@@ -424,31 +437,30 @@ write_memory(unsigned short addr, unsigned char data)
             ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)] = data;
         }
     }
-	else if ((addr > 0xDFFF) && (addr < 0xFE00)) // ECHO
-	{
-		memory[addr] = data;
-		memory[addr - 0x2000] = data;
-	}
-	else if ((addr >= 0xFEA0) && (addr < 0xFF00)) // Unusable because reasons
-	{
-		return;
-	}
-	else if ((addr >= 0xFF00) && (addr < 0xFF80))
-	{
-	    if (addr == 0xFF04)
-        {
-            // Writing any value to Divider Register sets it to 0
-            memory[0xFF04] = 0x0;
-        }
-		if ((addr == 0xFF02) && (data == 0x81))
-		{
-			printf("%c", memory[0xFF01]);
-			fflush(stdout);
-		}
+    else if ((addr > 0xDFFF) && (addr < 0xFE00)) // ECHO
+    {
         memory[addr] = data;
-	}
-	else // Unrestricted memory write access
-	{
-		memory[addr] = data;
-	}
-}               /* -----  end of function write_memory  ----- */
+        memory[addr - 0x2000] = data;
+    }
+    else if ((addr >= 0xFEA0) && (addr < 0xFF00)) // Unusable because reasons
+    {
+        return;
+    }
+    else if (addr == 0xFF04) // Divider Register, any write sets to 0
+    {
+        memory[0xFF04] = 0x0;
+    }
+    else if (addr == 0xFF44) // Writes to y coordinate register clear it
+    {
+        memory[0xFF44] = 0x0;
+    }
+    else if ((addr == 0xFF02) && (data == 0x81)) // Serial cable out
+    {
+        printf("%c", memory[0xFF01]);
+        fflush(stdout);
+    }
+    else // Unrestricted memory write access
+    {
+        memory[addr] = data;
+    }
+}       /* -----  end of function write_memory  ----- */

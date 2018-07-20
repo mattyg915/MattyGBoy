@@ -25,6 +25,7 @@
 #define EXIT_SUCCESS 0 // Quit without error condition
 
 unsigned char error_value = 0xFF;
+unsigned char boot = 0x1;
 unsigned char *memory;
 unsigned char *cartridge;
 Registers *regs;
@@ -63,13 +64,25 @@ int main(int argc, char **argv)
 	// TODO:Main program loop, fetch/decode/execute
 	// TODO just set up for testing for the moment
     int i = 0;
-	while (1)
-	{
+    while(ptrs->PC != 0x100) // Boot
+    {
         cpu_execution();
+    }
+
+    boot = 0x0; // Disable boot rom
+
+	while (i < 16545)
+	{
+        //printf("mem ff44 is %x\n", memory[0xFF44]);
+        //printf("divider is %x and timer is %x\n", memory[0xFF04], memory[0xFF05]);
+        cpu_execution();
+        printf("opcode: %x\n",opcode);
+        dump_registers();
         i++;
 	}
-    //dump_registers();
-    //printf("divider is %x and timer is %x\n", memory[0xFF04], memory[0xFF05]);
+    printf("mem ff44 is %x\n", memory[0xFF44]);
+    printf("divider is %x and timer is %x\n", memory[0xFF04], memory[0xFF05]);
+    dump_registers();
 	free(regs); free(ptrs); free(flags);
 	return EXIT_SUCCESS;
 }
