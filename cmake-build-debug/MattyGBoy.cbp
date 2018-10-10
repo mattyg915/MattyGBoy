@@ -99,6 +99,9 @@
 		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/global_declarations.h">
 			<Option target="MattyGBoy"/>
 		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/graphics.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
 		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/helper_functions.h">
 			<Option target="MattyGBoy"/>
 		</Unit>
@@ -117,6 +120,9 @@
 		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/register_structures.h">
 			<Option target="MattyGBoy"/>
 		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/timers.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
 		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/bit_rotate_shift_instructions.c">
 			<Option target="MattyGBoy"/>
 		</Unit>
@@ -127,6 +133,9 @@
 			<Option target="MattyGBoy"/>
 		</Unit>
 		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/cpu_emulator.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/graphics.c">
 			<Option target="MattyGBoy"/>
 		</Unit>
 		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/helper_functions.c">
@@ -148,6 +157,9 @@
 			<Option target="MattyGBoy"/>
 		</Unit>
 		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/register_structures.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/timers.c">
 			<Option target="MattyGBoy"/>
 		</Unit>
 		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/CMakeLists.txt">

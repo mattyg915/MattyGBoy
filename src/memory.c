@@ -23,7 +23,6 @@
 #include "memory.h"
 #include "global_declarations.h"
 
-extern unsigned char *memory;
 extern unsigned char *cartridge;
 
 // Track ROM banking
@@ -44,7 +43,7 @@ static unsigned char *ext_ram_bank = NULL; // Single array to virtualize all RAM
 init_memory()
 {
 	unsigned char *new_memory = malloc(0xFFFF);
-
+    /**
 	// Initialize hardware registers
 	new_memory[0xFF10] = 0x80;
 	new_memory[0xFF11] = 0xBF;
@@ -65,6 +64,7 @@ init_memory()
 	new_memory[0xFF47] = 0xFC;
 	new_memory[0xFF48] = 0xFF;
 	new_memory[0xFF49] = 0xFF;
+     **/
 
 	// Load BIOS
     FILE *bios_file = fopen("/Users/MattyG/Documents/Programming/BIOS.gb", "rb");
@@ -313,55 +313,6 @@ read_memory_ptr(unsigned short addr)
 
     return mem;
 }		/* -----  end of function read_memory_ptr  ----- */
-
-/*
- * ===  FUNCTION  ======================================================================
- *         Name:  increment_divider
- *  Description:  Increments the divider register, mem address 0xFF04
- * =====================================================================================
- */
-    void
-increment_divider()
-{
-	memory[0xFF04]++;
-}		/* -----  end of function increment_divider  ----- */
-
-/*
- * ===  FUNCTION  ======================================================================
- *         Name:  increment_timer
- *  Description:  Increments the divider register, mem address 0xFF04
- * =====================================================================================
- */
-    void
-increment_timer()
-{
-	memory[0xFF05]++;
-	if (memory[0xFF05] == 0x0)
-	{
-        memory[0xFF05] = memory[0xFF06]; // Value resets to value in TMA reg at overflow
-        memory[0xFF0F] |= 0x4; // Request timer interrupt
-	}
-}		/* -----  end of function increment_timer  ----- */
-
-/*
- * ===  FUNCTION  ======================================================================
- *         Name:  increment_scanline
- *  Description:  Increments the y coordinate register, mem address 0xFF44
- * =====================================================================================
- */
-    void
-increment_scanline()
-{
-    memory[0xFF44]++;
-    if (memory[0xFF44] == 0x90) // V-Blank interrupt request
-    {
-        memory[0xFF0F] |= 0x1;
-    }
-    if (memory[0xFF44] > 0x99)
-    {
-        memory[0xFF44] = 0x0;
-    }
-}		/* -----  end of function increment_scanline  ----- */
 
 /*
  * ===  FUNCTION  ======================================================================

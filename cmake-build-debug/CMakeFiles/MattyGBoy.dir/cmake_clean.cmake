@@ -10,6 +10,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/MattyGBoy.dir/src/mattygboy.c.o"
   "CMakeFiles/MattyGBoy.dir/src/memory.c.o"
   "CMakeFiles/MattyGBoy.dir/src/register_structures.c.o"
+  "CMakeFiles/MattyGBoy.dir/src/graphics.c.o"
+  "CMakeFiles/MattyGBoy.dir/src/timers.c.o"
   "MattyGBoy.pdb"
   "MattyGBoy"
 )

@@ -27,4 +27,4 @@ add_executable(MattyGBoy
     src/math_instructions.c
     src/mattygboy.c
     src/memory.c
-    src/register_structures.c)
+    src/register_structures.c include/graphics.h src/graphics.c include/timers.h src/timers.c)

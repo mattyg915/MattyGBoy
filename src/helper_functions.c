@@ -55,10 +55,10 @@ dump_registers()
 	unsigned short DE = combine_bytes(regs->D, regs->E);
 	unsigned short HL = combine_bytes(regs->H, regs->L);
 
-	printf("Registers:\nAF: %x\nBC: %x\nDE: %x\nHL: %x\n", AF, BC, DE, HL);
-	printf("Stack pointer: %x Program Counter: %x\n",
+	printf("Registers:\nAF: 0x%x\nBC: 0x%x\nDE: 0x%x\nHL: 0x%x\n", AF, BC, DE, HL);
+	printf("Stack pointer: 0x%x Program Counter: 0x%x\n",
 			ptrs->SP, ptrs->PC);
-	printf("Flags: Z: %x N: %x H: %x C: %x IME: %x\n\n",
+	printf("Flags: Z: 0x%x N: 0x%x H: 0x%x C: 0x%x IME: 0x%x\n\n",
 			flags->Z, flags->N, flags->H, flags->C, flags->IME);
 }		/* -----  end of function dump_registers  ----- */
 

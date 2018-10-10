@@ -24,11 +24,10 @@
 #include "control_instructions.h"
 #include "load_instructions.h"
 #include "cpu_control_instructions.h"
+#include "graphics.h"
+#include "timers.h"
 
 unsigned char opcode;
-static unsigned char divider_counter = 0x0;
-static unsigned int timer_counter = 0x0;
-static unsigned short scanline_counter = 0x0;
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -470,104 +469,6 @@ decode ()
 
 /*
  * ===  FUNCTION  ======================================================================
- *         Name:  update_timers
- *  Description:  Handles updates to the timer registers
- * =====================================================================================
- */
-    static void
-update_timers(unsigned char cycles)
-{
-    for (int i = 0x0; i < cycles; i++)
-    {
-        // Update the divider register
-        divider_counter++;
-        if (divider_counter == 0x0) {
-            increment_divider();
-        }
-
-        // Update the timer register
-        timer_counter++;
-        unsigned char tac_reg = read_memory(0xFF07);
-		// Only increment timer if bit 3 of TAC set
-        unsigned char tima_enable = (unsigned char) (tac_reg & 0x4u);
-
-		// TIMA update frequency specified by 2 LSB in TAC
-		switch (tac_reg & 0x3u)
-		{
-			case 0x00:
-				if (timer_counter == 0x400) // 4096 Hz / 1024 clocks
-				{
-					if (tima_enable)
-					{
-						increment_timer();
-					}
-					timer_counter = 0x0;
-				}
-				break;
-			case 0x01:
-				if (timer_counter == 0x10) // 262144 Hz / 16 clocks
-				{
-					if (tima_enable)
-					{
-						increment_timer();
-					}
-					timer_counter = 0x0;
-				}
-				break;
-			case 0x02:
-				if (timer_counter == 0x40) // 65536 Hz / 64 clocks
-				{
-					if (tima_enable)
-					{
-						increment_timer();
-					}
-					timer_counter = 0x0;
-				}
-				break;
-			case 0x3:
-				if (timer_counter == 0x100) // 16384 Hz / 256 clocks
-				{
-					if (tima_enable)
-					{
-						increment_timer();
-					}
-					timer_counter = 0x0;
-				}
-				break;
-			default:
-				break;
-		}
-    }
-}        /* -----  end of function update timers  ----- */
-
-/*
- * ===  FUNCTION  ======================================================================
- *         Name:  update_graphics
- *  Description:  Handles updates to the graphics registers
- * =====================================================================================
- */
-    static void
-update_graphics(unsigned char cycles)
-{
-    unsigned char lcd_enable = (unsigned char) (read_memory(0xFF40) & 0x80u);
-    if (lcd_enable != 0x80)
-    {
-        return;
-    }
-
-    for (int i = 0x0; i < cycles; i++)
-    {
-        scanline_counter++;
-        if (scanline_counter == 0x1C8)
-        {
-            scanline_counter = 0x0;
-            increment_scanline();
-        }
-    }
-}        /* -----  end of function update_graphics  ----- */
-
-/*
- * ===  FUNCTION  ======================================================================
  *         Name:  cpu_execution
  *  Description:  Emulates the three primary functions of the CPU using associated
  *                functions: fetch an opcode, decode it, execute it's instruction
@@ -579,6 +480,8 @@ cpu_execution ()
     unsigned char cycles;
     fetch();
     cycles = decode();
+
+    // Pass reference to the counters since functions should change them
     update_timers(cycles);
     update_graphics(cycles);
     //dump_registers();

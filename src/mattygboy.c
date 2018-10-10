@@ -63,11 +63,21 @@ int main(int argc, char **argv)
 
 	// TODO:Main program loop, fetch/decode/execute
 	// TODO just set up for testing for the moment
-    int i = 0;
-    while(ptrs->PC != 0x100) // Boot
+    int i = 1;
+    //while(ptrs->PC != 0x100) // Boot
+    while (i <= 1000)
+    //while (memory[0xFF44] < 1)
     {
         cpu_execution();
+        i++;
     }
+    printf("i is %d\n\n", i);
+    printf("opcode: %x\n",opcode);
+    dump_registers();
+    printf("mem ff44 is 0x%x\n", memory[0xFF44]);
+    printf("divider is 0x%x and timer is 0x%x\n", memory[0xFF04], memory[0xFF05]);
+
+    return 0;
 
     boot = 0x0; // Disable boot rom
 
