@@ -6,6 +6,12 @@
 
 #IncludeRegexTransform: 
 
+../include/bit_rotate_shift_instructions.h
+
+../include/control_instructions.h
+
+../include/cpu_control_instructions.h
+
 ../include/cpu_emulator.h
 
 ../include/global_declarations.h
@@ -16,7 +22,15 @@ helper_functions.h
 memory.h
 ../include/memory.h
 
+../include/graphics.h
+
 ../include/helper_functions.h
+
+../include/load_instructions.h
+
+../include/logical_instructions.h
+
+../include/math_instructions.h
 
 ../include/memory.h
 
@@ -24,13 +38,29 @@ memory.h
 
 ../include/timers.h
 
-/Users/MattyG/Documents/Programming/MattyGBoy/src/timers.c
-timers.h
-/Users/MattyG/Documents/Programming/MattyGBoy/src/timers.h
-memory.h
-/Users/MattyG/Documents/Programming/MattyGBoy/src/memory.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/cpu_emulator.c
+stdlib.h
+-
+stdio.h
+-
+math_instructions.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/math_instructions.h
 global_declarations.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/global_declarations.h
 cpu_emulator.h
 /Users/MattyG/Documents/Programming/MattyGBoy/src/cpu_emulator.h
+logical_instructions.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/logical_instructions.h
+bit_rotate_shift_instructions.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/bit_rotate_shift_instructions.h
+control_instructions.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/control_instructions.h
+load_instructions.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/load_instructions.h
+cpu_control_instructions.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/cpu_control_instructions.h
+graphics.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/graphics.h
+timers.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/timers.h
 

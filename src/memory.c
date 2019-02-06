@@ -64,7 +64,7 @@ init_memory()
 	new_memory[0xFF47] = 0xFC;
 	new_memory[0xFF48] = 0xFF;
 	new_memory[0xFF49] = 0xFF;
-     **/
+    **/
 
 	// Load BIOS
     FILE *bios_file = fopen("/Users/MattyG/Documents/Programming/BIOS.gb", "rb");
@@ -106,7 +106,7 @@ load_cartridge(char *file)
 			banking_mode = 0x0;
 			break;
 	}
-
+	// Allocate memory as appropriate based on size indicated by header
 	switch (new_cartridge[0x149])
 	{
 		case 0x0:

@@ -63,9 +63,9 @@ int main(int argc, char **argv)
 
 	// TODO:Main program loop, fetch/decode/execute
 	// TODO just set up for testing for the moment
-    int i = 1;
+    int i = 0;
     //while(ptrs->PC != 0x100) // Boot
-    while (i <= 1000)
+    while (memory[0xFF44] == 0)
     //while (memory[0xFF44] < 1)
     {
         cpu_execution();

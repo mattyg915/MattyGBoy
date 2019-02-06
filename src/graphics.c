@@ -23,7 +23,7 @@
 #include "cpu_emulator.h"
 
 // Used to track, based on cpu cycles, when the scanline register should be incremented
-static unsigned short scanline_counter =0x0;
+static unsigned short scanline_counter = 0x0;
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -55,11 +55,14 @@ increment_scanline()
     void
     update_graphics(unsigned char cycles)
 {
+    // TODO: revisit this
+    /**
     unsigned char lcd_enable = (unsigned char) (memory[0xFF40] & 0x80u);
     if (lcd_enable != 0x80)
     {
         return;
     }
+    */
 
     for (int i = 0x0; i < cycles; i++)
     {

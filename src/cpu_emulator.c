@@ -201,7 +201,6 @@ sixteen_bit_update_flags (int value1, int value2)
 fetch ()
 {
     opcode = read_memory(ptrs->PC);
-    //printf("opcode is %x\n", opcode);
     ptrs->PC++;
 }               /* -----  end of function fetch  ----- */
 
@@ -217,71 +216,58 @@ fetch ()
 	static unsigned char
 decode ()
 {
-	unsigned char cycles;
 	switch (opcode) {
 		case 0x00: // NOP
-            cycles = 0x4;
-			return cycles;
+            return 0x4;
 			// Rotate A instructions
 		case 0x0F:
 			rrc(&regs->A);
 			flags->Z = 0; // Z flag always cleared
-			cycles = 0x4;
-			return cycles;
+			return 0x4;
 		case 0x1F:
 			rr(&regs->A);
 			flags->Z = 0; // Z flag always cleared
-			cycles = 0x4;
-			return cycles;
+			return 0x4;
 		case 0x07:
 			rlc(&regs->A);
 			flags->Z = 0; // Z flag always cleared
-			cycles = 0x4;
-			return cycles;
+			return 0x4;
 		case 0x17:
 			rl(&regs->A);
 			flags->Z = 0; // Z flag always cleared
-			cycles = 0x4;
-			return cycles;
+			return 0x4;
 			// Bit test, rotate, and shift instructions
 		case 0xCB:
 			fetch();
-			cycles = bit_rotate_shift();
-			return cycles;
+			return bit_rotate_shift();
 			// Add instructions
 			// 8-bit
 		case 0xC6:
 		case 0xE8:
 		case 0x80 ... 0x87:
-			cycles = eight_bit_add();
-			return cycles;
+			return eight_bit_add();
 			// 16-bit
 		case 0x09:
 		case 0x19:
 		case 0x29:
 		case 0x39:
-			cycles = sixteen_bit_add();
-			return cycles;
+			return sixteen_bit_add();
 			// ADC instructions
 		case 0xCE:
 		case 0x88 ... 0x8F:
-			cycles = adc();
-			return cycles;
+			return adc();
 			// AND instructions
 		case 0xE6:
 		case 0xA0 ... 0xA7:
-			cycles = and();
-			return cycles;
+			return and();
 			// SUB instructions
 		case 0xD6:
 		case 0x90 ... 0x97:
-			cycles = sub();
-			return cycles;
+			return sub();
 			// SBC instructions
 		case 0xDE:
 		case 0x98 ... 0x9F:
-			cycles = sbc();
-			return cycles;
+			return sbc();
 			// 8-bit INC instructions
 		case 0x34:
 		case 0x3C:
@@ -291,15 +277,13 @@ decode ()
 		case 0x1C:
 		case 0x24:
 		case 0x2C:
-			cycles = eight_bit_inc();
-			return cycles;
+			return eight_bit_inc();
 			// 16-bit INC instructions
 		case 0x03:
 		case 0x13:
 		case 0x23:
 		case 0x33:
-			cycles = sixteen_bit_inc();
-			return cycles;
+			return sixteen_bit_inc();
 			// 8-bit DEC instructions
 		case 0x35:
 		case 0x3D:
@@ -309,38 +293,31 @@ decode ()
 		case 0x1D:
 		case 0x25:
 		case 0x2D:
-			cycles = eight_bit_dec();
-			return cycles;
+			return eight_bit_dec();
 			// 16-bit DEC instructions
 		case 0x0B:
 		case 0x1B:
 		case 0x2B:
 		case 0x3B:
-			cycles = sixteen_bit_dec();
-			return cycles;
+			return sixteen_bit_dec();
 			// OR instructions
 		case 0xF6:
 		case 0xB0 ... 0xB7:
-			cycles = or();
-			return cycles;
+			return or();
 			// XOR instructions
 		case 0xEE:
 		case 0xA8 ... 0xAF:
-			cycles = xor();
-			return cycles;
+			return xor();
 			// DAA
 		case 0x27:
-			cycles = daa();
-			return cycles;
+			return daa();
 			// CPL
 		case 0x2F:
-			cycles = cpl();
-			return cycles;
+			return cpl();
 			// CP instructions
 		case 0xFE:
 		case 0xB9 ... 0xBF:
-			cycles = cp();
-			return cycles;
+			return cp();
 			// Jump instructions
 		case 0xC3:
 		case 0xE9:
@@ -348,33 +325,28 @@ decode ()
 		case 0xD2:
 		case 0xC2:
 		case 0xCA:
-			cycles = jp();
-			return cycles;
+			return jp();
 		case 0x18:
 		case 0x38:
 		case 0x30:
 		case 0x20:
 		case 0x28:
-			cycles = jr();
-			return cycles;
+			return jr();
 			// Call and return instructions
 		case 0xCD:
 		case 0xDC:
 		case 0xD4:
 		case 0xC4:
 		case 0xCC:
-			cycles = call();
-			return cycles;
+			return call();
 	    case 0xC8:
 		case 0xC9:
 		case 0xD8:
 		case 0xD0:
 		case 0xC0:
-			cycles = ret();
-			return cycles;
+			return ret();
 		case 0xD9:
-			cycles = reti();
-			return cycles;
+			return reti();
 		case 0xC7:
 		case 0xCF:
 		case 0xD7:
@@ -383,23 +355,19 @@ decode ()
 		case 0xEF:
 		case 0xF7:
 		case 0xFF:
-			cycles = rst();
-			return cycles;
+			return rst();
 			// Load instructions
 		case 0x40 ... 0x75:
 		case 0x77 ... 0x7F:
-			cycles = basic_ld();
-			return cycles;
+			return basic_ld();
 		case 0xF8:
 		case 0xF9:
-			cycles = ld_hl_sp();
-			return cycles;
+			return ld_hl_sp();
 		case 0x22:
 		case 0x2A:
 		case 0x32:
 		case 0x3A:
-			cycles = load_hl();
-			return cycles;
+			return load_hl();
 		case 0x06:
 		case 0x0E:
 		case 0x16:
@@ -408,59 +376,47 @@ decode ()
 		case 0x2E:
 		case 0x36:
 		case 0x3E:
-			cycles = load_one_byte_imm();
-			return cycles;
+			return load_one_byte_imm();
 		case 0x0A:
 		case 0x1A:
 		case 0xFA:
 		case 0x02:
 		case 0x12:
 		case 0xEA:
-			cycles = load_from_to_mem();
-			return cycles;
+			return load_from_to_mem();
 		case 0x01:
 		case 0x08:
 		case 0x11:
 		case 0x21:
 		case 0x31:
-			cycles = sixteen_bit_load();
-			return cycles;
+			return sixteen_bit_load();
 		case 0xF0:
 		case 0xE0:
 		case 0xF2:
 		case 0xE2:
-			cycles = read_write_io();
-			return cycles;
+			return read_write_io();
 		case 0x76:
-			cycles = halt();
-			return cycles;
+			return halt();
 		case 0xF3:
-			cycles = di();
-			return cycles;
+			return di();
 		case 0xFB:
-			cycles = ei();
-			return cycles;
+			return ei();
 		case 0x10:
-			cycles = stop();
-			return cycles;
+			return stop();
 		case 0xF1:
 		case 0xC1:
 		case 0xD1:
 		case 0xE1:
-			cycles = pop();
-			return cycles;
+			return pop();
 		case 0xC5:
 		case 0xD5:
 		case 0xE5:
 		case 0xF5:
-			cycles = push();
-			return cycles;
+			return push();
 		case 0x3F:
-			cycles = ccf();
-			return cycles;
+			return ccf();
 		case 0x37:
-			cycles = scf();
-			return cycles;
+			return scf();
 		default:
 			printf("ERROR: Invalid or unsupported opcode, %x, encountered\n", opcode);
 			exit(1);
@@ -480,6 +436,9 @@ cpu_execution ()
     unsigned char cycles;
     fetch();
     cycles = decode();
+
+    printf("opcode: %x || ", opcode);
+    printf("cycles: %x\n", cycles);
 
     // Pass reference to the counters since functions should change them
     update_timers(cycles);

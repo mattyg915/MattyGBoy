@@ -13,3 +13,7 @@ It was probably in the past few days as I struck out to implement the virtual me
 The biggest lesson I have learned is the benefit of getting a more holistic view of a development project like this before starting to code. The memory refactoring I'm doing now is just the largest of several refactors I've done when something I had envisioned at the start turned out not to work when I started looking into newer information I needed to execute the next part of the project.
 
 My biggest enemy at this point is a struggle to keep making forward progress and only stopping to refactor when absolutely necessary. I want to get it *working* before I worry about making it *great*, but I'm having a hard time finding exactly where that line is between ugly/overly complex but works and too ugly, too overly complex, shouldn't be done this way and I should change it before continuing.
+
+11/8/18
+
+Loooong time since last update and mounting schoolwork and work work have taken my attention away from this project. My issue right now is that the timer and graphics registers don't seem to update appropriately and I don't yet know why. I've been wrestling with that in fits and starts for a while now. At this point I'm reasonably sure that my opcodes are correctly implemented, so the problem has to be somewhere in my memory management system, the new graphics/timers source files, or with my understanding of when and how those registers should be updated. 
