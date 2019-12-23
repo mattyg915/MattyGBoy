@@ -1,26 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
+  <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true">
     <generated>
       <config projectName="MattyGBoy" targetName="MattyGBoy" />
     </generated>
   </component>
-  <component name="CMakeSettings">
+  <component name="CMakeSettings" AUTO_RELOAD="true">
     <configurations>
       <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a9bb0a6b-44fd-4dd3-b653-b64bc2b36444" name="Default" comment="">
+    <list default="true" id="a9bb0a6b-44fd-4dd3-b653-b64bc2b36444" name="Default" comment="fix cmake issues">
+      <change beforePath="$PROJECT_DIR$/.idea/codeStyles/Project.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.10.3/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.10.3/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.10.3/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.10.3/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.10.3/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.10.3/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.10.3/CompilerIdC/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.10.3/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.10.3/CompilerIdCXX/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.12.0/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.12.0/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.12.0/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.12.0/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.12.0/CompilerIdC/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.12.1/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.12.1/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.12.1/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.12.1/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.12.1/CompilerIdC/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.6/CMakeCCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.6/CMakeCXXCompiler.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.6/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.6/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.6/CMakeSystem.cmake" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.6/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.6/CompilerIdC/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.6/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/3.9.6/CompilerIdCXX/a.out" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/C.includecache" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/C.includecache" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/cmake_clean.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/cmake_clean.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/flags.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/bit_rotate_shift_instructions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/bit_rotate_shift_instructions.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/control_instructions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/control_instructions.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/cpu_control_instructions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/cpu_control_instructions.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/cpu_emulator.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/cpu_emulator.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/graphics.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/graphics.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/helper_functions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/helper_functions.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/load_instructions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/load_instructions.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/logical_instructions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/logical_instructions.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/math_instructions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/math_instructions.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/mattygboy.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/mattygboy.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/memory.c 2.o" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/memory.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/memory.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/register_structures.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/register_structures.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/timers.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/timers.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-environment.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-environment.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/feature_tests.bin" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/feature_tests.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/MattyGBoy" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/MattyGBoy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpu_emulator.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu_emulator.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/graphics.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mattygboy.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/mattygboy.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/memory.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/MattyGBoy.cbp" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/MattyGBoy.cbp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/MattyGBoy.dSYM/Contents/Info.plist" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/MattyGBoy.dSYM/Contents/Resources/DWARF/MattyGBoy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/mattyGboy.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/mattyGboy.gitignore" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,148 +86,31 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
-  <component name="FUSProjectUsageTrigger">
-    <session id="-617770273">
-      <usages-collector id="statistics.lifecycle.project">
-        <counts>
-          <entry key="project.closed" value="10" />
-          <entry key="project.open.time.10" value="1" />
-          <entry key="project.open.time.14" value="1" />
-          <entry key="project.open.time.6" value="1" />
-          <entry key="project.open.time.7" value="2" />
-          <entry key="project.open.time.8" value="3" />
-          <entry key="project.open.time.9" value="2" />
-          <entry key="project.opened" value="10" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.open">
-        <counts>
-          <entry key="ObjectiveC" value="20" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.types.edit">
-        <counts>
-          <entry key="Doxygen file" value="5" />
-          <entry key="ObjectiveC" value="2577" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.cidr.testingFrameworks.usages" />
-      <usages-collector id="statistics.file.extensions.open">
-        <counts>
-          <entry key="c" value="12" />
-          <entry key="h" value="8" />
-        </counts>
-      </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit">
-        <counts>
-          <entry key="c" value="2190" />
-          <entry key="h" value="392" />
-        </counts>
-      </usages-collector>
-    </session>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
   </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="CMakeBuildProfile:Debug" />
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/mattygboy.c">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="417">
-                  <caret line="67" column="30" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="30" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/src/cpu_emulator.c">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="315">
-                  <caret line="149" column="13" lean-forward="true" selection-start-line="149" selection-start-column="13" selection-end-line="149" selection-end-column="13" />
-                  <folding>
-                    <element signature="e#488#507#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/timers.c">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="1635">
-                  <caret line="109" column="1" selection-start-line="109" selection-start-column="1" selection-end-line="109" selection-end-column="1" />
-                  <folding>
-                    <element signature="e#503#522#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/graphics.c">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="110">
-                  <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
-                  <folding>
-                    <element signature="e#564#582#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/src/memory.c">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-3873">
-                  <caret line="66" column="4" lean-forward="true" selection-start-line="66" selection-start-column="4" selection-end-line="66" selection-end-column="4" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/include/timers.h">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="330">
-                  <caret line="22" column="25" lean-forward="true" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/include/cpu_emulator.h">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="345">
-                  <caret line="23" selection-start-line="23" selection-end-line="23" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/include/memory.h">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="465">
-                  <caret line="31" column="25" selection-start-line="31" selection-start-column="25" selection-end-line="31" selection-end-column="25" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/include/graphics.h">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="330">
-                  <caret line="22" column="6" selection-start-line="22" selection-start-column="6" selection-end-line="22" selection-end-column="6" />
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/bit_rotate_shift_instructions.c">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="255">
+              <caret line="17" column="17" lean-forward="true" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mattyGboy.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" selection-start-line="3" selection-end-line="3" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -202,36 +142,33 @@
         <option value="$PROJECT_DIR$/include/cpu_control_instructions.h" />
         <option value="$PROJECT_DIR$/include/load_instructions.h" />
         <option value="$PROJECT_DIR$/include/logical_instructions.h" />
-        <option value="$PROJECT_DIR$/src/logical_instructions.c" />
         <option value="$PROJECT_DIR$/include/register_structures.h" />
-        <option value="$PROJECT_DIR$/src/cpu_control_instructions.c" />
-        <option value="$PROJECT_DIR$/src/load_instructions.c" />
-        <option value="$PROJECT_DIR$/src/register_structures.c" />
-        <option value="$PROJECT_DIR$/src/bit_rotate_shift_instructions.c" />
-        <option value="$PROJECT_DIR$/src/math_instructions.c" />
-        <option value="$PROJECT_DIR$/src/control_instructions.c" />
         <option value="$PROJECT_DIR$/include/cpu_emulator.h" />
         <option value="$PROJECT_DIR$/include/global_declarations.h" />
-        <option value="$PROJECT_DIR$/src/helper_functions.c" />
-        <option value="$PROJECT_DIR$/include/memory.h" />
         <option value="$PROJECT_DIR$/include/graphics.h" />
         <option value="$PROJECT_DIR$/include/timers.h" />
-        <option value="$PROJECT_DIR$/src/timers.c" />
-        <option value="$PROJECT_DIR$/src/mattygboy.c" />
-        <option value="$PROJECT_DIR$/src/graphics.c" />
-        <option value="$PROJECT_DIR$/src/cpu_emulator.c" />
+        <option value="$PROJECT_DIR$/include/memory.h" />
         <option value="$PROJECT_DIR$/src/memory.c" />
+        <option value="$PROJECT_DIR$/src/graphics.c" />
+        <option value="$PROJECT_DIR$/src/timers.c" />
+        <option value="$PROJECT_DIR$/src/cpu_emulator.c" />
+        <option value="$PROJECT_DIR$/src/mattygboy.c" />
+        <option value="$PROJECT_DIR$/src/cpu_control_instructions.c" />
+        <option value="$PROJECT_DIR$/src/helper_functions.c" />
+        <option value="$PROJECT_DIR$/src/logical_instructions.c" />
+        <option value="$PROJECT_DIR$/src/math_instructions.c" />
+        <option value="$PROJECT_DIR$/src/load_instructions.c" />
+        <option value="$PROJECT_DIR$/src/register_structures.c" />
+        <option value="$PROJECT_DIR$/src/control_instructions.c" />
+        <option value="$PROJECT_DIR$/CMakeLists.txt" />
+        <option value="$PROJECT_DIR$/mattyGboy.gitignore" />
+        <option value="$PROJECT_DIR$/src/bit_rotate_shift_instructions.c" />
       </list>
     </option>
   </component>
-  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
-  <component name="JsGulpfileManager">
-    <detection-done>true</detection-done>
-    <sorting>DEFINITION_ORDER</sorting>
-  </component>
+  <component name="OCFindUsagesOptions" text="true" ivars="false" properties="true" derivedClasses="false" />
   <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
-    <option name="width" value="834" />
+    <option name="width" value="1680" />
     <option name="height" value="1050" />
   </component>
   <component name="ProjectView">
@@ -239,17 +176,13 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="MattyGBoy" type="b2602c69:ProjectViewProjectNode" />
               <item name="MattyGBoy" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="MattyGBoy" type="b2602c69:ProjectViewProjectNode" />
-              <item name="MattyGBoy" type="462c0819:PsiDirectoryNode" />
-              <item name="cmake-build-debug" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="MattyGBoy" type="b2602c69:ProjectViewProjectNode" />
@@ -265,12 +198,18 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="CMakeSettings" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -284,20 +223,20 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.MattyGBoy">
-    <configuration name="Build All" type="CMakeRunConfiguration" factoryName="Application" PASS_PARENT_ENVS_2="true" PROJECT_NAME="MattyGBoy" TARGET_NAME="MattyGBoy" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="MattyGBoy" RUN_TARGET_NAME="MattyGBoy">
-      <method v="2">
-        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
-      </method>
-    </configuration>
+  <component name="RunManager" selected="CMake Application.MattyGBoy">
     <configuration name="MattyGBoy" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="06_ld_r_r.gb" WORKING_DIR="file://$PROJECT_DIR$/src" PASS_PARENT_ENVS_2="true" PROJECT_NAME="MattyGBoy" TARGET_NAME="MattyGBoy" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="MattyGBoy" RUN_TARGET_NAME="MattyGBoy">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Unnamed" type="CMakeRunConfiguration" factoryName="Application" nameIsGenerated="true" PASS_PARENT_ENVS_2="true" CONFIG_NAME="Debug" RUN_PATH="$PROJECT_DIR$/src/mattygboy.c" EXPLICIT_BUILD_TARGET_NAME="all">
+      <method v="2">
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
     <list>
-      <item itemvalue="Application.Build All" />
-      <item itemvalue="Application.MattyGBoy" />
+      <item itemvalue="CMake Application.Unnamed" />
+      <item itemvalue="CMake Application.MattyGBoy" />
     </list>
   </component>
   <component name="SvnConfiguration">
@@ -364,28 +303,33 @@
       <workItem from="1537795625289" duration="1242000" />
       <workItem from="1541714650547" duration="404000" />
       <workItem from="1541724084287" duration="2682000" />
+      <workItem from="1554053839638" duration="70000" />
+      <workItem from="1557336081605" duration="1530000" />
+      <workItem from="1576939695641" duration="31000" />
+      <workItem from="1576939795532" duration="2363000" />
+      <workItem from="1577061574986" duration="268000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="180126000" />
+    <option name="totallyTimeSpent" value="184388000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1680" height="1050" extended-state="6" />
+    <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.13431014" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.14102565" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.24969475" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="0" weight="0.3265306" />
       <window_info anchor="bottom" id="Message" order="1" />
-      <window_info anchor="bottom" id="Find" order="2" weight="0.32976654" />
-      <window_info anchor="bottom" id="Run" order="3" weight="0.3102041" />
+      <window_info active="true" anchor="bottom" id="Find" order="2" visible="true" weight="0.32970297" />
+      <window_info anchor="bottom" id="Run" order="3" visible="true" weight="0.3102041" />
       <window_info anchor="bottom" id="Debug" order="4" weight="0.3997996" />
       <window_info anchor="bottom" id="Cvs" order="5" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="6" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="7" />
-      <window_info anchor="bottom" id="CMake" order="8" weight="0.49027237" />
+      <window_info anchor="bottom" id="CMake" order="8" weight="0.46632653" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" weight="0.32959184" />
       <window_info anchor="bottom" id="Version Control" order="10" />
       <window_info anchor="bottom" id="Terminal" order="11" weight="0.3216433" />
@@ -419,58 +363,21 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
-  <component name="VcsContentAnnotationSettings">
-    <option name="myLimit" value="2678400000" />
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fix cmake issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix cmake issues" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/MattyGBoy.cbp">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="23" column="30" selection-start-line="23" selection-start-column="30" selection-end-line="23" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/makefile">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/Makefile">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="74" selection-start-line="74" selection-end-line="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2690">
-          <caret line="9" column="58" lean-forward="true" selection-start-line="9" selection-start-column="58" selection-end-line="9" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/depend.make">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/DependInfo.cmake">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/MattyGBoy.cbp" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/Makefile" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/TargetDirectories.txt" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/depend.make" />
+    <entry file="file://$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/DependInfo.cmake" />
     <entry file="file://$PROJECT_DIR$/include/math_instructions.h">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -499,13 +406,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/logical_instructions.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="345">
-          <caret line="27" column="72" selection-start-line="27" selection-start-column="72" selection-end-line="27" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/register_structures.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="422">
@@ -520,27 +420,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/register_structures.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="48" column="21" selection-start-line="48" selection-start-column="21" selection-end-line="48" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpu_control_instructions.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2774">
-          <caret line="188" column="21" selection-start-line="188" selection-start-column="21" selection-end-line="188" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/helper_functions.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-182">
-          <caret line="60" column="58" selection-start-line="60" selection-start-column="58" selection-end-line="60" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/global_declarations.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="390">
@@ -551,40 +430,6 @@
     <entry file="file://$PROJECT_DIR$/include/helper_functions.h">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/math_instructions.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="7020">
-          <caret line="468" column="41" selection-start-line="468" selection-start-column="41" selection-end-line="468" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/control_instructions.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6075">
-          <caret line="405" selection-start-line="405" selection-end-line="405" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/timers.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1635">
-          <caret line="109" column="1" selection-start-line="109" selection-start-column="1" selection-end-line="109" selection-end-column="1" />
-          <folding>
-            <element signature="e#503#522#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/graphics.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="110">
-          <caret line="25" column="41" selection-start-line="25" selection-start-column="41" selection-end-line="25" selection-end-column="41" />
-          <folding>
-            <element signature="e#564#582#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/bit_rotate_shift_instructions.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="120">
@@ -592,24 +437,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/bit_rotate_shift_instructions.c">
+    <entry file="file://$PROJECT_DIR$/include/timers.h">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2865">
-          <caret line="196" column="30" lean-forward="true" selection-start-line="196" selection-start-column="30" selection-end-line="196" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/mattygboy.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="417">
-          <caret line="67" column="30" selection-start-line="67" selection-start-column="30" selection-end-line="67" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/load_instructions.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4080">
-          <caret line="276" column="42" selection-start-line="276" selection-start-column="42" selection-end-line="276" selection-end-column="42" />
+        <state relative-caret-position="330">
+          <caret line="22" column="25" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
         </state>
       </provider>
     </entry>
@@ -620,13 +451,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/memory.h">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="465">
-          <caret line="31" column="25" selection-start-line="31" selection-start-column="25" selection-end-line="31" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/include/graphics.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
@@ -634,27 +458,122 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/memory.c">
+    <entry file="file://$PROJECT_DIR$/src/mattygboy.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3873">
-          <caret line="66" column="4" lean-forward="true" selection-start-line="66" selection-start-column="4" selection-end-line="66" selection-end-column="4" />
+        <state relative-caret-position="330">
+          <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/include/timers.h">
+    <entry file="file://$PROJECT_DIR$/src/cpu_control_instructions.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="21" selection-start-line="20" selection-start-column="21" selection-end-line="20" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/helper_functions.c">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="330">
-          <caret line="22" column="25" lean-forward="true" selection-start-line="22" selection-start-column="25" selection-end-line="22" selection-end-column="25" />
+          <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cpu_emulator.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="315">
-          <caret line="149" column="13" lean-forward="true" selection-start-line="149" selection-start-column="13" selection-end-line="149" selection-end-column="13" />
+        <state relative-caret-position="405">
+          <caret line="27" column="21" selection-start-line="27" selection-start-column="21" selection-end-line="27" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/timers.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="28" column="19" lean-forward="true" selection-start-line="28" selection-start-column="19" selection-end-line="28" selection-end-column="19" />
           <folding>
-            <element signature="e#488#507#0" expanded="true" />
+            <element signature="e#503#533#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/graphics.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/memory.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="21" selection-start-line="22" selection-start-column="10" selection-end-line="22" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/include/memory.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="19" lean-forward="true" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/makefile" />
+    <entry file="file://$PROJECT_DIR$/src/logical_instructions.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="21" selection-start-line="21" selection-start-column="21" selection-end-line="21" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/load_instructions.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="21" selection-start-line="21" selection-start-column="21" selection-end-line="21" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/register_structures.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" column="23" lean-forward="true" selection-start-line="11" selection-start-column="23" selection-end-line="11" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/control_instructions.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/math_instructions.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="21" selection-start-line="22" selection-start-column="21" selection-end-line="22" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/tests/add_tests.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="35" lean-forward="true" selection-start-line="17" selection-start-column="35" selection-end-line="17" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mattyGboy.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/bit_rotate_shift_instructions.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="17" lean-forward="true" selection-start-line="17" selection-start-column="17" selection-end-line="17" selection-end-column="17" />
         </state>
       </provider>
     </entry>
