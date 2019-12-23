@@ -32,8 +32,8 @@ add_executable(MattyGBoy
         src/memory.c
         src/register_structures.c
         src/timers.c
-        tests/add_tests.txt
-        tests/control_tests.txt
-        tests/sub_tests.txt
+        testFiles/add_tests.txt
+        testFiles/control_tests.txt
+        testFiles/sub_tests.txt
         mattyGboy.gitignore
         README.md)
