@@ -16,8 +16,6 @@
  * =====================================================================================
  */
 #include <stdio.h>
-#include "load_instructions.h"
-#include "cpu_emulator.h"
 #include "global_declarations.h"
 #include "memory.h"
 
@@ -401,7 +399,7 @@ read_write_io ()
 			regs->A = read_memory(addr);
 			cycles = 0xC;
 			return cycles;
-		case 0xE0:
+	    case 0xE0:
 			imm = read_memory(ptrs->PC);
 			ptrs->PC++;
             addr = (unsigned short) (imm + 0xFF00);

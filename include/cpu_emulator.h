@@ -19,5 +19,6 @@
 #define CPUEMULATOR
 void eight_bit_update_flags(int value1, int value2);
 void sixteen_bit_update_flags(int value1, int value2);
+void request_interrupt (unsigned char bitSetter);
 void cpu_execution();
 #endif

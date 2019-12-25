@@ -113,7 +113,7 @@ increment_timer()
     if (memory[0xFF05] == 0x0)
     {
         memory[0xFF05] = memory[0xFF06]; // Value resets to value in TMA reg at overflow
-        memory[0xFF0F] |= 0x4; // Request timer interrupt
+        memory[0xFF0F] |= 0x4u; // Request timer interrupt
     }
 }		/* -----  end of function increment_timer  ----- */
 

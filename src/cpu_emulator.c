@@ -107,7 +107,7 @@ eight_bit_update_flags (int value1, int value2)
         }
         else
         {
-                flags->Z &= 0; // Otherwise clear it
+                flags->Z &= 0; // Otherwise clear it NOLINT
         }
 }		/* -----  end of function eight_bit_update_flags  ----- */
 
@@ -203,6 +203,25 @@ fetch ()
     opcode = read_memory(ptrs->PC);
     ptrs->PC++;
 }               /* -----  end of function fetch  ----- */
+
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  request_interrupt
+ *  Description:  Requests a cpu interrupt by setting the appropriate bit in mem addr
+ *                  0xFF0F
+ *
+ *  Parameters:   bitSetter is an unsigned char used to set the appropriate bit for
+ *                  the interrupt being requested
+ * =====================================================================================
+ */
+     void
+request_interrupt (unsigned char bitSetter)
+{
+    unsigned char req_reg = read_memory(0xFF0F);
+    req_reg |= bitSetter;
+    write_memory(0xFF0F, req_reg);
+}               /* -----  end of function request_interrupt  ----- */
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -435,9 +454,9 @@ cpu_execution ()
 {
     unsigned char cycles;
     fetch();
-    cycles = decode();
-
     printf("opcode: %x || ", opcode);
+
+    cycles = decode();
     printf("cycles: %x\n", cycles);
 
     // Pass reference to the counters since functions should change them

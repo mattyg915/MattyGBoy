@@ -18,6 +18,5 @@
 
 #ifndef MATTYGBOY_GRAPHICS_H
 #define MATTYGBOY_GRAPHICS_H
-void increment_scanline();
 void update_graphics(unsigned char cycles);
 #endif

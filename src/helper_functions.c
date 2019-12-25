@@ -18,9 +18,7 @@
 #include <time.h>
 #include <stdio.h>
 #include "helper_functions.h"
-#include "register_structures.h"
 #include "global_declarations.h"
-#include "cpu_emulator.h"
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -78,7 +76,7 @@ combine_bytes(unsigned char byte1, unsigned char byte2)
 {       
     unsigned short result = 0;
     result += byte1;
-    result <<= 8;
+    result <<= 0x8u;
     result += byte2;
 
     return result;
@@ -103,6 +101,6 @@ split_bytes(unsigned short value,
     // Cast as a char to just grab the lower-order bits
     *addr2 = (unsigned char)value;
     // Shift the higher bits into the lower position then cast
-    value >>= 8;
+    value >>= 0x8u;
     *addr1 = (unsigned char)value;
 }       /* -----  end of function split_bytes  ----- */

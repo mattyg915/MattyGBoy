@@ -174,7 +174,7 @@ init_mbc()
  * ===  FUNCTION  ======================================================================
  *         Name:  read_memory
  *  Description:  Returns a 1-byte value located at the specified memory address
- *  		  while taking into account rom and ram banks
+ *  		        while taking into account rom and ram banks
  *   Parameters:  addr is a 16-bit memory address
  * =====================================================================================
  */
@@ -252,7 +252,7 @@ read_memory(unsigned short addr)
  * ===  FUNCTION  ======================================================================
  *         Name:  read_memory_ptr
  *  Description:  Returns a pointer to the specified memory address while taking
- *                into account rom and ram banks
+ *                  into account rom and ram banks
  *   Parameters:  addr is a 16-bit memory address
  * =====================================================================================
  */
@@ -325,6 +325,7 @@ read_memory_ptr(unsigned short addr)
 	void
 write_memory(unsigned short addr, unsigned char data)
 {
+	    printf("%x\n",addr);
     if (addr <= 0x1FFF) // RAM enable
     {
         // Enable RAM if lower nibble of data == 0xA
@@ -363,7 +364,7 @@ write_memory(unsigned short addr, unsigned char data)
         else // ROM mode, set bits 5 and 6 of rom bank
         {
             mbc->rom_bank_number &= 0x6E0u;
-            data &= 0x1F;
+            data &= 0x1Fu;
             mbc->rom_bank_number |= data;
             if (mbc->rom_bank_number == 0x0)
             {

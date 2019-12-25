@@ -40,13 +40,13 @@ init_registers()
 	}
 
 	// Initialize registers
-	reg_ptr->A = 0x00;
-	reg_ptr->B = 0x00;
-	reg_ptr->C = 0x00;
-	reg_ptr->D = 0x00;
-	reg_ptr->E = 0x00;
-	reg_ptr->H = 0x00;
-	reg_ptr->L = 0x00;
+	reg_ptr->A = 0x00u;
+	reg_ptr->B = 0x00u;
+	reg_ptr->C = 0x00u;
+	reg_ptr->D = 0x00u;
+	reg_ptr->E = 0x00u;
+	reg_ptr->H = 0x00u;
+	reg_ptr->L = 0x00u;
 
 	return reg_ptr;
 }		/* -----  end of function init_registers  ----- */
@@ -67,8 +67,8 @@ init_pointers()
 		return NULL;
 	}
 	// Program counter starts at 0x100, stack at 0xFFFE
-	ptrs_ptr->PC = 0x0000;
-	ptrs_ptr->SP = 0x0000;
+	ptrs_ptr->PC = 0x0000u;
+	ptrs_ptr->SP = 0x0000u;
 
 	return ptrs_ptr;
 }		/* -----  end of function init_pointers  ----- */
@@ -89,11 +89,11 @@ init_flags ()
 		return NULL;
 	}
 
-	flags_ptr->Z = 0x0;
-	flags_ptr->N = 0x0;
-	flags_ptr->H = 0x0;
-	flags_ptr->C = 0x0;
-	flags_ptr->IME = 0x0;
+	flags_ptr->Z = 0x0u;
+	flags_ptr->N = 0x0u;
+	flags_ptr->H = 0x0u;
+	flags_ptr->C = 0x0u;
+	flags_ptr->IME = 0x0u;
 
 	return flags_ptr;
 }		/* -----  end of function init_flags  ----- */
