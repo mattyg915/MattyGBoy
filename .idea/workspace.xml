@@ -245,10 +245,18 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1577111139365" />
+    <state x="418" y="129" key="CommitChangelistDialog2" timestamp="1577235081187">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="418" y="129" key="CommitChangelistDialog2/0.0.1680.1050@0.0.1680.1050" timestamp="1577235081187" />
     <state width="454" height="466" key="DebuggerActiveHint" timestamp="1577072415755">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state width="454" height="466" key="DebuggerActiveHint/0.0.1680.1050@0.0.1680.1050" timestamp="1577072415755" />
+    <state x="682" y="455" key="Github.Dialog.Accounts.Choose" timestamp="1577235100325">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="682" y="455" key="Github.Dialog.Accounts.Choose/0.0.1680.1050@0.0.1680.1050" timestamp="1577235100325" />
     <state width="1638" height="275" key="GridCell.Tab.0.bottom" timestamp="1577234465524">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
@@ -285,6 +293,10 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="341" y="164" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1577069043929" />
+    <state x="440" y="265" key="Vcs.Push.Dialog.v2" timestamp="1577235090953">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="440" y="265" key="Vcs.Push.Dialog.v2/0.0.1680.1050@0.0.1680.1050" timestamp="1577235090953" />
   </component>
   <component name="masterDetails">
     <states>
