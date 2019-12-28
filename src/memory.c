@@ -325,7 +325,6 @@ read_memory_ptr(unsigned short addr)
 	void
 write_memory(unsigned short addr, unsigned char data)
 {
-	    printf("%x\n",addr);
     if (addr <= 0x1FFF) // RAM enable
     {
         // Enable RAM if lower nibble of data == 0xA

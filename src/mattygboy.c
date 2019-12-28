@@ -52,11 +52,14 @@ int main(int argc, char **argv)
 
     //boot = 0x0; // Disable boot rom
 
-	while (1)
+	while (ptrs->PC != 0x100)
 	{
         cpu_execution();
         i++;
 	}
+    dump_registers();
+    printf("mem ff44 is %x\n", read_memory(0xFF44));
+    printf("mem ff40 is %x\n", read_memory(0xFF40));
 
 	free(regs); free(ptrs); free(flags); free(cartridge);
 	return EXIT_SUCCESS;

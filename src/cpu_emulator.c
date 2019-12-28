@@ -459,8 +459,6 @@ cpu_execution ()
     cycles = decode();
     printf("cycles: %x\n", cycles);
 
-    // Pass reference to the counters since functions should change them
     update_timers(cycles);
     update_graphics(cycles);
-    //dump_registers();
 }		/* -----  end of function cpu_execution  ----- */

@@ -19,7 +19,6 @@
 #include "global_declarations.h"
 #include "cpu_emulator.h"
 #include "memory.h"
-#include <stdio.h>
 
 // Used to track, based on cpu cycles, when the scanline register should be incremented
 static unsigned short scanline_counter = 0x0;
@@ -48,6 +47,7 @@ increment_scanline()
         // TODO: Draw a line
     }
 
+    cur_line++;
     memory[0xFF44] = cur_line;
 }		/* -----  end of function increment_scanline  ----- */
 
@@ -63,7 +63,7 @@ is_lcd_enabled()
 {
     unsigned char lcd_enable = read_memory(0xFF40);
 
-    return (lcd_enable & 0x80u) == 0x80;
+    return (lcd_enable & 0x80u) == 0x80u;
 }        /* -----  end of function is_lcd_enabled  ----- */
 
 /*
@@ -81,14 +81,14 @@ set_lcd_status()
         // If lcd disabled reset scanline and counter, set mode 1 (VBlank)
         scanline_counter = 0x0;
         memory[0xFF44] = 0x0;
-        status &= 0xFDu;
+        status |= 0x1u;
         write_memory(0xFF41, status);
         return;
     }
 
     unsigned char cur_line = read_memory(0xFF44);
     unsigned char cur_mode = status & 0x3u;
-    unsigned char mode = 0x0u;
+    unsigned char mode;
     unsigned int req_int = 0x0; // interrupt request, default false
 
     if (cur_line >= 0x90u)
@@ -168,6 +168,8 @@ update_graphics(unsigned char cycles)
             if (scanline_counter == 0x1C8)
             {
                 scanline_counter = 0x0;
+                increment_scanline();
+            } else {
                 increment_scanline();
             }
         }
