@@ -45,14 +45,18 @@ int main(int argc, char **argv)
 	// TODO: Main program loop, fetch/decode/execute
 	// TODO: just set up for testing for the moment
     int i = 0;
-    unsigned char *mem = get_mem();
-
 
     //boot = 0x0; // Disable boot rom
 
 	while (ptrs->PC != 0x100u)
 	{
-        cpu_execution(mem);
+        cpu_execution();
+	}
+	// disable boot_rom
+	boot = 0x0;
+
+	while(i < 100) {
+	    cpu_execution();
         i++;
 	}
     //dump_registers();

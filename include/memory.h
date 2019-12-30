@@ -29,12 +29,12 @@ typedef struct MBC_Registers
 
 static unsigned char *memory;
 static unsigned char *cartridge;
+static unsigned char *boot_rom;
 MBC_Registers* init_mbc();
 void init_memory();
 void write_memory(unsigned short addr, unsigned char data);
 void increment_divider();
 void increment_scanline();
-unsigned char* get_mem();
 unsigned char read_memory(unsigned short addr);
 unsigned char* read_memory_ptr(unsigned short addr);
 void load_cartridge(char *file);

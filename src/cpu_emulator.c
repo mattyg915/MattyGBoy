@@ -450,7 +450,7 @@ decode ()
  * =====================================================================================
  */
     void
-cpu_execution (unsigned char *mem)
+cpu_execution ()
 {
     unsigned char cycles;
 
@@ -461,5 +461,5 @@ cpu_execution (unsigned char *mem)
     //printf("cycles: %x\n", cycles);
 
     update_timers(cycles);
-    update_graphics(mem, cycles);
+    update_graphics(cycles);
 }		/* -----  end of function cpu_execution  ----- */

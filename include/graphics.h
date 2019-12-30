@@ -18,5 +18,5 @@
 
 #ifndef MATTYGBOY_GRAPHICS_H
 #define MATTYGBOY_GRAPHICS_H
-void update_graphics(unsigned char *mem, unsigned char cycles);
+void update_graphics(unsigned char cycles);
 #endif

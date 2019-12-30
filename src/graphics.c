@@ -130,9 +130,9 @@ set_lcd_status()
  * =====================================================================================
  */
     void
-update_graphics(unsigned char *mem, unsigned char cycles)
+update_graphics(unsigned char cycles)
 {
-    set_lcd_status(mem);
+    set_lcd_status();
 
     if (is_lcd_enabled())
     {

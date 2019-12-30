@@ -41,47 +41,15 @@ static unsigned char *ext_ram_bank = NULL; // Single array to virtualize all RAM
 init_memory()
 {
 	unsigned char *new_memory = malloc(0xFFFF);
-    /**
-	// Initialize hardware registers
-	new_memory[0xFF10] = 0x80;
-	new_memory[0xFF11] = 0xBF;
-	new_memory[0xFF12] = 0xF3;
-	new_memory[0xFF14] = 0xBF;
-	new_memory[0xFF16] = 0x3F;
-	new_memory[0xFF19] = 0xBF;
-	new_memory[0xFF1A] = 0xFF;
-	new_memory[0xFF1B] = 0x7F;
-	new_memory[0xFF1C] = 0x9F;
-	new_memory[0xFF1E] = 0xBF;
-	new_memory[0xFF20] = 0xFF;
-	new_memory[0xFF23] = 0xBF;
-	new_memory[0xFF24] = 0x77;
-	new_memory[0xFF25] = 0xF3;
-	new_memory[0xFF26] = 0xF1;
-	new_memory[0xFF40] = 0x91;
-	new_memory[0xFF47] = 0xFC;
-	new_memory[0xFF48] = 0xFF;
-	new_memory[0xFF49] = 0xFF;
-    **/
+	unsigned char *boot = malloc(0xFF);
 
 	// Load BIOS
     FILE *bios_file = fopen("/Users/MattyG/Documents/Programming/BIOS.gb", "rb");
-    fread(new_memory, 0x1, 0xFF, bios_file);
+    fread(boot, 0x1, 0xFF, bios_file);
     fclose(bios_file);
 
 	memory = new_memory;
-}		/* -----  end of function init_memory  ----- */
-
-/*
- * ===  FUNCTION  ======================================================================
- *         Name:  get_mem
- *       Return:  Pointer to the start of the virtual memory array
- * =====================================================================================
- */
-    unsigned char*
-get_mem()
-{
-    return memory;
+	boot_rom = boot;
 }		/* -----  end of function init_memory  ----- */
 
 /*
@@ -195,7 +163,7 @@ read_memory(unsigned short addr)
 
 	if (boot && (addr < 0x100)) // Only use during boot process
     {
-        return memory[addr];
+        return boot_rom[addr];
     }
 
 	if (banking_mode == 1) // MBC1
