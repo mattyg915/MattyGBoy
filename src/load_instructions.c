@@ -128,7 +128,6 @@ basic_ld ()
 	return cycles;
 }		/* -----  end of function basic_ld  ----- */
 
-
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  load_one_byte_imm
@@ -310,7 +309,7 @@ ld_hl_sp ()
     switch (opcode)
     {
         case 0xF8:
-            offset = read_memory(ptrs->PC);
+            offset = read_memory(ptrs->PC); // NOLINT
             ptrs->PC++;
             split_bytes(ptrs->SP + offset, &regs->H, &regs->L);
             cycles = 0xC;
@@ -323,6 +322,7 @@ ld_hl_sp ()
             return 0x0;
     }
 }
+
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  sixteen_bit_load

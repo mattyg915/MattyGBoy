@@ -21,13 +21,12 @@
 #include "global_declarations.h"
 #include "cpu_emulator.h"
 #include "helper_functions.h"
+#include "memory.h"
 
 #define EXIT_SUCCESS 0 // Quit without error condition
 
 unsigned char error_value = 0xFF;
 unsigned char boot = 0x1;
-unsigned char *memory;
-unsigned char *cartridge;
 Registers *regs;
 Pointers *ptrs;
 CPU_Flags *flags;
@@ -39,28 +38,27 @@ int main(int argc, char **argv)
 	ptrs = init_pointers();
 	flags = init_flags();
 
-	printf(argv[optind]);
-
 	// TODO: for now just load rom via command line argument
-	cartridge = load_cartridge(argv[optind]);
-	memory = init_memory();
+	load_cartridge(argv[optind]);
+	init_memory();
 
 	// TODO: Main program loop, fetch/decode/execute
 	// TODO: just set up for testing for the moment
     int i = 0;
+    unsigned char *mem = get_mem();
 
 
     //boot = 0x0; // Disable boot rom
 
-	while (ptrs->PC != 0x100)
+	while (ptrs->PC != 0x100u)
 	{
-        cpu_execution();
+        cpu_execution(mem);
         i++;
 	}
-    dump_registers();
-    printf("mem ff44 is %x\n", read_memory(0xFF44));
-    printf("mem ff40 is %x\n", read_memory(0xFF40));
+    //dump_registers();
+    printf("\n");
+    dump_memory();
 
-	free(regs); free(ptrs); free(flags); free(cartridge);
+	free(regs); free(ptrs); free(flags);
 	return EXIT_SUCCESS;
 }

@@ -18,7 +18,6 @@
 #include <stdio.h>
 #include "math_instructions.h"
 #include "global_declarations.h"
-#include "cpu_emulator.h"
 #include "logical_instructions.h"
 #include "bit_rotate_shift_instructions.h"
 #include "control_instructions.h"
@@ -122,7 +121,7 @@ eight_bit_update_flags (int value1, int value2)
  *                value2 is the second operand in an arithmetic instruction
  * =====================================================================================
  */
-        void
+    void
 sixteen_bit_update_flags (int value1, int value2)
 {
 	int carry_test;
@@ -447,18 +446,20 @@ decode ()
  *         Name:  cpu_execution
  *  Description:  Emulates the three primary functions of the CPU using associated
  *                functions: fetch an opcode, decode it, execute it's instruction
+ *   Parameters:  mem is a pointer to the virtual memory
  * =====================================================================================
  */
     void
-cpu_execution ()
+cpu_execution (unsigned char *mem)
 {
     unsigned char cycles;
+
     fetch();
-    printf("opcode: %x || ", opcode);
+
 
     cycles = decode();
-    printf("cycles: %x\n", cycles);
+    //printf("cycles: %x\n", cycles);
 
     update_timers(cycles);
-    update_graphics(cycles);
+    update_graphics(mem, cycles);
 }		/* -----  end of function cpu_execution  ----- */

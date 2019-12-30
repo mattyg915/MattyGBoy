@@ -16,10 +16,10 @@
  * =====================================================================================
  */
 
+#include <cpu_emulator.h>
 #include "timers.h"
 #include "memory.h"
 #include "global_declarations.h"
-#include "cpu_emulator.h"
 
 // Used to track when the actual timer and divider registers should be incremented
 static unsigned char divider_counter = 0x0;
@@ -108,23 +108,14 @@ update_timers(unsigned char cycles)
 void
 increment_timer()
 {
-    memory[0xFF05]++;
+    unsigned char timer = read_memory(0xFF05);
+    timer++;
 
-    if (memory[0xFF05] == 0x0)
+    if (timer == 0x0)
     {
-        memory[0xFF05] = memory[0xFF06]; // Value resets to value in TMA reg at overflow
-        memory[0xFF0F] |= 0x4u; // Request timer interrupt
+        timer = read_memory(0xFF06); // Value resets to value in TMA reg at overflow
+        request_interrupt(0x4u);
     }
-}		/* -----  end of function increment_timer  ----- */
 
-/*
- * ===  FUNCTION  ======================================================================
- *         Name:  increment_divider
- *  Description:  Increments the divider register, mem address 0xFF04
- * =====================================================================================
- */
-void
-increment_divider()
-{
-    memory[0xFF04]++;
-}		/* -----  end of function increment_divider  ----- */
+    write_memory(0xFF05, timer);
+}		/* -----  end of function increment_timer  ----- */

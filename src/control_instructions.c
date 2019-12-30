@@ -16,8 +16,6 @@
  *
  * =====================================================================================
  */
-#include <stdio.h>
-#include <stdlib.h>
 #include "global_declarations.h"
 #include "cpu_emulator.h"
 #include "helper_functions.h"
@@ -180,7 +178,7 @@ jr ()
 {
     unsigned char cycles;
 	// All ops use a 1-byte immediate
-	char offset = read_memory(ptrs->PC);
+	char offset = read_memory(ptrs->PC); // NOLINT
 	ptrs->PC++;
 
 	switch (opcode)

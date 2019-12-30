@@ -20,5 +20,4 @@
 #define MATTYGBOY_TIMERS_H
 void update_timers(unsigned char cycles);
 void increment_timer();
-void increment_divider();
 #endif

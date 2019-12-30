@@ -25,34 +25,6 @@ static unsigned short scanline_counter = 0x0;
 
 /*
  * ===  FUNCTION  ======================================================================
- *         Name:  increment_scanline
- *  Description:  Increments the y coordinate register, mem address 0xFF44
- * =====================================================================================
- */
-    void
-increment_scanline()
-{
-    unsigned char cur_line = read_memory(0xFF44);
-
-    if (cur_line == 0x90u) // V-Blank interrupt request
-    {
-        request_interrupt(0x1u);
-    }
-    else if (cur_line > 0x99u) // Past last vertical line
-    {
-        cur_line = 0x0u;
-    }
-    else if (cur_line < 0x90u)
-    {
-        // TODO: Draw a line
-    }
-
-    cur_line++;
-    memory[0xFF44] = cur_line;
-}		/* -----  end of function increment_scanline  ----- */
-
-/*
- * ===  FUNCTION  ======================================================================
  *         Name:  is_lcd_enabled
  *  Description:  Returns true if the lcd is enabled by reading lcd control register
  *                  at mem addr 0xFF40
@@ -75,12 +47,12 @@ is_lcd_enabled()
     void
 set_lcd_status()
 {
-    unsigned char status = memory[0xFF41];
+    unsigned char status = read_memory(0xFF41);
 
     if (!is_lcd_enabled()) {
         // If lcd disabled reset scanline and counter, set mode 1 (VBlank)
         scanline_counter = 0x0;
-        memory[0xFF44] = 0x0;
+        write_memory(0xFF44, 0x0); // All writes to this address set to 0
         status |= 0x1u;
         write_memory(0xFF41, status);
         return;
@@ -153,12 +125,14 @@ set_lcd_status()
  * ===  FUNCTION  ======================================================================
  *         Name:  update_graphics
  *  Description:  Handles updates to the graphics registers
+ *   Parameters:  mem is a pointer to the virtual memory
+ *                cycles is the number of cpu cycles this execution
  * =====================================================================================
  */
     void
-update_graphics(unsigned char cycles)
+update_graphics(unsigned char *mem, unsigned char cycles)
 {
-    set_lcd_status();
+    set_lcd_status(mem);
 
     if (is_lcd_enabled())
     {

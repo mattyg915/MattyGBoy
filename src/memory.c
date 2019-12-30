@@ -20,10 +20,9 @@
  */
 #include <stdlib.h>
 #include <stdio.h>
+#include <cpu_emulator.h>
 #include "memory.h"
 #include "global_declarations.h"
-
-extern unsigned char *cartridge;
 
 // Track ROM banking
 static unsigned char banking_mode;
@@ -36,10 +35,9 @@ static unsigned char *ext_ram_bank = NULL; // Single array to virtualize all RAM
  * ===  FUNCTION  ======================================================================
  *         Name:  init_memory
  *  Description:  Initializes the the virtual memory
- *       Return:  Pointer to the start of the virtual memory array
  * =====================================================================================
  */
-	unsigned char*
+	void
 init_memory()
 {
 	unsigned char *new_memory = malloc(0xFFFF);
@@ -71,7 +69,19 @@ init_memory()
     fread(new_memory, 0x1, 0xFF, bios_file);
     fclose(bios_file);
 
-	return new_memory;
+	memory = new_memory;
+}		/* -----  end of function init_memory  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  get_mem
+ *       Return:  Pointer to the start of the virtual memory array
+ * =====================================================================================
+ */
+    unsigned char*
+get_mem()
+{
+    return memory;
 }		/* -----  end of function init_memory  ----- */
 
 /*
@@ -80,7 +90,7 @@ init_memory()
  *  Description:  Loads the game cartridge rom and parses the cartridge header
  * =====================================================================================
  */
-	unsigned char*
+	void
 load_cartridge(char *file)
 {
 	unsigned char *new_cartridge = malloc(0x200000);
@@ -135,7 +145,7 @@ load_cartridge(char *file)
 			break;
 	}
 
-	return new_cartridge;
+	cartridge = new_cartridge;
 }               /* -----  end of function load_cartridge  ----- */
 
 /*
@@ -405,9 +415,18 @@ write_memory(unsigned short addr, unsigned char data)
     {
         memory[0xFF44] = 0x0;
     }
+    else if (addr == 0xFF01) {
+        printf("PC: %x || ", ptrs->PC);
+        printf("opcode: %x || ", opcode);
+        printf("next opcode is %x || ", read_memory(ptrs->PC));
+        printf("next imm is %x || ", read_memory(ptrs->PC + 1));
+        printf("register a is %x\n", regs->A);
+    }
     else if ((addr == 0xFF02) && (data == 0x81)) // Serial cable out
     {
-        printf("%c", memory[0xFF01]);
+        printf("next opcode is %x || ", read_memory(ptrs->PC));
+        printf("next imm is %x\n", read_memory(ptrs->PC + 1));
+        printf("%c", (char)memory[0xFF01]);
         fflush(stdout);
     }
     else // Unrestricted memory write access
@@ -415,3 +434,44 @@ write_memory(unsigned short addr, unsigned char data)
         memory[addr] = data;
     }
 }       /* -----  end of function write_memory  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  increment_divider
+ *  Description:  Increments the divider register, mem address 0xFF04
+ * =====================================================================================
+ */
+void
+increment_divider()
+{
+    memory[0xFF04]++;
+}		/* -----  end of function increment_divider  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
+ *         Name:  increment_scanline
+ *  Description:  Increments the y coordinate register, mem address 0xFF44
+ *   Parameters:  mem is a pointer to the virtual memory
+ * =====================================================================================
+ */
+void
+increment_scanline()
+{
+    unsigned char cur_line = read_memory(0xFF44);
+
+    if (cur_line == 0x90u) // V-Blank interrupt request
+    {
+        request_interrupt(0x1u);
+    }
+    else if (cur_line > 0x99u) // Past last vertical line
+    {
+        cur_line = 0x0u;
+    }
+    else if (cur_line < 0x90u)
+    {
+        // TODO: Draw a line
+    }
+
+    cur_line++;
+    memory[0xFF44] = cur_line;
+}		/* -----  end of function increment_scanline  ----- */

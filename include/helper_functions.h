@@ -20,4 +20,5 @@
 unsigned short combine_bytes(unsigned char byte1, unsigned char byte2);
 void split_bytes(unsigned short value, unsigned char *addr1, unsigned char *addr2);
 void dump_registers();
+void dump_memory();
 #endif

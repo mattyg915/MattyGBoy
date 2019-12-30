@@ -15,10 +15,7 @@
  *
  * =====================================================================================
  */
-#include "cpu_control_instructions.h"
 #include "global_declarations.h"
-#include "cpu_emulator.h"
-#include "helper_functions.h"
 
 /* 
  * ===  FUNCTION  ======================================================================

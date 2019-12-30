@@ -62,6 +62,26 @@ dump_registers()
 
 /*
  * ===  FUNCTION  ======================================================================
+ *         Name:  dump_memory
+ *  Description:  Prints the contents of memory to the console
+ * =====================================================================================
+ */
+void
+dump_memory()
+{
+    for (int i = 0x0; i < 0x8000; i += 0x10)
+    {
+        printf("0x%x |  ", i);
+        for (int j = i; j < i + 0x10; j++)
+        {
+            printf("%X ", read_memory(j));
+        }
+        printf("\n");
+    }
+}		/* -----  end of function dump_memory  ----- */
+
+/*
+ * ===  FUNCTION  ======================================================================
  *         Name:  combine_bytes
  *  Description:  Takes two 8-bit values and returns them as a single 16-bit value
  *   Parameters:  byte1 is an unsigned char that should occupy the 8 most 
