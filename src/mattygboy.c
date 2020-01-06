@@ -26,7 +26,7 @@
 #define EXIT_SUCCESS 0 // Quit without error condition
 
 unsigned char error_value = 0xFF;
-unsigned char boot = 0x1;
+unsigned char boot_up = 0x1;
 Registers *regs;
 Pointers *ptrs;
 CPU_Flags *flags;
@@ -46,22 +46,21 @@ int main(int argc, char **argv)
 	// TODO: just set up for testing for the moment
     int i = 0;
 
-    //boot = 0x0; // Disable boot rom
-
 	while (ptrs->PC != 0x100u)
 	{
         cpu_execution();
 	}
 	// disable boot_rom
-	boot = 0x0;
+	boot_up = 0x0;
 
-	while(i < 100) {
+	while(1) {
 	    cpu_execution();
         i++;
 	}
     //dump_registers();
     printf("\n");
     dump_memory();
+    dump_registers();
 
 	free(regs); free(ptrs); free(flags);
 	return EXIT_SUCCESS;

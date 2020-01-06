@@ -28,7 +28,7 @@
  * =====================================================================================
  */
     unsigned char
-cp ()
+cp (unsigned char opcode)
 {
     unsigned char cycles;
 	flags->N = 1; // CP sets the N flag
@@ -93,7 +93,7 @@ cp ()
  * =====================================================================================
  */
     unsigned char
-jp ()
+jp (unsigned char opcode)
 {
     unsigned char cycles;
 
@@ -174,7 +174,7 @@ jp ()
  * =====================================================================================
  */
         unsigned char
-jr ()
+jr (unsigned char opcode)
 {
     unsigned char cycles;
 	// All ops use a 1-byte immediate
@@ -244,7 +244,7 @@ jr ()
  * =====================================================================================
  */
         unsigned char
-call ()
+call (unsigned char opcode)
 {
     unsigned char cycles;
 
@@ -348,7 +348,7 @@ call ()
  * =====================================================================================
  */
         unsigned char
-ret ()
+ret (unsigned char opcode)
 {
     // Grab return address off the stack
     unsigned char return_lo = read_memory(ptrs->SP);
@@ -438,7 +438,7 @@ reti ()
  * =====================================================================================
  */
         unsigned char
-rst ()
+rst (unsigned char opcode)
 {
 	unsigned char target = 0;
 

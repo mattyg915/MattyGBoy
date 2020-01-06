@@ -15,7 +15,6 @@
  * =====================================================================================
  */
 #include <stdlib.h>
-#include <stdio.h>
 #include "math_instructions.h"
 #include "global_declarations.h"
 #include "logical_instructions.h"
@@ -25,8 +24,6 @@
 #include "cpu_control_instructions.h"
 #include "graphics.h"
 #include "timers.h"
-
-unsigned char opcode;
 
 /*
  * ===  FUNCTION  ======================================================================
@@ -40,7 +37,7 @@ unsigned char opcode;
  * =====================================================================================
  */
 	void
-eight_bit_update_flags (int value1, int value2)
+eight_bit_update_flags (unsigned char value1, unsigned char value2)
 {
 	int carry_test; // An int is needed for the algorithm to check for carry
 	unsigned char zero_test; // Need 1 byte data to check zero because of overflow
@@ -99,7 +96,7 @@ eight_bit_update_flags (int value1, int value2)
 		}
 	}
 
-	// Zero Flag
+	    // Zero Flag
         if (!zero_test)
         {
                 flags->Z = 1;
@@ -122,7 +119,7 @@ eight_bit_update_flags (int value1, int value2)
  * =====================================================================================
  */
     void
-sixteen_bit_update_flags (int value1, int value2)
+sixteen_bit_update_flags (unsigned short value1, unsigned short value2)
 {
 	int carry_test;
 	unsigned short zero_test;
@@ -133,7 +130,7 @@ sixteen_bit_update_flags (int value1, int value2)
             zero_test = (unsigned short) value1 + (unsigned short) value2;
 
             // Half-Carry - addition
-            if ((((value1 & 0x00FF) + (value2 & 0x00FF)) & 0x1000) == 0x0100) //NOLINT
+            if ((((value1 & 0xFF) + (value2 & 0xFF)) & 0x100) == 0x100) //NOLINT
             {
                     flags->H = 1;
             }
@@ -152,7 +149,7 @@ sixteen_bit_update_flags (int value1, int value2)
                     flags->C = 0;
             }
         }
-	// Otherwise subtraction
+	    // Otherwise subtraction
         else
         {
             carry_test = value1 - value2;
@@ -192,15 +189,15 @@ sixteen_bit_update_flags (int value1, int value2)
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name:  fetch
- *  Description:  Sets the global variable opcode to the current instruction being
- *                executed by the CPU
+ *      Returns:  The current opcode to execute
  * =====================================================================================
  */
-	static void
+	static unsigned char
 fetch ()
 {
-    opcode = read_memory(ptrs->PC);
+    unsigned char opcode = read_memory(ptrs->PC);
     ptrs->PC++;
+    return opcode;
 }               /* -----  end of function fetch  ----- */
 
 
@@ -228,11 +225,12 @@ request_interrupt (unsigned char bitSetter)
  *  Description:  Takes the current opcode pointed to by PC and determines 
  *  		  its generalized instruction (e.g. this is a 'load' instruction), 
  *  		  then calls the appropriate method to further decode and emulate it
+ *   Parameters:  opcode is the opcode as an unsigned char to decode and execute
  *       Return:  The number of clock cycles used to execute the instruction
  * =====================================================================================
  */
 	static unsigned char
-decode ()
+decode (unsigned char opcode)
 {
 	switch (opcode) {
 		case 0x00: // NOP
@@ -256,36 +254,36 @@ decode ()
 			return 0x4;
 			// Bit test, rotate, and shift instructions
 		case 0xCB:
-			fetch();
-			return bit_rotate_shift();
+			opcode = fetch();
+			return bit_rotate_shift(opcode);
 			// Add instructions
 			// 8-bit
 		case 0xC6:
 		case 0xE8:
 		case 0x80 ... 0x87:
-			return eight_bit_add();
+			return eight_bit_add(opcode);
 			// 16-bit
 		case 0x09:
 		case 0x19:
 		case 0x29:
 		case 0x39:
-			return sixteen_bit_add();
+			return sixteen_bit_add(opcode);
 			// ADC instructions
 		case 0xCE:
 		case 0x88 ... 0x8F:
-			return adc();
+			return adc(opcode);
 			// AND instructions
 		case 0xE6:
 		case 0xA0 ... 0xA7:
-			return and();
+			return and(opcode);
 			// SUB instructions
 		case 0xD6:
 		case 0x90 ... 0x97:
-			return sub();
+			return sub(opcode);
 			// SBC instructions
 		case 0xDE:
 		case 0x98 ... 0x9F:
-			return sbc();
+			return sbc(opcode);
 			// 8-bit INC instructions
 		case 0x34:
 		case 0x3C:
@@ -295,13 +293,13 @@ decode ()
 		case 0x1C:
 		case 0x24:
 		case 0x2C:
-			return eight_bit_inc();
+			return eight_bit_inc(opcode);
 			// 16-bit INC instructions
 		case 0x03:
 		case 0x13:
 		case 0x23:
 		case 0x33:
-			return sixteen_bit_inc();
+			return sixteen_bit_inc(opcode);
 			// 8-bit DEC instructions
 		case 0x35:
 		case 0x3D:
@@ -311,21 +309,21 @@ decode ()
 		case 0x1D:
 		case 0x25:
 		case 0x2D:
-			return eight_bit_dec();
+			return eight_bit_dec(opcode);
 			// 16-bit DEC instructions
 		case 0x0B:
 		case 0x1B:
 		case 0x2B:
 		case 0x3B:
-			return sixteen_bit_dec();
+			return sixteen_bit_dec(opcode);
 			// OR instructions
 		case 0xF6:
 		case 0xB0 ... 0xB7:
-			return or();
+			return or(opcode);
 			// XOR instructions
 		case 0xEE:
 		case 0xA8 ... 0xAF:
-			return xor();
+			return xor(opcode);
 			// DAA
 		case 0x27:
 			return daa();
@@ -335,7 +333,7 @@ decode ()
 			// CP instructions
 		case 0xFE:
 		case 0xB9 ... 0xBF:
-			return cp();
+			return cp(opcode);
 			// Jump instructions
 		case 0xC3:
 		case 0xE9:
@@ -343,26 +341,26 @@ decode ()
 		case 0xD2:
 		case 0xC2:
 		case 0xCA:
-			return jp();
+			return jp(opcode);
 		case 0x18:
 		case 0x38:
 		case 0x30:
 		case 0x20:
 		case 0x28:
-			return jr();
+			return jr(opcode);
 			// Call and return instructions
 		case 0xCD:
 		case 0xDC:
 		case 0xD4:
 		case 0xC4:
 		case 0xCC:
-			return call();
+			return call(opcode);
 	    case 0xC8:
 		case 0xC9:
 		case 0xD8:
 		case 0xD0:
 		case 0xC0:
-			return ret();
+			return ret(opcode);
 		case 0xD9:
 			return reti();
 		case 0xC7:
@@ -373,19 +371,19 @@ decode ()
 		case 0xEF:
 		case 0xF7:
 		case 0xFF:
-			return rst();
+			return rst(opcode);
 			// Load instructions
 		case 0x40 ... 0x75:
 		case 0x77 ... 0x7F:
-			return basic_ld();
+			return basic_ld(opcode);
 		case 0xF8:
 		case 0xF9:
-			return ld_hl_sp();
+			return ld_hl_sp(opcode);
 		case 0x22:
 		case 0x2A:
 		case 0x32:
 		case 0x3A:
-			return load_hl();
+			return load_hl(opcode);
 		case 0x06:
 		case 0x0E:
 		case 0x16:
@@ -394,25 +392,25 @@ decode ()
 		case 0x2E:
 		case 0x36:
 		case 0x3E:
-			return load_one_byte_imm();
+			return load_one_byte_imm(opcode);
 		case 0x0A:
 		case 0x1A:
 		case 0xFA:
 		case 0x02:
 		case 0x12:
 		case 0xEA:
-			return load_from_to_mem();
+			return load_from_to_mem(opcode);
 		case 0x01:
 		case 0x08:
 		case 0x11:
 		case 0x21:
 		case 0x31:
-			return sixteen_bit_load();
+			return sixteen_bit_load(opcode);
 		case 0xF0:
 		case 0xE0:
 		case 0xF2:
 		case 0xE2:
-			return read_write_io();
+			return read_write_io(opcode);
 		case 0x76:
 			return halt();
 		case 0xF3:
@@ -425,18 +423,17 @@ decode ()
 		case 0xC1:
 		case 0xD1:
 		case 0xE1:
-			return pop();
+			return pop(opcode);
 		case 0xC5:
 		case 0xD5:
 		case 0xE5:
 		case 0xF5:
-			return push();
+			return push(opcode);
 		case 0x3F:
 			return ccf();
 		case 0x37:
 			return scf();
 		default:
-			printf("ERROR: Invalid or unsupported opcode, %x, encountered\n", opcode);
 			exit(1);
 	}
 }		/* -----  end of function decode  ----- */
@@ -454,11 +451,9 @@ cpu_execution ()
 {
     unsigned char cycles;
 
-    fetch();
+    unsigned char opcode = fetch();
 
-
-    cycles = decode();
-    //printf("cycles: %x\n", cycles);
+    cycles = decode(opcode);
 
     update_timers(cycles);
     update_graphics(cycles);

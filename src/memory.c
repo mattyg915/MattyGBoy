@@ -161,7 +161,7 @@ read_memory(unsigned short addr)
 {
 	unsigned char data;
 
-	if (boot && (addr < 0x100)) // Only use during boot process
+	if (boot_up && (addr < 0x100)) // Only use during boot process
     {
         return boot_rom[addr];
     }
@@ -384,17 +384,17 @@ write_memory(unsigned short addr, unsigned char data)
         memory[0xFF44] = 0x0;
     }
     else if (addr == 0xFF01) {
-        printf("PC: %x || ", ptrs->PC);
-        printf("opcode: %x || ", opcode);
-        printf("next opcode is %x || ", read_memory(ptrs->PC));
-        printf("next imm is %x || ", read_memory(ptrs->PC + 1));
-        printf("register a is %x\n", regs->A);
+//        printf("PC: %x || ", ptrs->PC);
+//        printf("opcode: %x || ", opcode);
+//        printf("next opcode is %x || ", read_memory(ptrs->PC));
+//        printf("next imm is %x || ", read_memory(ptrs->PC + 1));
+//        printf("register a is %x\n", regs->A);
     }
     else if ((addr == 0xFF02) && (data == 0x81)) // Serial cable out
     {
-        printf("next opcode is %x || ", read_memory(ptrs->PC));
-        printf("next imm is %x\n", read_memory(ptrs->PC + 1));
-        printf("%c", (char)memory[0xFF01]);
+//        printf("next opcode is %x || ", read_memory(ptrs->PC));
+//        printf("next imm is %x\n", read_memory(ptrs->PC + 1));
+        printf("%c", memory[0xFF01]);
         fflush(stdout);
     }
     else // Unrestricted memory write access

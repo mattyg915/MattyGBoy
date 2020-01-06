@@ -17,11 +17,11 @@
  */
 #ifndef LOADINSTRUCTIONS
 #define LOADINSTRUCTIONS
-unsigned char basic_ld();
-unsigned char load_from_to_mem();
-unsigned char load_one_byte_imm();
-unsigned char read_write_io();
-unsigned char load_hl();
-unsigned char sixteen_bit_load();
-unsigned char ld_hl_sp();
+unsigned char basic_ld(unsigned char opcode);
+unsigned char load_from_to_mem(unsigned char opcode);
+unsigned char load_one_byte_imm(unsigned char opcode);
+unsigned char read_write_io(unsigned char opcode);
+unsigned char load_hl(unsigned char opcode);
+unsigned char sixteen_bit_load(unsigned char opcode);
+unsigned char ld_hl_sp(unsigned char opcode);
 #endif

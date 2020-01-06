@@ -23,8 +23,7 @@
 #define GLOBALDECLARATIONS
 
 extern unsigned char error_value;
-extern unsigned char opcode;
-extern unsigned char boot;
+extern unsigned char boot_up;
 extern Registers *regs; // Pointer to the general registers
 extern Pointers *ptrs; // Pointer to stack pointer and program counter
 extern CPU_Flags *flags; // Pointer to the cpu flags

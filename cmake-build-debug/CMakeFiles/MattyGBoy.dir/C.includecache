@@ -1,0 +1,42 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/cpu_emulator.h
+
+../include/global_declarations.h
+register_structures.h
+../include/register_structures.h
+helper_functions.h
+../include/helper_functions.h
+memory.h
+../include/memory.h
+
+../include/helper_functions.h
+
+../include/memory.h
+
+../include/register_structures.h
+
+/Users/MattyG/Documents/Programming/MattyGBoy/src/mattygboy.c
+unistd.h
+-
+stdlib.h
+-
+stdio.h
+-
+register_structures.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/register_structures.h
+global_declarations.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/global_declarations.h
+cpu_emulator.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/cpu_emulator.h
+helper_functions.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/helper_functions.h
+memory.h
+/Users/MattyG/Documents/Programming/MattyGBoy/src/memory.h
+

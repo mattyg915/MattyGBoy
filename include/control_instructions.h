@@ -19,11 +19,11 @@
 
 #ifndef CONTROLINSTRUCTIONS
 #define CONTROLINSTRUCTIONS
-unsigned char cp();
-unsigned char jp();
-unsigned char jr();
-unsigned char call();
-unsigned char ret();
+unsigned char cp(unsigned char opcode);
+unsigned char jp(unsigned char opcode);
+unsigned char jr(unsigned char opcode);
+unsigned char call(unsigned char opcode);
+unsigned char ret(unsigned char opcode);
 unsigned char reti();
-unsigned char rst();
+unsigned char rst(unsigned char opcode);
 #endif

@@ -26,8 +26,8 @@ void sla (unsigned char *reg);
 void sra (unsigned char *reg);
 void swap (unsigned char *reg);
 void srl (unsigned char *reg);
-void bit (const unsigned char *reg);
-void res (unsigned char *reg);
-void set (unsigned char *reg);
-unsigned char bit_rotate_shift ();
+void bit (unsigned char opcode, const unsigned char *reg);
+void res (unsigned char opcode, unsigned char *reg);
+void set (unsigned char opcode, unsigned char *reg);
+unsigned char bit_rotate_shift (unsigned char opcode);
 #endif

@@ -15,9 +15,6 @@
  *
  * =====================================================================================
  */
-#include <stdlib.h>
-#include <stdio.h>
-#include "math_instructions.h"
 #include "global_declarations.h"
 #include "cpu_emulator.h"
 #include "helper_functions.h"
@@ -30,7 +27,7 @@
  * =====================================================================================
  */
 	unsigned char
-eight_bit_add ()
+eight_bit_add (unsigned char opcode)
 {
 	unsigned char cycles = 0;
 
@@ -114,7 +111,7 @@ eight_bit_add ()
  * =====================================================================================
  */
         unsigned char
-sixteen_bit_add ()
+sixteen_bit_add (unsigned char opcode)
 {
 	// Clear N
 	flags->N = 0;
@@ -163,7 +160,7 @@ sixteen_bit_add ()
  * =====================================================================================
  */
         unsigned char
-adc ()
+adc (unsigned char opcode)
 {
     // Clear the N flag
     flags->N = 0;
@@ -232,7 +229,7 @@ adc ()
  * =====================================================================================
  */
 	unsigned char
-sub ()
+sub (unsigned char opcode)
 {
 	// Set the N flag
 	flags->N = 1;
@@ -302,7 +299,7 @@ sub ()
  * =====================================================================================
  */
 	unsigned char
-sbc ()
+sbc (unsigned char opcode)
 {
 	// Set the N flag
     flags->N = 1;
@@ -371,7 +368,7 @@ sbc ()
  * =====================================================================================
  */
 	unsigned char
-eight_bit_inc ()
+eight_bit_inc (unsigned char opcode)
 {
 	unsigned char cycles;
 	// Clear N flag
@@ -447,7 +444,7 @@ eight_bit_inc ()
  * =====================================================================================
  */
 	unsigned char
-sixteen_bit_inc ()
+sixteen_bit_inc (unsigned char opcode)
 {
     unsigned char cycles;
 	unsigned short value;
@@ -492,7 +489,7 @@ sixteen_bit_inc ()
  * =====================================================================================
  */
 	unsigned char
-eight_bit_dec ()
+eight_bit_dec (unsigned char opcode)
 {
     unsigned char cycles;
 
@@ -569,7 +566,7 @@ eight_bit_dec ()
  * =====================================================================================
  */
 	unsigned char
-sixteen_bit_dec ()
+sixteen_bit_dec (unsigned char opcode)
 {
     unsigned char cycles;
 	unsigned short value;

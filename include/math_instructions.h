@@ -17,13 +17,13 @@
 
 #ifndef MATHINSTRUCTIONS
 #define MATHINSTRUCTIONS
-unsigned char eight_bit_add();
-unsigned char sixteen_bit_add();
-unsigned char adc();
-unsigned char sub();
-unsigned char sbc();
-unsigned char eight_bit_inc();
-unsigned char sixteen_bit_inc();
-unsigned char eight_bit_dec();
-unsigned char sixteen_bit_dec();
+unsigned char eight_bit_add(unsigned char opcode);
+unsigned char sixteen_bit_add(unsigned char opcode);
+unsigned char adc(unsigned char opcode);
+unsigned char sub(unsigned char opcode);
+unsigned char sbc(unsigned char opcode);
+unsigned char eight_bit_inc(unsigned char opcode);
+unsigned char sixteen_bit_inc(unsigned char opcode);
+unsigned char eight_bit_dec(unsigned char opcode);
+unsigned char sixteen_bit_dec(unsigned char opcode);
 #endif

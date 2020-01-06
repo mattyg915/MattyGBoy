@@ -18,9 +18,9 @@
 
 #ifndef LOGICALINSTRUCTIONS
 #define LOGICALINSTRUCTIONS
-unsigned char and();
-unsigned char or();
-unsigned char xor();
+unsigned char and(unsigned char opcode);
+unsigned char or(unsigned char opcode);
+unsigned char xor(unsigned char opcode);
 unsigned char daa();
 unsigned char cpl();
 #endif

@@ -25,7 +25,7 @@
  * =====================================================================================
  */
 	unsigned char
-pop ()
+pop (unsigned char opcode)
 {
     unsigned char reg_f;
     switch (opcode)
@@ -107,7 +107,7 @@ scf ()
  * =====================================================================================
  */
 	unsigned char
-push ()
+push (unsigned char opcode)
 {
 	unsigned char f_reg = 0;
 	switch (opcode)

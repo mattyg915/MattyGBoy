@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="MattyGBoy"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="MattyGBoy">
+				<Option output="/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/MattyGBoy" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/MattyG/Documents/Programming/MattyGBoy/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 MattyGBoy"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="MattyGBoy/fast">
+				<Option output="/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/MattyGBoy" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/MattyG/Documents/Programming/MattyGBoy/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 MattyGBoy/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/Users/MattyG/Documents/Programming/MattyGBoy/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/bit_rotate_shift_instructions.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/control_instructions.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/cpu_control_instructions.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/cpu_emulator.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/global_declarations.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/graphics.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/helper_functions.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/load_instructions.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/logical_instructions.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/math_instructions.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/memory.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/register_structures.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/include/timers.h">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/bit_rotate_shift_instructions.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/control_instructions.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/cpu_control_instructions.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/cpu_emulator.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/graphics.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/helper_functions.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/load_instructions.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/logical_instructions.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/math_instructions.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/mattygboy.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/memory.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/register_structures.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/src/timers.c">
+			<Option target="MattyGBoy"/>
+		</Unit>
+		<Unit filename="/Users/MattyG/Documents/Programming/MattyGBoy/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

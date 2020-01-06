@@ -19,8 +19,8 @@
 #define CPUCONTROLINSTRUCTIONS
 unsigned char halt();
 unsigned char stop();
-unsigned char push();
-unsigned char pop();
+unsigned char push(unsigned char opcode);
+unsigned char pop(unsigned char opcode);
 unsigned char ei();
 unsigned char di();
 unsigned char ccf();

@@ -29,7 +29,7 @@
  * =====================================================================================
  */
         unsigned char
-and ()
+and (unsigned char opcode)
 {
     unsigned char cycles;
 
@@ -105,7 +105,7 @@ and ()
  * =====================================================================================
  */
         unsigned char
-or ()
+or (unsigned char opcode)
 {
     unsigned char cycles;
     // Right operand is dependant on opcode, left is always register A
@@ -180,7 +180,7 @@ or ()
  * =====================================================================================
  */
         unsigned char
-xor ()
+xor (unsigned char opcode)
 {
     unsigned char cycles;
     // Right operand is dependant on opcode, left is always register A
@@ -258,7 +258,7 @@ xor ()
 	unsigned char
 cpl ()
 {
-	regs->A ^= 0xFF; // Just invert the bits to get 1's complement
+	regs->A ^= 0xFFu; // Just invert the bits to get 1's complement
 	flags->N = 1; flags->H = 1;
     return 0x4;
 }		/* -----  end of function cpl  ----- */

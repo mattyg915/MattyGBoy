@@ -29,7 +29,7 @@
  * =====================================================================================
  */
 	unsigned char
-basic_ld ()
+basic_ld (unsigned char opcode)
 {
 	unsigned char cycles = 0;
 
@@ -136,7 +136,7 @@ basic_ld ()
  * =====================================================================================
  */
 	unsigned char
-load_one_byte_imm ()
+load_one_byte_imm (unsigned char opcode)
 {
     unsigned char cycles;
 
@@ -203,7 +203,7 @@ load_one_byte_imm ()
  * =====================================================================================
  */
 	unsigned char
-load_from_to_mem ()
+load_from_to_mem (unsigned char opcode)
 {
     unsigned char cycles;
 
@@ -257,7 +257,7 @@ load_from_to_mem ()
  * =====================================================================================
  */
 	unsigned char
-load_hl ()
+load_hl (unsigned char opcode)
 {
     unsigned char cycles;
 	unsigned short reg_hl = combine_bytes(regs->H, regs->L);
@@ -301,7 +301,7 @@ load_hl ()
  * =====================================================================================
  */
     unsigned char
-ld_hl_sp ()
+ld_hl_sp (unsigned char opcode)
 {
     unsigned char cycles;
     char offset;
@@ -331,7 +331,7 @@ ld_hl_sp ()
  * =====================================================================================
  */
 	unsigned char
-sixteen_bit_load ()
+sixteen_bit_load (unsigned char opcode)
 {
     unsigned char cycles;
 	unsigned char imm_lo = read_memory(ptrs->PC);
@@ -384,7 +384,7 @@ sixteen_bit_load ()
  * =====================================================================================
  */
 	unsigned char
-read_write_io ()
+read_write_io (unsigned char opcode)
 {
     unsigned char cycles;
 	unsigned char imm;

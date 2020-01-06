@@ -5,12 +5,15 @@
       <w>bitmask</w>
       <w>bitrotateshiftinstructions</w>
       <w>codeblocks</w>
+      <w>controlinstructions</w>
       <w>cpucontrolinstructions</w>
       <w>cpuemulator</w>
       <w>gameboy</w>
       <w>gercz</w>
       <w>globaldeclarations</w>
       <w>hram</w>
+      <w>loadinstructions</w>
+      <w>mathinstructions</w>
       <w>mattygboy</w>
       <w>mseconds</w>
       <w>opcode</w>

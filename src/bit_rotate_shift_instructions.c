@@ -191,7 +191,7 @@ srl (unsigned char *reg)
  * =====================================================================================
  */
         void
-bit (const unsigned char *reg)
+bit (unsigned char opcode, const unsigned char *reg)
 {
 	// Bit to test is a function of the opcode
 	unsigned char bitmask = (unsigned char) ((opcode - 0x40) / 0x8);
@@ -212,7 +212,7 @@ bit (const unsigned char *reg)
  * =====================================================================================
  */
         void
-res (unsigned char *reg)
+res (unsigned char opcode, unsigned char *reg)
 {
 	unsigned char bitmask = (unsigned char) ((opcode - 0x40) / 0x8);
 	bitmask ^= 0xFFu;
@@ -229,7 +229,7 @@ res (unsigned char *reg)
  * =====================================================================================
  */
         void
-set (unsigned char *reg)
+set (unsigned char opcode, unsigned char *reg)
 {
 	unsigned char bit = (unsigned char) ((opcode - 0x40) / 0x8);
 	
@@ -246,7 +246,7 @@ set (unsigned char *reg)
  * =====================================================================================
  */
 	unsigned char
-bit_rotate_shift ()
+bit_rotate_shift (unsigned char opcode)
 {
 	unsigned char cycles;
 	// For ones where memory[HL] is needed
@@ -329,13 +329,13 @@ bit_rotate_shift ()
 			srl(argument);
 			return cycles;
 		case 0x40 ... 0x7F:
-			bit(argument);
+			bit(opcode, argument);
 			return cycles;
 		case 0x80 ... 0xBF:
-			res(argument);
+			res(opcode, argument);
 			return cycles;
 		case 0xC0 ... 0xFF:
-			set(argument);
+			set(opcode, argument);
 			return cycles;
 		default:
 			return 0x0 ;
