@@ -383,13 +383,6 @@ write_memory(unsigned short addr, unsigned char data)
     {
         memory[0xFF44] = 0x0;
     }
-    else if (addr == 0xFF01) {
-//        printf("PC: %x || ", ptrs->PC);
-//        printf("opcode: %x || ", opcode);
-//        printf("next opcode is %x || ", read_memory(ptrs->PC));
-//        printf("next imm is %x || ", read_memory(ptrs->PC + 1));
-//        printf("register a is %x\n", regs->A);
-    }
     else if ((addr == 0xFF02) && (data == 0x81)) // Serial cable out
     {
 //        printf("next opcode is %x || ", read_memory(ptrs->PC));

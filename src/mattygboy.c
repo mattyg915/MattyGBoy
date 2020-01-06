@@ -53,13 +53,13 @@ int main(int argc, char **argv)
 	// disable boot_rom
 	boot_up = 0x0;
 
-	while(1) {
+	while(i < 500000) {
 	    cpu_execution();
         i++;
 	}
     //dump_registers();
     printf("\n");
-    dump_memory();
+    dump_memory(0xC000, 0xCC70);
     dump_registers();
 
 	free(regs); free(ptrs); free(flags);

@@ -401,6 +401,9 @@ read_write_io (unsigned char opcode)
 			return cycles;
 	    case 0xE0:
 			imm = read_memory(ptrs->PC);
+			if (imm == 0x02) {
+                printf("pc: %x | regA: %x | imm: %x\n", ptrs->PC, regs->A, imm);
+			}
 			ptrs->PC++;
             addr = (unsigned short) (imm + 0xFF00);
 			write_memory(addr, regs->A);

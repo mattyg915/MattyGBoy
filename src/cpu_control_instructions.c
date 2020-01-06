@@ -11,7 +11,6 @@
  *       Compiler:  gcc
  *
  *         Author:  Matt Gercz (mg), matt.gercz@icloud.com
- *   Organization:  
  *
  * =====================================================================================
  */

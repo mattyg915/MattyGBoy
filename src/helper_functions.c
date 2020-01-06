@@ -66,15 +66,15 @@ dump_registers()
  *  Description:  Prints the contents of memory to the console
  * =====================================================================================
  */
-void
-dump_memory()
+    void
+dump_memory(unsigned short start, unsigned short end)
 {
-    for (int i = 0x0; i < 0x8000; i += 0x10)
+    for (int i = start; i < end; i += 0x10)
     {
-        printf("0x%x |  ", i);
+        printf("0x%2X |  ", i);
         for (int j = i; j < i + 0x10; j++)
         {
-            printf("%X ", read_memory(j));
+            printf("%02X ", read_memory(j));
         }
         printf("\n");
     }
