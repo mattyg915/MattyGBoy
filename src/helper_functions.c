@@ -53,10 +53,10 @@ dump_registers()
 	unsigned short DE = combine_bytes(regs->D, regs->E);
 	unsigned short HL = combine_bytes(regs->H, regs->L);
 
-	printf("Registers:\nAF: 0x%x\nBC: 0x%x\nDE: 0x%x\nHL: 0x%x\n", AF, BC, DE, HL);
-	printf("Stack pointer: 0x%x Program Counter: 0x%x\n",
+	printf("Registers:\nAF: 0x%04X\nBC: 0x%04X\nDE: 0x%04X\nHL: 0x%04X\n", AF, BC, DE, HL);
+	printf("Stack pointer: 0x%02X Program Counter: 0x%02X\n",
 			ptrs->SP, ptrs->PC);
-	printf("Flags: Z: 0x%x N: 0x%x H: 0x%x C: 0x%x IME: 0x%x\n\n",
+	printf("Flags: Z: 0x%02X N: 0x%02X H: 0x%02X C: 0x%02X IME: 0x%02X\n\n",
 			flags->Z, flags->N, flags->H, flags->C, flags->IME);
 }		/* -----  end of function dump_registers  ----- */
 
@@ -71,7 +71,7 @@ dump_memory(unsigned short start, unsigned short end)
 {
     for (int i = start; i < end; i += 0x10)
     {
-        printf("0x%2X |  ", i);
+        printf("%02X |  ", i);
         for (int j = i; j < i + 0x10; j++)
         {
             printf("%02X ", read_memory(j));

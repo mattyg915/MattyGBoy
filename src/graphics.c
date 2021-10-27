@@ -30,7 +30,7 @@ static unsigned short scanline_counter = 0x0;
  *                  at mem addr 0xFF40
  * =====================================================================================
  */
-int
+    int
 is_lcd_enabled()
 {
     unsigned char lcd_enable = read_memory(0xFF40);
@@ -142,8 +142,6 @@ update_graphics(unsigned char cycles)
             if (scanline_counter == 0x1C8)
             {
                 scanline_counter = 0x0;
-                increment_scanline();
-            } else {
                 increment_scanline();
             }
         }

@@ -7,23 +7,47 @@
   </component>
   <component name="CMakeSettings" AUTO_RELOAD="true">
     <configurations>
-      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" ENABLED="true" />
     </configurations>
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a9bb0a6b-44fd-4dd3-b653-b64bc2b36444" name="Default" comment="refactor memory references and boot process">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeCache.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/build.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/build.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/depend.internal" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/depend.internal" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/depend.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/depend.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/flags.make" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/flags.make" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/link.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/link.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/bit_rotate_shift_instructions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/bit_rotate_shift_instructions.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/control_instructions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/control_instructions.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/cpu_control_instructions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/cpu_control_instructions.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/cpu_emulator.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/cpu_emulator.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/graphics.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/graphics.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/helper_functions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/helper_functions.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/load_instructions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/load_instructions.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/logical_instructions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/logical_instructions.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/math_instructions.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/math_instructions.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/mattygboy.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/mattygboy.c.o" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/memory.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/memory.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/register_structures.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/register_structures.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/timers.c.o" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/MattyGBoy.dir/src/timers.c.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/Makefile" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/cmake-build-debug/MattyGBoy" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/MattyGBoy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/helper_functions.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/helper_functions.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpu_control_instructions.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu_control_instructions.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" beforeDir="false" afterPath="$PROJECT_DIR$/cmake-build-debug/cmake_install.cmake" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpu_emulator.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpu_emulator.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/graphics.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/graphics.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/helper_functions.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/helper_functions.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/load_instructions.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/load_instructions.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/mattygboy.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/mattygboy.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/memory.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/memory.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/register_structures.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/register_structures.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/testFiles/03-op sp,hl.gb" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,13 +68,19 @@
   <component name="ProjectId" id="1VMblLAn5TJe4zzltuqff2oUKcJ" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
-    <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="RunOnceActivity.cidr.known.project.marker" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="cf.first.check.clang-format" value="false" />
+    <property name="cidr.known.project.marker" value="true" />
+    <property name="cmake.loaded.for.project" value="true" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="ObjectiveC" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -66,24 +96,13 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="MattyGBoy" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="../testFiles/06_ld_r_r.gb" WORKING_DIR="file://$PROJECT_DIR$/src" PASS_PARENT_ENVS_2="true" PROJECT_NAME="MattyGBoy" TARGET_NAME="MattyGBoy" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="MattyGBoy" RUN_TARGET_NAME="MattyGBoy">
+    <configuration name="MattyGBoy" type="CMakeRunConfiguration" factoryName="Application" PROGRAM_PARAMS="../testFiles/03-op_sp_hl.gb" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" WORKING_DIR="file://$PROJECT_DIR$/src" PASS_PARENT_ENVS_2="true" PROJECT_NAME="MattyGBoy" TARGET_NAME="MattyGBoy" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="MattyGBoy" RUN_TARGET_NAME="MattyGBoy">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
   </component>
-  <component name="ServiceViewManager">
-    <option name="viewStates">
-      <list>
-        <serviceView>
-          <treeState>
-            <expand />
-            <select />
-          </treeState>
-        </serviceView>
-      </list>
-    </option>
-  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="project-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -157,7 +176,34 @@
       <workItem from="1577066063679" duration="59000" />
       <workItem from="1577066146365" duration="28206000" />
       <workItem from="1577546726287" duration="12803000" />
-      <workItem from="1577725027995" duration="9637000" />
+      <workItem from="1577725027995" duration="16197000" />
+      <workItem from="1578685604915" duration="6000" />
+      <workItem from="1578714206687" duration="2509000" />
+      <workItem from="1579371539330" duration="189000" />
+      <workItem from="1579371874273" duration="145000" />
+      <workItem from="1579823394311" duration="31000" />
+      <workItem from="1579823469981" duration="439000" />
+      <workItem from="1579906665057" duration="51000" />
+      <workItem from="1579908990601" duration="315000" />
+      <workItem from="1579976444094" duration="1430000" />
+      <workItem from="1580058694048" duration="476000" />
+      <workItem from="1595815599711" duration="379000" />
+      <workItem from="1601419961943" duration="1590000" />
+      <workItem from="1605397598803" duration="1529000" />
+      <workItem from="1607397395783" duration="15000" />
+      <workItem from="1608418877701" duration="14000" />
+      <workItem from="1612468917848" duration="103000" />
+      <workItem from="1612469199450" duration="122000" />
+      <workItem from="1612588122989" duration="608000" />
+      <workItem from="1612639240397" duration="241000" />
+      <workItem from="1612908876530" duration="59000" />
+      <workItem from="1612909392290" duration="18000" />
+      <workItem from="1612910347775" duration="506000" />
+      <workItem from="1620392211667" duration="5566000" />
+      <workItem from="1623005047124" duration="135000" />
+      <workItem from="1623205708236" duration="181000" />
+      <workItem from="1633567865337" duration="492000" />
+      <workItem from="1634442636203" duration="220000" />
     </task>
     <task id="LOCAL-00001" summary="fix cmake issues">
       <created>1577061843725</created>
@@ -212,7 +258,7 @@
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
-    <option name="version" value="1" />
+    <option name="version" value="3" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="fix cmake issues" />
@@ -223,91 +269,16 @@
     <MESSAGE value="refactor memory references and boot process" />
     <option name="LAST_COMMIT_MESSAGE" value="refactor memory references and boot process" />
   </component>
-  <component name="WindowStateProjectService">
-    <state x="440" y="190" key="#Notifications" timestamp="1577725036823">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="440" y="190" key="#Notifications/0.0.1680.1050@0.0.1680.1050" timestamp="1577725036823" />
-    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578280927189">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="304" y="187" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1578280927189" />
-    <state x="603" y="235" key="#xdebugger.evaluate" timestamp="1577548559805">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="603" y="235" key="#xdebugger.evaluate/0.0.1680.1050@0.0.1680.1050" timestamp="1577548559805" />
-    <state x="418" y="129" key="CommitChangelistDialog2" timestamp="1578282633857">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="418" y="129" key="CommitChangelistDialog2/0.0.1680.1050@0.0.1680.1050" timestamp="1578282633857" />
-    <state width="454" height="466" key="DebuggerActiveHint" timestamp="1577072415755">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="454" height="466" key="DebuggerActiveHint/0.0.1680.1050@0.0.1680.1050" timestamp="1577072415755" />
-    <state x="100" y="100" width="1480" height="850" key="DiffContextDialog" timestamp="1577596435929">
-      <screen x="0" y="23" width="1680" height="1027" />
-    </state>
-    <state x="100" y="100" width="1480" height="850" key="DiffContextDialog/0.23.1680.1027@0.23.1680.1027" timestamp="1577596435929" />
-    <state x="682" y="455" key="Github.Dialog.Accounts.Choose" timestamp="1577724658057">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="682" y="455" key="Github.Dialog.Accounts.Choose/0.0.1680.1050@0.0.1680.1050" timestamp="1577724658057" />
-    <state width="1638" height="217" key="GridCell.Tab.0.bottom" timestamp="1578284347928">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="217" key="GridCell.Tab.0.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1578284347928" />
-    <state width="1638" height="362" key="GridCell.Tab.0.bottom/0.23.1680.1027@0.23.1680.1027" timestamp="1577724943032" />
-    <state width="1638" height="217" key="GridCell.Tab.0.center" timestamp="1578284347927">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="217" key="GridCell.Tab.0.center/0.0.1680.1050@0.0.1680.1050" timestamp="1578284347927" />
-    <state width="1638" height="362" key="GridCell.Tab.0.center/0.23.1680.1027@0.23.1680.1027" timestamp="1577724943031" />
-    <state width="1638" height="217" key="GridCell.Tab.0.left" timestamp="1578284347926">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="217" key="GridCell.Tab.0.left/0.0.1680.1050@0.0.1680.1050" timestamp="1578284347926" />
-    <state width="1638" height="362" key="GridCell.Tab.0.left/0.23.1680.1027@0.23.1680.1027" timestamp="1577724943030" />
-    <state width="1638" height="217" key="GridCell.Tab.0.right" timestamp="1578284347927">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="217" key="GridCell.Tab.0.right/0.0.1680.1050@0.0.1680.1050" timestamp="1578284347927" />
-    <state width="1638" height="362" key="GridCell.Tab.0.right/0.23.1680.1027@0.23.1680.1027" timestamp="1577724943031" />
-    <state width="1638" height="244" key="GridCell.Tab.1.bottom" timestamp="1578282153461">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="244" key="GridCell.Tab.1.bottom/0.0.1680.1050@0.0.1680.1050" timestamp="1578282153461" />
-    <state width="1638" height="362" key="GridCell.Tab.1.bottom/0.23.1680.1027@0.23.1680.1027" timestamp="1577724943035" />
-    <state width="1638" height="244" key="GridCell.Tab.1.center" timestamp="1578282153459">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="244" key="GridCell.Tab.1.center/0.0.1680.1050@0.0.1680.1050" timestamp="1578282153459" />
-    <state width="1638" height="362" key="GridCell.Tab.1.center/0.23.1680.1027@0.23.1680.1027" timestamp="1577724943033" />
-    <state width="1638" height="244" key="GridCell.Tab.1.left" timestamp="1578282153459">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="244" key="GridCell.Tab.1.left/0.0.1680.1050@0.0.1680.1050" timestamp="1578282153459" />
-    <state width="1638" height="362" key="GridCell.Tab.1.left/0.23.1680.1027@0.23.1680.1027" timestamp="1577724943032" />
-    <state width="1638" height="244" key="GridCell.Tab.1.right" timestamp="1578282153460">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state width="1638" height="244" key="GridCell.Tab.1.right/0.0.1680.1050@0.0.1680.1050" timestamp="1578282153460" />
-    <state width="1638" height="362" key="GridCell.Tab.1.right/0.23.1680.1027@0.23.1680.1027" timestamp="1577724943034" />
-    <state x="595" y="243" key="RollbackChangesDialog" timestamp="1577596424195">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="595" y="243" key="RollbackChangesDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1577596424195" />
-    <state x="341" y="164" key="SettingsEditor" timestamp="1577725052708">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="341" y="164" key="SettingsEditor/0.0.1680.1050@0.0.1680.1050" timestamp="1577725052708" />
-    <state x="440" y="265" key="Vcs.Push.Dialog.v2" timestamp="1577724648738">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="440" y="265" key="Vcs.Push.Dialog.v2/0.0.1680.1050@0.0.1680.1050" timestamp="1577724648738" />
-    <state x="498" y="282" width="683" height="486" key="find.popup" timestamp="1578280947350">
-      <screen x="0" y="0" width="1680" height="1050" />
-    </state>
-    <state x="498" y="282" width="683" height="486" key="find.popup/0.0.1680.1050@0.0.1680.1050" timestamp="1578280947350" />
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/src/memory.c</url>
+          <line>196</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="masterDetails">
     <states>

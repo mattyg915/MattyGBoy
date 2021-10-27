@@ -44,12 +44,43 @@ init_memory()
 	unsigned char *boot = malloc(0xFF);
 
 	// Load BIOS
-    FILE *bios_file = fopen("/Users/MattyG/Documents/Programming/BIOS.gb", "rb");
+    FILE *bios_file = fopen("/Users/MattyG/Documents/Programming/BIOS.gb", "r");
     fread(boot, 0x1, 0xFF, bios_file);
     fclose(bios_file);
 
 	memory = new_memory;
-	boot_rom = boot;
+    memory[0xFF05] = 0x00;
+    memory[0xFF06] = 0x00;
+    memory[0xFF07] = 0x00;
+    memory[0xFF10] = 0x80;
+    memory[0xFF11] = 0xBF;
+    memory[0xFF12] = 0xF3;
+    memory[0xFF14] = 0xBF;
+    memory[0xFF16] = 0x3F;
+    memory[0xFF17] = 0x00;
+    memory[0xFF19] = 0xBF;
+    memory[0xFF1A] = 0x7F;
+    memory[0xFF1B] = 0xFF;
+    memory[0xFF1C] = 0x9F;
+    memory[0xFF1E] = 0xBF;
+    memory[0xFF20] = 0xFF;
+    memory[0xFF21] = 0x00;
+    memory[0xFF22] = 0x00;
+    memory[0xFF23] = 0xBF;
+    memory[0xFF24] = 0x77;
+    memory[0xFF25] = 0xF3;
+    memory[0xFF26] = 0xF1;
+    memory[0xFF40] = 0x91;
+    memory[0xFF42] = 0x00;
+    memory[0xFF43] = 0x00;
+    memory[0xFF45] = 0x00;
+    memory[0xFF47] = 0xFC;
+    memory[0xFF48] = 0xFF;
+    memory[0xFF49] = 0xFF;
+    memory[0xFF4A] = 0x00;
+    memory[0xFF4B] = 0x00;
+    memory[0xFFFF] = 0x00;
+    boot_rom = boot;
 }		/* -----  end of function init_memory  ----- */
 
 /*
@@ -62,7 +93,7 @@ init_memory()
 load_cartridge(char *file)
 {
 	unsigned char *new_cartridge = malloc(0x200000);
-	FILE *binary_file = fopen(file, "rb");
+	FILE *binary_file = fopen(file, "r");
 	fread(new_cartridge, 0x1, 0x200000, binary_file);
 	fclose(binary_file);
 
@@ -309,7 +340,7 @@ write_memory(unsigned short addr, unsigned char data)
         mbc->ram_enable = (unsigned char) ((data & 0xFu) == 0xA ? 1 : 0);
         return;
     }
-    else if ((addr >= 0x2000) && (addr <= 0x3FFF)) // Set low 5 bits of rom bank
+    else if (addr >= 0x2000 && addr <= 0x3FFF) // Set low 5 bits of rom bank
     {
         mbc->rom_bank_number += (unsigned char) (data & 0x1Fu);
 
@@ -332,7 +363,7 @@ write_memory(unsigned short addr, unsigned char data)
         }
         return;
     }
-    else if ((addr > 0x3FFF) && (addr < 0x6000)) // Set ram bank or upper 2 bits rom
+    else if (addr > 0x3FFF && addr < 0x6000) // Set ram bank or upper 2 bits rom
     {
         if (mbc->ram_rom_select) // RAM mode
         {
@@ -349,7 +380,7 @@ write_memory(unsigned short addr, unsigned char data)
             }
         }
     }
-    else if ((addr > 0x5FFF) && (addr < 0x8000)) // Select RAM/ROM mode
+    else if (addr > 0x5FFF && addr < 0x8000) // Select RAM/ROM mode
     {
         mbc->ram_rom_select = (unsigned char) (data & 0x1u);
 
@@ -358,7 +389,7 @@ write_memory(unsigned short addr, unsigned char data)
             mbc->ram_bank_number = 0;
         }
     }
-    else if ((addr > 0x9FFF) && (addr < 0xC000)) // External RAM banks
+    else if (addr > 0x9FFF && addr < 0xC000) // External RAM banks
     {
         if (mbc->ram_enable)
         {
@@ -366,12 +397,12 @@ write_memory(unsigned short addr, unsigned char data)
             ext_ram_bank[addr + (mbc->ram_bank_number * 0x2000)] = data;
         }
     }
-    else if ((addr > 0xDFFF) && (addr < 0xFE00)) // ECHO
+    else if (addr > 0xDFFF && addr < 0xFE00) // ECHO
     {
         memory[addr] = data;
         memory[addr - 0x2000] = data;
     }
-    else if ((addr >= 0xFEA0) && (addr < 0xFF00)) // Unusable because reasons
+    else if (addr >= 0xFEA0 && addr < 0xFF00) // Unusable because reasons
     {
         return;
     }
@@ -383,11 +414,9 @@ write_memory(unsigned short addr, unsigned char data)
     {
         memory[0xFF44] = 0x0;
     }
-    else if ((addr == 0xFF02) && (data == 0x81)) // Serial cable out
+    else if (addr == 0xFF02 && data == 0x81) // Serial cable out
     {
-//        printf("next opcode is %x || ", read_memory(ptrs->PC));
-//        printf("next imm is %x\n", read_memory(ptrs->PC + 1));
-        printf("%c", memory[0xFF01]);
+        printf("%c\n", read_memory(0xFF01));
         fflush(stdout);
     }
     else // Unrestricted memory write access
@@ -419,6 +448,7 @@ void
 increment_scanline()
 {
     unsigned char cur_line = read_memory(0xFF44);
+    cur_line++;
 
     if (cur_line == 0x90u) // V-Blank interrupt request
     {
@@ -427,12 +457,12 @@ increment_scanline()
     else if (cur_line > 0x99u) // Past last vertical line
     {
         cur_line = 0x0u;
+
     }
     else if (cur_line < 0x90u)
     {
         // TODO: Draw a line
     }
 
-    cur_line++;
     memory[0xFF44] = cur_line;
 }		/* -----  end of function increment_scanline  ----- */
